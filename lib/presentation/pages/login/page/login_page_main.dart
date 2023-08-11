@@ -78,9 +78,9 @@ class _LoginPageState extends CustomState<LoginPage> {
                 const Text(
                   "CMS Audit",
                   style: TextStyle(
-                      color: Colors.white,
+                      color: CustomColor.toolbarBg,
                       fontSize: 20,
-                      fontWeight: FontWeight.bold),
+                      fontWeight: FontWeight.normal),
                 ),
                 const SizedBox(height: 15),
                 getLoginComponent(

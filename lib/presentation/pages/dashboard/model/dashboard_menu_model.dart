@@ -4,5 +4,6 @@ class DashboardMenuModel{
   int id;
   String name;
   Widget? screen;
-  DashboardMenuModel({required this.id, required this.name,this.screen});
+  IconData? iconData;
+  DashboardMenuModel({required this.id, required this.name,required this.iconData, this.screen});
 }

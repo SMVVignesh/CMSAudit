@@ -79,30 +79,40 @@ class _DashboardScreenState extends CustomState<DashboardScreen> {
                         onTap: () {
                           navigateTo(item);
                         },
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(left: 10),
-                              child: Text(
-                                item.name,
-                                style: TextStyle(
-                                    color: CustomColor.black, fontSize: 14),
+                        child: SizedBox(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              const SizedBox(
+                                height: 15,
                               ),
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            Container(
-                              width: double.infinity,
-                              height: 0.5,
-                              color: CustomColor.textGrey,
-                            )
-                          ],
+                              Padding(
+                                padding: const EdgeInsets.only(left: 10),
+                                child: Row(
+                                  children: [
+                                    Icon(item.iconData,size: 20,),
+                                    const SizedBox(width: 10,),
+                                    Expanded(
+                                      child: Text(
+                                        item.name,
+                                        style: const TextStyle(
+                                            color: CustomColor.black, fontSize: 16),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 15,
+                              ),
+                              Container(
+                                width: double.infinity,
+                                height: 0.5,
+                                color: CustomColor.textGrey,
+                              )
+                            ],
+                          ),
                         ),
                       );
                     },
@@ -124,12 +134,12 @@ class _DashboardScreenState extends CustomState<DashboardScreen> {
   updateDrawerMenus() {
     menus.clear();
     menus.add(DashboardMenuModel(
-        id: 1, name: "Products", screen: const ProductScreen()));
+        id: 1, name: "Products",iconData:Icons.production_quantity_limits, screen: const ProductScreen()));
     menus.add(DashboardMenuModel(
-        id: 2, name: "Audits", screen: const AuditDetailsScreen()));
+        id: 2, name: "Audits",iconData:Icons.account_balance, screen: const AuditDetailsScreen()));
     menus.add(DashboardMenuModel(
-        id: 3, name: "Update Details", screen: const UpdateListScreen()));
-    menus.add(DashboardMenuModel(id: 4, name: "Logout"));
+        id: 3, name: "Update Details",iconData:Icons.update, screen: const UpdateListScreen()));
+    menus.add(DashboardMenuModel(id: 4,iconData:Icons.logout, name: "Logout"));
   }
 
   void navigateTo(DashboardMenuModel item) {
