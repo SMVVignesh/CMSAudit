@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import '../../../../../../core/utils/custom_color.dart';
 import '../../../../../../domain/local_data_base/data_base_repository.dart';
@@ -12,6 +13,8 @@ class AuditDetailsScreen extends StatefulWidget {
 }
 
 class _AuditDetailsScreenState extends State<AuditDetailsScreen> {
+  final DateFormat inputFormatter = DateFormat("yyyy-MM-DDThh:mm:ss");
+  final DateFormat outputFormatter = DateFormat("yyyy-MM-DD, hh:mm aa");
   List<Data> list = [];
 
   @override
@@ -66,7 +69,7 @@ class _AuditDetailsScreenState extends State<AuditDetailsScreen> {
                       height: 10,
                     ),
                     Text(
-                      "Start Date:   ${item.startedDate ?? "n/a"}",
+                      "Start Date:   ${getDisplayFormat(item.startedDate ?? "")}",
                       style: const TextStyle(
                           color: CustomColor.black,
                           fontSize: 14,
@@ -76,7 +79,7 @@ class _AuditDetailsScreenState extends State<AuditDetailsScreen> {
                       height: 10,
                     ),
                     Text(
-                      "Closing Taken:   ${item.closingTakenDateTime ?? "n/a"}",
+                      "Closing Taken:   ${getDisplayFormat(item.closingTakenDateTime ?? "")}",
                       style: const TextStyle(
                           color: CustomColor.black,
                           fontSize: 14,
@@ -113,5 +116,14 @@ class _AuditDetailsScreenState extends State<AuditDetailsScreen> {
     AuditResponse? auditResponse = await DatabaseRepository().getAuditData();
     list.addAll(auditResponse?.data ?? []);
     setState(() {});
+  }
+
+  String getDisplayFormat(String s) {
+    try {
+      return outputFormatter.format(inputFormatter.parse(s));
+    } catch (e) {
+      print("Exception :${e.toString()}");
+      return "n/a";
+    }
   }
 }

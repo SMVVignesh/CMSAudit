@@ -12,6 +12,7 @@ class ProductScreen extends StatefulWidget {
 }
 
 class _ProductScreenState extends State<ProductScreen> {
+
   List<Product> list = [];
 
   @override
