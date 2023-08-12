@@ -56,7 +56,7 @@ class _ProductScreenState extends State<ProductScreen> {
                       height: 10,
                     ),
                     Text(
-                      "Sku Weight:   ${item.skuWeight ?? "n/a"}",
+                      "SKU Weight:   ${item.skuWeight ?? "n/a"}",
                       style: TextStyle(
                           color: CustomColor.black,
                           fontSize: 14,
@@ -66,7 +66,7 @@ class _ProductScreenState extends State<ProductScreen> {
                       height: 10,
                     ),
                     Text(
-                      "Sku Piece Weight:   ${item.skuPieceWeight ?? "n/a"}",
+                      "NoOf SKU In Case:   ${item.noOfSKUInCase ?? "n/a"}",
                       style: TextStyle(
                           color: CustomColor.black,
                           fontSize: 14,
@@ -83,17 +83,6 @@ class _ProductScreenState extends State<ProductScreen> {
                           fontWeight: FontWeight.normal),
                     ),
                     SizedBox(
-                      height: 10,
-                    ),
-                    Text(
-                      "Category:   ${item.productTypeName ?? "n/a"}",
-                      style: TextStyle(
-                          color: CustomColor.black,
-                          fontSize: 14,
-                          fontWeight: FontWeight.normal),
-
-                    ),
-                    const SizedBox(
                       height: 10,
                     ),
                     Container(
