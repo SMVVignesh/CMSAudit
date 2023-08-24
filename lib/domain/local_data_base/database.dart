@@ -1,3 +1,4 @@
+import 'dart:ffi';
 import 'dart:io';
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
@@ -25,14 +26,35 @@ class ApiData extends Table {
 }
 
 
+
+/*
+* This class represents the data base table for Api cache*/
+@DataClassName("WHLocationTable")
+class WHLocation extends Table {
+
+
+  DateTimeColumn get updatedDateAndTime => dateTime()();
+
+  TextColumn get guId => text()();
+  TextColumn get locationName => text()();
+  TextColumn get palletNumber => text()();
+  TextColumn get description => text()();
+  TextColumn get auditDetailId => text()();
+  BoolColumn get isActive => boolean()();
+
+  @override
+  Set<Column> get primaryKey => {locationName,palletNumber,auditDetailId};
+}
+
+
 /*
 * This class represents Data base and their tables*/
-@DriftDatabase(tables: [ApiData], views: [])
+@DriftDatabase(tables: [ApiData,WHLocation], views: [])
 class Database extends _$Database {
   Database() : super(_openConnection());
 
   @override
-  int get schemaVersion => 5;
+  int get schemaVersion => 2;
 
   @override
   MigrationStrategy get migration {

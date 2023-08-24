@@ -257,9 +257,6 @@ if all fields are validated this is going to call  Login api
               .setAccessToken(newLoginResponse.token ?? "");
           await SharedPreferenceRepository().setEmail(email);
           await SharedPreferenceRepository().saveLoginData(newLoginResponse);
-
-          SnackBarUtils.showSuccess(context,
-              AppLocalizations.of(context)!.trans(LOGGED_IN_SUCCESSFULLY));
           Navigator.pushReplacementNamed(context, AppRoute.getScreenRoute(HOME_SCREEN));
         } on UnauthorisedException {
           SnackBarUtils.showError(context,

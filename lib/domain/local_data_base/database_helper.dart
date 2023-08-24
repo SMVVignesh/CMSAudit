@@ -1,3 +1,6 @@
+import 'dart:ffi';
+
+import '../../core/utils/utils.dart';
 import 'database.dart';
 
 class DatabaseHelper {
@@ -53,5 +56,48 @@ class DatabaseHelper {
   Future<int> deleteAllApi() async {
     final query = _database.delete(_database.apiData);
     return await query.go();
+  }
+
+  /*
+  * This method is used to insert the data in ApiDataTable by tag*/
+  Future<int> insertWHLocation(
+      {required String locationName,
+      required String palletNumber,
+      required String description,
+      required bool isActive,
+      required String auditDetailId}) async {
+    final query = _database.into(_database.wHLocation).insert(WHLocationTable(
+        updatedDateAndTime: DateTime.now(),
+        locationName: locationName,
+        palletNumber: palletNumber,
+        description: description,
+        auditDetailId: auditDetailId,
+        isActive: isActive,
+        guId: Utils.getNewGuId()));
+    return await query;
+  }
+
+  /*
+  * This method is used to delete WHLocations*/
+  Future<int> deleteWHLocation(
+      {required String locationName,
+      required String palletNumber,
+      required String auditDetailId}) async {
+    final query = _database.delete(_database.wHLocation)
+      ..where((tbl) => tbl.locationName.equals(locationName))
+      ..where((tbl) => tbl.palletNumber.equals(palletNumber))
+      ..where((tbl) => tbl.auditDetailId.equals(auditDetailId));
+    return await query.go();
+  }
+
+  /*
+  * This method will return only one record by tag in ApiDataTable*/
+  Future<List<WHLocationTable>> getWHLocationByAuditId(String auditId) async {
+    List<WHLocationTable> query =
+        await _database.select(_database.wHLocation).get();
+    List<WHLocationTable> whLocations = query.where((tbl) {
+      return tbl.auditDetailId == auditId;
+    }).toList();
+    return whLocations;
   }
 }

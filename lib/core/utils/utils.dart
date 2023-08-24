@@ -1,12 +1,13 @@
-
 import 'package:flutter/material.dart';
+import 'package:flutter_guid/flutter_guid.dart';
 import 'package:tool_kit/tool_kit.dart';
 import '../../domain/share_preference/shared_preference_repository.dart';
 import '../constants/constants.dart';
 import 'custom_color.dart';
+import 'package:intl/intl.dart';
+
 
 class Utils {
-
   /*
 * This method is used to validate the email format*/
   static bool isValidEmail(String? email) {
@@ -37,7 +38,18 @@ class Utils {
         context, AppRoute.getScreenRoute(LOGIN_SCREEN));
   }
 
+  static String getNewGuId() {
+    return Guid.newGuid.value;
+  }
 
-
-
+  static String getDisplayFormat(String s) {
+    final DateFormat inputFormatter = DateFormat("yyyy-MM-ddThh:mm:ss");
+    final DateFormat outputFormatter = DateFormat("yyyy-MM-dd, hh:mm aa");
+    try {
+      return outputFormatter.format(inputFormatter.parse(s));
+    } catch (e) {
+      print("Exception :${e.toString()}");
+      return "n/a";
+    }
+  }
 }

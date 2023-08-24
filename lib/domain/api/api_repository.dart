@@ -67,7 +67,7 @@ class ApiRepository {
 
   /*This method is used to get Audit List*/
   Future<AuditResponse> getAuditList() async {
-    Map<String, dynamic> body = {"isActive": true};
+    Map<String, dynamic> body = {"isActive": false};
 
     late AuditResponse auditResponse;
     final response = await otherInApis.post(

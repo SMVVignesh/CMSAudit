@@ -116,7 +116,7 @@ class _UpdateListScreenState extends State<UpdateListScreen> {
             padding: const EdgeInsets.all(8.0),
             child: Text(
               loadingMessage,
-              style: const TextStyle(fontSize: 12, color: CustomColor.textGrey),
+              style: const TextStyle(fontSize: 14, color: CustomColor.black),
             ),
           )
       ],

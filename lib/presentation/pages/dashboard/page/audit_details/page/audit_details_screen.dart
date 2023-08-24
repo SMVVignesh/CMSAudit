@@ -1,7 +1,8 @@
+import 'package:cms_audit/presentation/pages/dashboard/page/wh_location/wh_location.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 import '../../../../../../core/utils/custom_color.dart';
+import '../../../../../../core/utils/utils.dart';
 import '../../../../../../domain/local_data_base/data_base_repository.dart';
 import '../model/audit_response.dart';
 
@@ -13,8 +14,7 @@ class AuditDetailsScreen extends StatefulWidget {
 }
 
 class _AuditDetailsScreenState extends State<AuditDetailsScreen> {
-  final DateFormat inputFormatter = DateFormat("yyyy-MM-DDThh:mm:ss");
-  final DateFormat outputFormatter = DateFormat("yyyy-MM-DD, hh:mm aa");
+
   List<Data> list = [];
 
   @override
@@ -39,71 +39,82 @@ class _AuditDetailsScreenState extends State<AuditDetailsScreen> {
         : ListView.builder(
             itemBuilder: (context, index) {
               Data item = list[index];
-              return Padding(
-                padding: const EdgeInsets.only(left: 10, right: 10),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    const SizedBox(
-                      height: 10,
+              return GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => WHLocations(auditDetails: item)),
+                  );
+                },
+                child: Container(
+                  color: Colors.transparent,
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 10, right: 10),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Text(
+                          item.name ?? "",
+                          style: const TextStyle(
+                              color: CustomColor.black,
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Text(
+                          "Branch:   ${item.branchName ?? "n/a"}",
+                          style: const TextStyle(
+                              color: CustomColor.black,
+                              fontSize: 14,
+                              fontWeight: FontWeight.normal),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Text(
+                          "Start Date:   ${Utils.getDisplayFormat(item.startedDate ?? "")}",
+                          style: const TextStyle(
+                              color: CustomColor.black,
+                              fontSize: 14,
+                              fontWeight: FontWeight.normal),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Text(
+                          "Closing Taken:   ${Utils.getDisplayFormat(item.closingTakenDateTime ?? "")}",
+                          style: const TextStyle(
+                              color: CustomColor.black,
+                              fontSize: 14,
+                              fontWeight: FontWeight.normal),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Text(
+                          "Last Billed Invoice:   ${item.lastBilledInvoNumber ?? "n/a"}",
+                          style: const TextStyle(
+                              color: CustomColor.black,
+                              fontSize: 14,
+                              fontWeight: FontWeight.normal),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Container(
+                          width: double.infinity,
+                          height: 0.5,
+                          color: CustomColor.textGrey,
+                        )
+                      ],
                     ),
-                    Text(
-                      item.name ?? "",
-                      style: const TextStyle(
-                          color: CustomColor.black,
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Text(
-                      "Branch:   ${item.branchName ?? "n/a"}",
-                      style: const TextStyle(
-                          color: CustomColor.black,
-                          fontSize: 14,
-                          fontWeight: FontWeight.normal),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Text(
-                      "Start Date:   ${getDisplayFormat(item.startedDate ?? "")}",
-                      style: const TextStyle(
-                          color: CustomColor.black,
-                          fontSize: 14,
-                          fontWeight: FontWeight.normal),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Text(
-                      "Closing Taken:   ${getDisplayFormat(item.closingTakenDateTime ?? "")}",
-                      style: const TextStyle(
-                          color: CustomColor.black,
-                          fontSize: 14,
-                          fontWeight: FontWeight.normal),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Text(
-                      "Last Billed Invoice:   ${item.lastBilledInvoNumber ?? "n/a"}",
-                      style: const TextStyle(
-                          color: CustomColor.black,
-                          fontSize: 14,
-                          fontWeight: FontWeight.normal),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Container(
-                      width: double.infinity,
-                      height: 0.5,
-                      color: CustomColor.textGrey,
-                    )
-                  ],
+                  ),
                 ),
               );
             },
@@ -118,12 +129,5 @@ class _AuditDetailsScreenState extends State<AuditDetailsScreen> {
     setState(() {});
   }
 
-  String getDisplayFormat(String s) {
-    try {
-      return outputFormatter.format(inputFormatter.parse(s));
-    } catch (e) {
-      print("Exception :${e.toString()}");
-      return "n/a";
-    }
-  }
+
 }
