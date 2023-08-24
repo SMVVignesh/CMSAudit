@@ -244,10 +244,11 @@ class $WHLocationTable extends WHLocation
   late final GeneratedColumn<DateTime> updatedDateAndTime =
       GeneratedColumn<DateTime>('updated_date_and_time', aliasedName, false,
           type: DriftSqlType.dateTime, requiredDuringInsert: true);
-  static const VerificationMeta _guIdMeta = const VerificationMeta('guId');
+  static const VerificationMeta _locationIdMeta =
+      const VerificationMeta('locationId');
   @override
-  late final GeneratedColumn<String> guId = GeneratedColumn<String>(
-      'gu_id', aliasedName, false,
+  late final GeneratedColumn<String> locationId = GeneratedColumn<String>(
+      'location_id', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true);
   static const VerificationMeta _locationNameMeta =
       const VerificationMeta('locationName');
@@ -285,7 +286,7 @@ class $WHLocationTable extends WHLocation
   @override
   List<GeneratedColumn> get $columns => [
         updatedDateAndTime,
-        guId,
+        locationId,
         locationName,
         palletNumber,
         description,
@@ -309,11 +310,13 @@ class $WHLocationTable extends WHLocation
     } else if (isInserting) {
       context.missing(_updatedDateAndTimeMeta);
     }
-    if (data.containsKey('gu_id')) {
+    if (data.containsKey('location_id')) {
       context.handle(
-          _guIdMeta, guId.isAcceptableOrUnknown(data['gu_id']!, _guIdMeta));
+          _locationIdMeta,
+          locationId.isAcceptableOrUnknown(
+              data['location_id']!, _locationIdMeta));
     } else if (isInserting) {
-      context.missing(_guIdMeta);
+      context.missing(_locationIdMeta);
     }
     if (data.containsKey('location_name')) {
       context.handle(
@@ -366,8 +369,8 @@ class $WHLocationTable extends WHLocation
       updatedDateAndTime: attachedDatabase.typeMapping.read(
           DriftSqlType.dateTime,
           data['${effectivePrefix}updated_date_and_time'])!,
-      guId: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}gu_id'])!,
+      locationId: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}location_id'])!,
       locationName: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}location_name'])!,
       palletNumber: attachedDatabase.typeMapping
@@ -389,7 +392,7 @@ class $WHLocationTable extends WHLocation
 
 class WHLocationTable extends DataClass implements Insertable<WHLocationTable> {
   final DateTime updatedDateAndTime;
-  final String guId;
+  final String locationId;
   final String locationName;
   final String palletNumber;
   final String description;
@@ -397,7 +400,7 @@ class WHLocationTable extends DataClass implements Insertable<WHLocationTable> {
   final bool isActive;
   const WHLocationTable(
       {required this.updatedDateAndTime,
-      required this.guId,
+      required this.locationId,
       required this.locationName,
       required this.palletNumber,
       required this.description,
@@ -407,7 +410,7 @@ class WHLocationTable extends DataClass implements Insertable<WHLocationTable> {
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['updated_date_and_time'] = Variable<DateTime>(updatedDateAndTime);
-    map['gu_id'] = Variable<String>(guId);
+    map['location_id'] = Variable<String>(locationId);
     map['location_name'] = Variable<String>(locationName);
     map['pallet_number'] = Variable<String>(palletNumber);
     map['description'] = Variable<String>(description);
@@ -419,7 +422,7 @@ class WHLocationTable extends DataClass implements Insertable<WHLocationTable> {
   WHLocationCompanion toCompanion(bool nullToAbsent) {
     return WHLocationCompanion(
       updatedDateAndTime: Value(updatedDateAndTime),
-      guId: Value(guId),
+      locationId: Value(locationId),
       locationName: Value(locationName),
       palletNumber: Value(palletNumber),
       description: Value(description),
@@ -434,7 +437,7 @@ class WHLocationTable extends DataClass implements Insertable<WHLocationTable> {
     return WHLocationTable(
       updatedDateAndTime:
           serializer.fromJson<DateTime>(json['updatedDateAndTime']),
-      guId: serializer.fromJson<String>(json['guId']),
+      locationId: serializer.fromJson<String>(json['locationId']),
       locationName: serializer.fromJson<String>(json['locationName']),
       palletNumber: serializer.fromJson<String>(json['palletNumber']),
       description: serializer.fromJson<String>(json['description']),
@@ -447,7 +450,7 @@ class WHLocationTable extends DataClass implements Insertable<WHLocationTable> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'updatedDateAndTime': serializer.toJson<DateTime>(updatedDateAndTime),
-      'guId': serializer.toJson<String>(guId),
+      'locationId': serializer.toJson<String>(locationId),
       'locationName': serializer.toJson<String>(locationName),
       'palletNumber': serializer.toJson<String>(palletNumber),
       'description': serializer.toJson<String>(description),
@@ -458,7 +461,7 @@ class WHLocationTable extends DataClass implements Insertable<WHLocationTable> {
 
   WHLocationTable copyWith(
           {DateTime? updatedDateAndTime,
-          String? guId,
+          String? locationId,
           String? locationName,
           String? palletNumber,
           String? description,
@@ -466,7 +469,7 @@ class WHLocationTable extends DataClass implements Insertable<WHLocationTable> {
           bool? isActive}) =>
       WHLocationTable(
         updatedDateAndTime: updatedDateAndTime ?? this.updatedDateAndTime,
-        guId: guId ?? this.guId,
+        locationId: locationId ?? this.locationId,
         locationName: locationName ?? this.locationName,
         palletNumber: palletNumber ?? this.palletNumber,
         description: description ?? this.description,
@@ -477,7 +480,7 @@ class WHLocationTable extends DataClass implements Insertable<WHLocationTable> {
   String toString() {
     return (StringBuffer('WHLocationTable(')
           ..write('updatedDateAndTime: $updatedDateAndTime, ')
-          ..write('guId: $guId, ')
+          ..write('locationId: $locationId, ')
           ..write('locationName: $locationName, ')
           ..write('palletNumber: $palletNumber, ')
           ..write('description: $description, ')
@@ -488,14 +491,14 @@ class WHLocationTable extends DataClass implements Insertable<WHLocationTable> {
   }
 
   @override
-  int get hashCode => Object.hash(updatedDateAndTime, guId, locationName,
+  int get hashCode => Object.hash(updatedDateAndTime, locationId, locationName,
       palletNumber, description, auditDetailId, isActive);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is WHLocationTable &&
           other.updatedDateAndTime == this.updatedDateAndTime &&
-          other.guId == this.guId &&
+          other.locationId == this.locationId &&
           other.locationName == this.locationName &&
           other.palletNumber == this.palletNumber &&
           other.description == this.description &&
@@ -505,7 +508,7 @@ class WHLocationTable extends DataClass implements Insertable<WHLocationTable> {
 
 class WHLocationCompanion extends UpdateCompanion<WHLocationTable> {
   final Value<DateTime> updatedDateAndTime;
-  final Value<String> guId;
+  final Value<String> locationId;
   final Value<String> locationName;
   final Value<String> palletNumber;
   final Value<String> description;
@@ -514,7 +517,7 @@ class WHLocationCompanion extends UpdateCompanion<WHLocationTable> {
   final Value<int> rowid;
   const WHLocationCompanion({
     this.updatedDateAndTime = const Value.absent(),
-    this.guId = const Value.absent(),
+    this.locationId = const Value.absent(),
     this.locationName = const Value.absent(),
     this.palletNumber = const Value.absent(),
     this.description = const Value.absent(),
@@ -524,7 +527,7 @@ class WHLocationCompanion extends UpdateCompanion<WHLocationTable> {
   });
   WHLocationCompanion.insert({
     required DateTime updatedDateAndTime,
-    required String guId,
+    required String locationId,
     required String locationName,
     required String palletNumber,
     required String description,
@@ -532,7 +535,7 @@ class WHLocationCompanion extends UpdateCompanion<WHLocationTable> {
     required bool isActive,
     this.rowid = const Value.absent(),
   })  : updatedDateAndTime = Value(updatedDateAndTime),
-        guId = Value(guId),
+        locationId = Value(locationId),
         locationName = Value(locationName),
         palletNumber = Value(palletNumber),
         description = Value(description),
@@ -540,7 +543,7 @@ class WHLocationCompanion extends UpdateCompanion<WHLocationTable> {
         isActive = Value(isActive);
   static Insertable<WHLocationTable> custom({
     Expression<DateTime>? updatedDateAndTime,
-    Expression<String>? guId,
+    Expression<String>? locationId,
     Expression<String>? locationName,
     Expression<String>? palletNumber,
     Expression<String>? description,
@@ -551,7 +554,7 @@ class WHLocationCompanion extends UpdateCompanion<WHLocationTable> {
     return RawValuesInsertable({
       if (updatedDateAndTime != null)
         'updated_date_and_time': updatedDateAndTime,
-      if (guId != null) 'gu_id': guId,
+      if (locationId != null) 'location_id': locationId,
       if (locationName != null) 'location_name': locationName,
       if (palletNumber != null) 'pallet_number': palletNumber,
       if (description != null) 'description': description,
@@ -563,7 +566,7 @@ class WHLocationCompanion extends UpdateCompanion<WHLocationTable> {
 
   WHLocationCompanion copyWith(
       {Value<DateTime>? updatedDateAndTime,
-      Value<String>? guId,
+      Value<String>? locationId,
       Value<String>? locationName,
       Value<String>? palletNumber,
       Value<String>? description,
@@ -572,7 +575,7 @@ class WHLocationCompanion extends UpdateCompanion<WHLocationTable> {
       Value<int>? rowid}) {
     return WHLocationCompanion(
       updatedDateAndTime: updatedDateAndTime ?? this.updatedDateAndTime,
-      guId: guId ?? this.guId,
+      locationId: locationId ?? this.locationId,
       locationName: locationName ?? this.locationName,
       palletNumber: palletNumber ?? this.palletNumber,
       description: description ?? this.description,
@@ -589,8 +592,8 @@ class WHLocationCompanion extends UpdateCompanion<WHLocationTable> {
       map['updated_date_and_time'] =
           Variable<DateTime>(updatedDateAndTime.value);
     }
-    if (guId.present) {
-      map['gu_id'] = Variable<String>(guId.value);
+    if (locationId.present) {
+      map['location_id'] = Variable<String>(locationId.value);
     }
     if (locationName.present) {
       map['location_name'] = Variable<String>(locationName.value);
@@ -617,7 +620,7 @@ class WHLocationCompanion extends UpdateCompanion<WHLocationTable> {
   String toString() {
     return (StringBuffer('WHLocationCompanion(')
           ..write('updatedDateAndTime: $updatedDateAndTime, ')
-          ..write('guId: $guId, ')
+          ..write('locationId: $locationId, ')
           ..write('locationName: $locationName, ')
           ..write('palletNumber: $palletNumber, ')
           ..write('description: $description, ')
@@ -641,10 +644,11 @@ class $WHInOutWardsTable extends WHInOutWards
   late final GeneratedColumn<DateTime> updatedDateAndTime =
       GeneratedColumn<DateTime>('updated_date_and_time', aliasedName, false,
           type: DriftSqlType.dateTime, requiredDuringInsert: true);
-  static const VerificationMeta _guIdMeta = const VerificationMeta('guId');
+  static const VerificationMeta _inOutWardIdMeta =
+      const VerificationMeta('inOutWardId');
   @override
-  late final GeneratedColumn<String> guId = GeneratedColumn<String>(
-      'gu_id', aliasedName, false,
+  late final GeneratedColumn<String> inOutWardId = GeneratedColumn<String>(
+      'in_out_ward_id', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true);
   static const VerificationMeta _qtyMeta = const VerificationMeta('qty');
   @override
@@ -698,6 +702,12 @@ class $WHInOutWardsTable extends WHInOutWards
   late final GeneratedColumn<String> productId = GeneratedColumn<String>(
       'product_id', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _productNameMeta =
+      const VerificationMeta('productName');
+  @override
+  late final GeneratedColumn<String> productName = GeneratedColumn<String>(
+      'product_name', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
   static const VerificationMeta _auditDetailIdMeta =
       const VerificationMeta('auditDetailId');
   @override
@@ -707,7 +717,7 @@ class $WHInOutWardsTable extends WHInOutWards
   @override
   List<GeneratedColumn> get $columns => [
         updatedDateAndTime,
-        guId,
+        inOutWardId,
         qty,
         stockType,
         description,
@@ -717,6 +727,7 @@ class $WHInOutWardsTable extends WHInOutWards
         customerName,
         whLocationId,
         productId,
+        productName,
         auditDetailId
       ];
   @override
@@ -736,11 +747,13 @@ class $WHInOutWardsTable extends WHInOutWards
     } else if (isInserting) {
       context.missing(_updatedDateAndTimeMeta);
     }
-    if (data.containsKey('gu_id')) {
+    if (data.containsKey('in_out_ward_id')) {
       context.handle(
-          _guIdMeta, guId.isAcceptableOrUnknown(data['gu_id']!, _guIdMeta));
+          _inOutWardIdMeta,
+          inOutWardId.isAcceptableOrUnknown(
+              data['in_out_ward_id']!, _inOutWardIdMeta));
     } else if (isInserting) {
-      context.missing(_guIdMeta);
+      context.missing(_inOutWardIdMeta);
     }
     if (data.containsKey('qty')) {
       context.handle(
@@ -802,6 +815,14 @@ class $WHInOutWardsTable extends WHInOutWards
     } else if (isInserting) {
       context.missing(_productIdMeta);
     }
+    if (data.containsKey('product_name')) {
+      context.handle(
+          _productNameMeta,
+          productName.isAcceptableOrUnknown(
+              data['product_name']!, _productNameMeta));
+    } else if (isInserting) {
+      context.missing(_productNameMeta);
+    }
     if (data.containsKey('audit_detail_id')) {
       context.handle(
           _auditDetailIdMeta,
@@ -823,8 +844,8 @@ class $WHInOutWardsTable extends WHInOutWards
       updatedDateAndTime: attachedDatabase.typeMapping.read(
           DriftSqlType.dateTime,
           data['${effectivePrefix}updated_date_and_time'])!,
-      guId: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}gu_id'])!,
+      inOutWardId: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}in_out_ward_id'])!,
       qty: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}qty'])!,
       stockType: attachedDatabase.typeMapping
@@ -843,6 +864,8 @@ class $WHInOutWardsTable extends WHInOutWards
           .read(DriftSqlType.string, data['${effectivePrefix}wh_location_id'])!,
       productId: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}product_id'])!,
+      productName: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}product_name'])!,
       auditDetailId: attachedDatabase.typeMapping.read(
           DriftSqlType.string, data['${effectivePrefix}audit_detail_id'])!,
     );
@@ -857,7 +880,7 @@ class $WHInOutWardsTable extends WHInOutWards
 class WHInOutWardsTable extends DataClass
     implements Insertable<WHInOutWardsTable> {
   final DateTime updatedDateAndTime;
-  final String guId;
+  final String inOutWardId;
   final int qty;
   final String stockType;
   final String description;
@@ -867,10 +890,11 @@ class WHInOutWardsTable extends DataClass
   final String customerName;
   final String whLocationId;
   final String productId;
+  final String productName;
   final String auditDetailId;
   const WHInOutWardsTable(
       {required this.updatedDateAndTime,
-      required this.guId,
+      required this.inOutWardId,
       required this.qty,
       required this.stockType,
       required this.description,
@@ -880,12 +904,13 @@ class WHInOutWardsTable extends DataClass
       required this.customerName,
       required this.whLocationId,
       required this.productId,
+      required this.productName,
       required this.auditDetailId});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['updated_date_and_time'] = Variable<DateTime>(updatedDateAndTime);
-    map['gu_id'] = Variable<String>(guId);
+    map['in_out_ward_id'] = Variable<String>(inOutWardId);
     map['qty'] = Variable<int>(qty);
     map['stock_type'] = Variable<String>(stockType);
     map['description'] = Variable<String>(description);
@@ -895,6 +920,7 @@ class WHInOutWardsTable extends DataClass
     map['customer_name'] = Variable<String>(customerName);
     map['wh_location_id'] = Variable<String>(whLocationId);
     map['product_id'] = Variable<String>(productId);
+    map['product_name'] = Variable<String>(productName);
     map['audit_detail_id'] = Variable<String>(auditDetailId);
     return map;
   }
@@ -902,7 +928,7 @@ class WHInOutWardsTable extends DataClass
   WHInOutWardsCompanion toCompanion(bool nullToAbsent) {
     return WHInOutWardsCompanion(
       updatedDateAndTime: Value(updatedDateAndTime),
-      guId: Value(guId),
+      inOutWardId: Value(inOutWardId),
       qty: Value(qty),
       stockType: Value(stockType),
       description: Value(description),
@@ -912,6 +938,7 @@ class WHInOutWardsTable extends DataClass
       customerName: Value(customerName),
       whLocationId: Value(whLocationId),
       productId: Value(productId),
+      productName: Value(productName),
       auditDetailId: Value(auditDetailId),
     );
   }
@@ -922,7 +949,7 @@ class WHInOutWardsTable extends DataClass
     return WHInOutWardsTable(
       updatedDateAndTime:
           serializer.fromJson<DateTime>(json['updatedDateAndTime']),
-      guId: serializer.fromJson<String>(json['guId']),
+      inOutWardId: serializer.fromJson<String>(json['inOutWardId']),
       qty: serializer.fromJson<int>(json['qty']),
       stockType: serializer.fromJson<String>(json['stockType']),
       description: serializer.fromJson<String>(json['description']),
@@ -932,6 +959,7 @@ class WHInOutWardsTable extends DataClass
       customerName: serializer.fromJson<String>(json['customerName']),
       whLocationId: serializer.fromJson<String>(json['whLocationId']),
       productId: serializer.fromJson<String>(json['productId']),
+      productName: serializer.fromJson<String>(json['productName']),
       auditDetailId: serializer.fromJson<String>(json['auditDetailId']),
     );
   }
@@ -940,7 +968,7 @@ class WHInOutWardsTable extends DataClass
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'updatedDateAndTime': serializer.toJson<DateTime>(updatedDateAndTime),
-      'guId': serializer.toJson<String>(guId),
+      'inOutWardId': serializer.toJson<String>(inOutWardId),
       'qty': serializer.toJson<int>(qty),
       'stockType': serializer.toJson<String>(stockType),
       'description': serializer.toJson<String>(description),
@@ -950,13 +978,14 @@ class WHInOutWardsTable extends DataClass
       'customerName': serializer.toJson<String>(customerName),
       'whLocationId': serializer.toJson<String>(whLocationId),
       'productId': serializer.toJson<String>(productId),
+      'productName': serializer.toJson<String>(productName),
       'auditDetailId': serializer.toJson<String>(auditDetailId),
     };
   }
 
   WHInOutWardsTable copyWith(
           {DateTime? updatedDateAndTime,
-          String? guId,
+          String? inOutWardId,
           int? qty,
           String? stockType,
           String? description,
@@ -966,10 +995,11 @@ class WHInOutWardsTable extends DataClass
           String? customerName,
           String? whLocationId,
           String? productId,
+          String? productName,
           String? auditDetailId}) =>
       WHInOutWardsTable(
         updatedDateAndTime: updatedDateAndTime ?? this.updatedDateAndTime,
-        guId: guId ?? this.guId,
+        inOutWardId: inOutWardId ?? this.inOutWardId,
         qty: qty ?? this.qty,
         stockType: stockType ?? this.stockType,
         description: description ?? this.description,
@@ -979,13 +1009,14 @@ class WHInOutWardsTable extends DataClass
         customerName: customerName ?? this.customerName,
         whLocationId: whLocationId ?? this.whLocationId,
         productId: productId ?? this.productId,
+        productName: productName ?? this.productName,
         auditDetailId: auditDetailId ?? this.auditDetailId,
       );
   @override
   String toString() {
     return (StringBuffer('WHInOutWardsTable(')
           ..write('updatedDateAndTime: $updatedDateAndTime, ')
-          ..write('guId: $guId, ')
+          ..write('inOutWardId: $inOutWardId, ')
           ..write('qty: $qty, ')
           ..write('stockType: $stockType, ')
           ..write('description: $description, ')
@@ -995,6 +1026,7 @@ class WHInOutWardsTable extends DataClass
           ..write('customerName: $customerName, ')
           ..write('whLocationId: $whLocationId, ')
           ..write('productId: $productId, ')
+          ..write('productName: $productName, ')
           ..write('auditDetailId: $auditDetailId')
           ..write(')'))
         .toString();
@@ -1003,7 +1035,7 @@ class WHInOutWardsTable extends DataClass
   @override
   int get hashCode => Object.hash(
       updatedDateAndTime,
-      guId,
+      inOutWardId,
       qty,
       stockType,
       description,
@@ -1013,13 +1045,14 @@ class WHInOutWardsTable extends DataClass
       customerName,
       whLocationId,
       productId,
+      productName,
       auditDetailId);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is WHInOutWardsTable &&
           other.updatedDateAndTime == this.updatedDateAndTime &&
-          other.guId == this.guId &&
+          other.inOutWardId == this.inOutWardId &&
           other.qty == this.qty &&
           other.stockType == this.stockType &&
           other.description == this.description &&
@@ -1029,12 +1062,13 @@ class WHInOutWardsTable extends DataClass
           other.customerName == this.customerName &&
           other.whLocationId == this.whLocationId &&
           other.productId == this.productId &&
+          other.productName == this.productName &&
           other.auditDetailId == this.auditDetailId);
 }
 
 class WHInOutWardsCompanion extends UpdateCompanion<WHInOutWardsTable> {
   final Value<DateTime> updatedDateAndTime;
-  final Value<String> guId;
+  final Value<String> inOutWardId;
   final Value<int> qty;
   final Value<String> stockType;
   final Value<String> description;
@@ -1044,11 +1078,12 @@ class WHInOutWardsCompanion extends UpdateCompanion<WHInOutWardsTable> {
   final Value<String> customerName;
   final Value<String> whLocationId;
   final Value<String> productId;
+  final Value<String> productName;
   final Value<String> auditDetailId;
   final Value<int> rowid;
   const WHInOutWardsCompanion({
     this.updatedDateAndTime = const Value.absent(),
-    this.guId = const Value.absent(),
+    this.inOutWardId = const Value.absent(),
     this.qty = const Value.absent(),
     this.stockType = const Value.absent(),
     this.description = const Value.absent(),
@@ -1058,12 +1093,13 @@ class WHInOutWardsCompanion extends UpdateCompanion<WHInOutWardsTable> {
     this.customerName = const Value.absent(),
     this.whLocationId = const Value.absent(),
     this.productId = const Value.absent(),
+    this.productName = const Value.absent(),
     this.auditDetailId = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   WHInOutWardsCompanion.insert({
     required DateTime updatedDateAndTime,
-    required String guId,
+    required String inOutWardId,
     required int qty,
     required String stockType,
     required String description,
@@ -1073,10 +1109,11 @@ class WHInOutWardsCompanion extends UpdateCompanion<WHInOutWardsTable> {
     required String customerName,
     required String whLocationId,
     required String productId,
+    required String productName,
     required String auditDetailId,
     this.rowid = const Value.absent(),
   })  : updatedDateAndTime = Value(updatedDateAndTime),
-        guId = Value(guId),
+        inOutWardId = Value(inOutWardId),
         qty = Value(qty),
         stockType = Value(stockType),
         description = Value(description),
@@ -1086,10 +1123,11 @@ class WHInOutWardsCompanion extends UpdateCompanion<WHInOutWardsTable> {
         customerName = Value(customerName),
         whLocationId = Value(whLocationId),
         productId = Value(productId),
+        productName = Value(productName),
         auditDetailId = Value(auditDetailId);
   static Insertable<WHInOutWardsTable> custom({
     Expression<DateTime>? updatedDateAndTime,
-    Expression<String>? guId,
+    Expression<String>? inOutWardId,
     Expression<int>? qty,
     Expression<String>? stockType,
     Expression<String>? description,
@@ -1099,13 +1137,14 @@ class WHInOutWardsCompanion extends UpdateCompanion<WHInOutWardsTable> {
     Expression<String>? customerName,
     Expression<String>? whLocationId,
     Expression<String>? productId,
+    Expression<String>? productName,
     Expression<String>? auditDetailId,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
       if (updatedDateAndTime != null)
         'updated_date_and_time': updatedDateAndTime,
-      if (guId != null) 'gu_id': guId,
+      if (inOutWardId != null) 'in_out_ward_id': inOutWardId,
       if (qty != null) 'qty': qty,
       if (stockType != null) 'stock_type': stockType,
       if (description != null) 'description': description,
@@ -1115,6 +1154,7 @@ class WHInOutWardsCompanion extends UpdateCompanion<WHInOutWardsTable> {
       if (customerName != null) 'customer_name': customerName,
       if (whLocationId != null) 'wh_location_id': whLocationId,
       if (productId != null) 'product_id': productId,
+      if (productName != null) 'product_name': productName,
       if (auditDetailId != null) 'audit_detail_id': auditDetailId,
       if (rowid != null) 'rowid': rowid,
     });
@@ -1122,7 +1162,7 @@ class WHInOutWardsCompanion extends UpdateCompanion<WHInOutWardsTable> {
 
   WHInOutWardsCompanion copyWith(
       {Value<DateTime>? updatedDateAndTime,
-      Value<String>? guId,
+      Value<String>? inOutWardId,
       Value<int>? qty,
       Value<String>? stockType,
       Value<String>? description,
@@ -1132,11 +1172,12 @@ class WHInOutWardsCompanion extends UpdateCompanion<WHInOutWardsTable> {
       Value<String>? customerName,
       Value<String>? whLocationId,
       Value<String>? productId,
+      Value<String>? productName,
       Value<String>? auditDetailId,
       Value<int>? rowid}) {
     return WHInOutWardsCompanion(
       updatedDateAndTime: updatedDateAndTime ?? this.updatedDateAndTime,
-      guId: guId ?? this.guId,
+      inOutWardId: inOutWardId ?? this.inOutWardId,
       qty: qty ?? this.qty,
       stockType: stockType ?? this.stockType,
       description: description ?? this.description,
@@ -1146,6 +1187,7 @@ class WHInOutWardsCompanion extends UpdateCompanion<WHInOutWardsTable> {
       customerName: customerName ?? this.customerName,
       whLocationId: whLocationId ?? this.whLocationId,
       productId: productId ?? this.productId,
+      productName: productName ?? this.productName,
       auditDetailId: auditDetailId ?? this.auditDetailId,
       rowid: rowid ?? this.rowid,
     );
@@ -1158,8 +1200,8 @@ class WHInOutWardsCompanion extends UpdateCompanion<WHInOutWardsTable> {
       map['updated_date_and_time'] =
           Variable<DateTime>(updatedDateAndTime.value);
     }
-    if (guId.present) {
-      map['gu_id'] = Variable<String>(guId.value);
+    if (inOutWardId.present) {
+      map['in_out_ward_id'] = Variable<String>(inOutWardId.value);
     }
     if (qty.present) {
       map['qty'] = Variable<int>(qty.value);
@@ -1188,6 +1230,9 @@ class WHInOutWardsCompanion extends UpdateCompanion<WHInOutWardsTable> {
     if (productId.present) {
       map['product_id'] = Variable<String>(productId.value);
     }
+    if (productName.present) {
+      map['product_name'] = Variable<String>(productName.value);
+    }
     if (auditDetailId.present) {
       map['audit_detail_id'] = Variable<String>(auditDetailId.value);
     }
@@ -1201,7 +1246,7 @@ class WHInOutWardsCompanion extends UpdateCompanion<WHInOutWardsTable> {
   String toString() {
     return (StringBuffer('WHInOutWardsCompanion(')
           ..write('updatedDateAndTime: $updatedDateAndTime, ')
-          ..write('guId: $guId, ')
+          ..write('inOutWardId: $inOutWardId, ')
           ..write('qty: $qty, ')
           ..write('stockType: $stockType, ')
           ..write('description: $description, ')
@@ -1211,6 +1256,7 @@ class WHInOutWardsCompanion extends UpdateCompanion<WHInOutWardsTable> {
           ..write('customerName: $customerName, ')
           ..write('whLocationId: $whLocationId, ')
           ..write('productId: $productId, ')
+          ..write('productName: $productName, ')
           ..write('auditDetailId: $auditDetailId, ')
           ..write('rowid: $rowid')
           ..write(')'))
@@ -1230,10 +1276,11 @@ class $WHAuditingTable extends WHAuditing
   late final GeneratedColumn<DateTime> updatedDateAndTime =
       GeneratedColumn<DateTime>('updated_date_and_time', aliasedName, false,
           type: DriftSqlType.dateTime, requiredDuringInsert: true);
-  static const VerificationMeta _guIdMeta = const VerificationMeta('guId');
+  static const VerificationMeta _auditingIdMeta =
+      const VerificationMeta('auditingId');
   @override
-  late final GeneratedColumn<String> guId = GeneratedColumn<String>(
-      'gu_id', aliasedName, false,
+  late final GeneratedColumn<String> auditingId = GeneratedColumn<String>(
+      'auditing_id', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true);
   static const VerificationMeta _qtyMeta = const VerificationMeta('qty');
   @override
@@ -1263,6 +1310,12 @@ class $WHAuditingTable extends WHAuditing
   @override
   late final GeneratedColumn<String> productId = GeneratedColumn<String>(
       'product_id', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _productNameMeta =
+      const VerificationMeta('productName');
+  @override
+  late final GeneratedColumn<String> productName = GeneratedColumn<String>(
+      'product_name', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true);
   static const VerificationMeta _whLocationIdMeta =
       const VerificationMeta('whLocationId');
@@ -1295,12 +1348,13 @@ class $WHAuditingTable extends WHAuditing
   @override
   List<GeneratedColumn> get $columns => [
         updatedDateAndTime,
-        guId,
+        auditingId,
         qty,
         bestBefore,
         stockType,
         productQuality,
         productId,
+        productName,
         whLocationId,
         auditDetailId,
         description,
@@ -1324,11 +1378,13 @@ class $WHAuditingTable extends WHAuditing
     } else if (isInserting) {
       context.missing(_updatedDateAndTimeMeta);
     }
-    if (data.containsKey('gu_id')) {
+    if (data.containsKey('auditing_id')) {
       context.handle(
-          _guIdMeta, guId.isAcceptableOrUnknown(data['gu_id']!, _guIdMeta));
+          _auditingIdMeta,
+          auditingId.isAcceptableOrUnknown(
+              data['auditing_id']!, _auditingIdMeta));
     } else if (isInserting) {
-      context.missing(_guIdMeta);
+      context.missing(_auditingIdMeta);
     }
     if (data.containsKey('qty')) {
       context.handle(
@@ -1363,6 +1419,14 @@ class $WHAuditingTable extends WHAuditing
           productId.isAcceptableOrUnknown(data['product_id']!, _productIdMeta));
     } else if (isInserting) {
       context.missing(_productIdMeta);
+    }
+    if (data.containsKey('product_name')) {
+      context.handle(
+          _productNameMeta,
+          productName.isAcceptableOrUnknown(
+              data['product_name']!, _productNameMeta));
+    } else if (isInserting) {
+      context.missing(_productNameMeta);
     }
     if (data.containsKey('wh_location_id')) {
       context.handle(
@@ -1413,8 +1477,8 @@ class $WHAuditingTable extends WHAuditing
       updatedDateAndTime: attachedDatabase.typeMapping.read(
           DriftSqlType.dateTime,
           data['${effectivePrefix}updated_date_and_time'])!,
-      guId: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}gu_id'])!,
+      auditingId: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}auditing_id'])!,
       qty: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}qty'])!,
       bestBefore: attachedDatabase.typeMapping
@@ -1425,6 +1489,8 @@ class $WHAuditingTable extends WHAuditing
           DriftSqlType.string, data['${effectivePrefix}product_quality'])!,
       productId: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}product_id'])!,
+      productName: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}product_name'])!,
       whLocationId: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}wh_location_id'])!,
       auditDetailId: attachedDatabase.typeMapping.read(
@@ -1446,12 +1512,13 @@ class $WHAuditingTable extends WHAuditing
 
 class WHAuditingTable extends DataClass implements Insertable<WHAuditingTable> {
   final DateTime updatedDateAndTime;
-  final String guId;
+  final String auditingId;
   final int qty;
   final int bestBefore;
   final String stockType;
   final String productQuality;
   final String productId;
+  final String productName;
   final String whLocationId;
   final String auditDetailId;
   final String description;
@@ -1459,12 +1526,13 @@ class WHAuditingTable extends DataClass implements Insertable<WHAuditingTable> {
   final String file;
   const WHAuditingTable(
       {required this.updatedDateAndTime,
-      required this.guId,
+      required this.auditingId,
       required this.qty,
       required this.bestBefore,
       required this.stockType,
       required this.productQuality,
       required this.productId,
+      required this.productName,
       required this.whLocationId,
       required this.auditDetailId,
       required this.description,
@@ -1474,12 +1542,13 @@ class WHAuditingTable extends DataClass implements Insertable<WHAuditingTable> {
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['updated_date_and_time'] = Variable<DateTime>(updatedDateAndTime);
-    map['gu_id'] = Variable<String>(guId);
+    map['auditing_id'] = Variable<String>(auditingId);
     map['qty'] = Variable<int>(qty);
     map['best_before'] = Variable<int>(bestBefore);
     map['stock_type'] = Variable<String>(stockType);
     map['product_quality'] = Variable<String>(productQuality);
     map['product_id'] = Variable<String>(productId);
+    map['product_name'] = Variable<String>(productName);
     map['wh_location_id'] = Variable<String>(whLocationId);
     map['audit_detail_id'] = Variable<String>(auditDetailId);
     map['description'] = Variable<String>(description);
@@ -1491,12 +1560,13 @@ class WHAuditingTable extends DataClass implements Insertable<WHAuditingTable> {
   WHAuditingCompanion toCompanion(bool nullToAbsent) {
     return WHAuditingCompanion(
       updatedDateAndTime: Value(updatedDateAndTime),
-      guId: Value(guId),
+      auditingId: Value(auditingId),
       qty: Value(qty),
       bestBefore: Value(bestBefore),
       stockType: Value(stockType),
       productQuality: Value(productQuality),
       productId: Value(productId),
+      productName: Value(productName),
       whLocationId: Value(whLocationId),
       auditDetailId: Value(auditDetailId),
       description: Value(description),
@@ -1511,12 +1581,13 @@ class WHAuditingTable extends DataClass implements Insertable<WHAuditingTable> {
     return WHAuditingTable(
       updatedDateAndTime:
           serializer.fromJson<DateTime>(json['updatedDateAndTime']),
-      guId: serializer.fromJson<String>(json['guId']),
+      auditingId: serializer.fromJson<String>(json['auditingId']),
       qty: serializer.fromJson<int>(json['qty']),
       bestBefore: serializer.fromJson<int>(json['bestBefore']),
       stockType: serializer.fromJson<String>(json['stockType']),
       productQuality: serializer.fromJson<String>(json['productQuality']),
       productId: serializer.fromJson<String>(json['productId']),
+      productName: serializer.fromJson<String>(json['productName']),
       whLocationId: serializer.fromJson<String>(json['whLocationId']),
       auditDetailId: serializer.fromJson<String>(json['auditDetailId']),
       description: serializer.fromJson<String>(json['description']),
@@ -1529,12 +1600,13 @@ class WHAuditingTable extends DataClass implements Insertable<WHAuditingTable> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'updatedDateAndTime': serializer.toJson<DateTime>(updatedDateAndTime),
-      'guId': serializer.toJson<String>(guId),
+      'auditingId': serializer.toJson<String>(auditingId),
       'qty': serializer.toJson<int>(qty),
       'bestBefore': serializer.toJson<int>(bestBefore),
       'stockType': serializer.toJson<String>(stockType),
       'productQuality': serializer.toJson<String>(productQuality),
       'productId': serializer.toJson<String>(productId),
+      'productName': serializer.toJson<String>(productName),
       'whLocationId': serializer.toJson<String>(whLocationId),
       'auditDetailId': serializer.toJson<String>(auditDetailId),
       'description': serializer.toJson<String>(description),
@@ -1545,12 +1617,13 @@ class WHAuditingTable extends DataClass implements Insertable<WHAuditingTable> {
 
   WHAuditingTable copyWith(
           {DateTime? updatedDateAndTime,
-          String? guId,
+          String? auditingId,
           int? qty,
           int? bestBefore,
           String? stockType,
           String? productQuality,
           String? productId,
+          String? productName,
           String? whLocationId,
           String? auditDetailId,
           String? description,
@@ -1558,12 +1631,13 @@ class WHAuditingTable extends DataClass implements Insertable<WHAuditingTable> {
           String? file}) =>
       WHAuditingTable(
         updatedDateAndTime: updatedDateAndTime ?? this.updatedDateAndTime,
-        guId: guId ?? this.guId,
+        auditingId: auditingId ?? this.auditingId,
         qty: qty ?? this.qty,
         bestBefore: bestBefore ?? this.bestBefore,
         stockType: stockType ?? this.stockType,
         productQuality: productQuality ?? this.productQuality,
         productId: productId ?? this.productId,
+        productName: productName ?? this.productName,
         whLocationId: whLocationId ?? this.whLocationId,
         auditDetailId: auditDetailId ?? this.auditDetailId,
         description: description ?? this.description,
@@ -1574,12 +1648,13 @@ class WHAuditingTable extends DataClass implements Insertable<WHAuditingTable> {
   String toString() {
     return (StringBuffer('WHAuditingTable(')
           ..write('updatedDateAndTime: $updatedDateAndTime, ')
-          ..write('guId: $guId, ')
+          ..write('auditingId: $auditingId, ')
           ..write('qty: $qty, ')
           ..write('bestBefore: $bestBefore, ')
           ..write('stockType: $stockType, ')
           ..write('productQuality: $productQuality, ')
           ..write('productId: $productId, ')
+          ..write('productName: $productName, ')
           ..write('whLocationId: $whLocationId, ')
           ..write('auditDetailId: $auditDetailId, ')
           ..write('description: $description, ')
@@ -1592,12 +1667,13 @@ class WHAuditingTable extends DataClass implements Insertable<WHAuditingTable> {
   @override
   int get hashCode => Object.hash(
       updatedDateAndTime,
-      guId,
+      auditingId,
       qty,
       bestBefore,
       stockType,
       productQuality,
       productId,
+      productName,
       whLocationId,
       auditDetailId,
       description,
@@ -1608,12 +1684,13 @@ class WHAuditingTable extends DataClass implements Insertable<WHAuditingTable> {
       identical(this, other) ||
       (other is WHAuditingTable &&
           other.updatedDateAndTime == this.updatedDateAndTime &&
-          other.guId == this.guId &&
+          other.auditingId == this.auditingId &&
           other.qty == this.qty &&
           other.bestBefore == this.bestBefore &&
           other.stockType == this.stockType &&
           other.productQuality == this.productQuality &&
           other.productId == this.productId &&
+          other.productName == this.productName &&
           other.whLocationId == this.whLocationId &&
           other.auditDetailId == this.auditDetailId &&
           other.description == this.description &&
@@ -1623,12 +1700,13 @@ class WHAuditingTable extends DataClass implements Insertable<WHAuditingTable> {
 
 class WHAuditingCompanion extends UpdateCompanion<WHAuditingTable> {
   final Value<DateTime> updatedDateAndTime;
-  final Value<String> guId;
+  final Value<String> auditingId;
   final Value<int> qty;
   final Value<int> bestBefore;
   final Value<String> stockType;
   final Value<String> productQuality;
   final Value<String> productId;
+  final Value<String> productName;
   final Value<String> whLocationId;
   final Value<String> auditDetailId;
   final Value<String> description;
@@ -1637,12 +1715,13 @@ class WHAuditingCompanion extends UpdateCompanion<WHAuditingTable> {
   final Value<int> rowid;
   const WHAuditingCompanion({
     this.updatedDateAndTime = const Value.absent(),
-    this.guId = const Value.absent(),
+    this.auditingId = const Value.absent(),
     this.qty = const Value.absent(),
     this.bestBefore = const Value.absent(),
     this.stockType = const Value.absent(),
     this.productQuality = const Value.absent(),
     this.productId = const Value.absent(),
+    this.productName = const Value.absent(),
     this.whLocationId = const Value.absent(),
     this.auditDetailId = const Value.absent(),
     this.description = const Value.absent(),
@@ -1652,12 +1731,13 @@ class WHAuditingCompanion extends UpdateCompanion<WHAuditingTable> {
   });
   WHAuditingCompanion.insert({
     required DateTime updatedDateAndTime,
-    required String guId,
+    required String auditingId,
     required int qty,
     required int bestBefore,
     required String stockType,
     required String productQuality,
     required String productId,
+    required String productName,
     required String whLocationId,
     required String auditDetailId,
     required String description,
@@ -1665,12 +1745,13 @@ class WHAuditingCompanion extends UpdateCompanion<WHAuditingTable> {
     required String file,
     this.rowid = const Value.absent(),
   })  : updatedDateAndTime = Value(updatedDateAndTime),
-        guId = Value(guId),
+        auditingId = Value(auditingId),
         qty = Value(qty),
         bestBefore = Value(bestBefore),
         stockType = Value(stockType),
         productQuality = Value(productQuality),
         productId = Value(productId),
+        productName = Value(productName),
         whLocationId = Value(whLocationId),
         auditDetailId = Value(auditDetailId),
         description = Value(description),
@@ -1678,12 +1759,13 @@ class WHAuditingCompanion extends UpdateCompanion<WHAuditingTable> {
         file = Value(file);
   static Insertable<WHAuditingTable> custom({
     Expression<DateTime>? updatedDateAndTime,
-    Expression<String>? guId,
+    Expression<String>? auditingId,
     Expression<int>? qty,
     Expression<int>? bestBefore,
     Expression<String>? stockType,
     Expression<String>? productQuality,
     Expression<String>? productId,
+    Expression<String>? productName,
     Expression<String>? whLocationId,
     Expression<String>? auditDetailId,
     Expression<String>? description,
@@ -1694,12 +1776,13 @@ class WHAuditingCompanion extends UpdateCompanion<WHAuditingTable> {
     return RawValuesInsertable({
       if (updatedDateAndTime != null)
         'updated_date_and_time': updatedDateAndTime,
-      if (guId != null) 'gu_id': guId,
+      if (auditingId != null) 'auditing_id': auditingId,
       if (qty != null) 'qty': qty,
       if (bestBefore != null) 'best_before': bestBefore,
       if (stockType != null) 'stock_type': stockType,
       if (productQuality != null) 'product_quality': productQuality,
       if (productId != null) 'product_id': productId,
+      if (productName != null) 'product_name': productName,
       if (whLocationId != null) 'wh_location_id': whLocationId,
       if (auditDetailId != null) 'audit_detail_id': auditDetailId,
       if (description != null) 'description': description,
@@ -1711,12 +1794,13 @@ class WHAuditingCompanion extends UpdateCompanion<WHAuditingTable> {
 
   WHAuditingCompanion copyWith(
       {Value<DateTime>? updatedDateAndTime,
-      Value<String>? guId,
+      Value<String>? auditingId,
       Value<int>? qty,
       Value<int>? bestBefore,
       Value<String>? stockType,
       Value<String>? productQuality,
       Value<String>? productId,
+      Value<String>? productName,
       Value<String>? whLocationId,
       Value<String>? auditDetailId,
       Value<String>? description,
@@ -1725,12 +1809,13 @@ class WHAuditingCompanion extends UpdateCompanion<WHAuditingTable> {
       Value<int>? rowid}) {
     return WHAuditingCompanion(
       updatedDateAndTime: updatedDateAndTime ?? this.updatedDateAndTime,
-      guId: guId ?? this.guId,
+      auditingId: auditingId ?? this.auditingId,
       qty: qty ?? this.qty,
       bestBefore: bestBefore ?? this.bestBefore,
       stockType: stockType ?? this.stockType,
       productQuality: productQuality ?? this.productQuality,
       productId: productId ?? this.productId,
+      productName: productName ?? this.productName,
       whLocationId: whLocationId ?? this.whLocationId,
       auditDetailId: auditDetailId ?? this.auditDetailId,
       description: description ?? this.description,
@@ -1747,8 +1832,8 @@ class WHAuditingCompanion extends UpdateCompanion<WHAuditingTable> {
       map['updated_date_and_time'] =
           Variable<DateTime>(updatedDateAndTime.value);
     }
-    if (guId.present) {
-      map['gu_id'] = Variable<String>(guId.value);
+    if (auditingId.present) {
+      map['auditing_id'] = Variable<String>(auditingId.value);
     }
     if (qty.present) {
       map['qty'] = Variable<int>(qty.value);
@@ -1764,6 +1849,9 @@ class WHAuditingCompanion extends UpdateCompanion<WHAuditingTable> {
     }
     if (productId.present) {
       map['product_id'] = Variable<String>(productId.value);
+    }
+    if (productName.present) {
+      map['product_name'] = Variable<String>(productName.value);
     }
     if (whLocationId.present) {
       map['wh_location_id'] = Variable<String>(whLocationId.value);
@@ -1790,12 +1878,13 @@ class WHAuditingCompanion extends UpdateCompanion<WHAuditingTable> {
   String toString() {
     return (StringBuffer('WHAuditingCompanion(')
           ..write('updatedDateAndTime: $updatedDateAndTime, ')
-          ..write('guId: $guId, ')
+          ..write('auditingId: $auditingId, ')
           ..write('qty: $qty, ')
           ..write('bestBefore: $bestBefore, ')
           ..write('stockType: $stockType, ')
           ..write('productQuality: $productQuality, ')
           ..write('productId: $productId, ')
+          ..write('productName: $productName, ')
           ..write('whLocationId: $whLocationId, ')
           ..write('auditDetailId: $auditDetailId, ')
           ..write('description: $description, ')

@@ -29,7 +29,7 @@ class ApiData extends Table {
 class WHLocation extends Table {
   DateTimeColumn get updatedDateAndTime => dateTime()();
 
-  TextColumn get guId => text()();
+  TextColumn get locationId => text()();
 
   TextColumn get locationName => text()();
 
@@ -51,7 +51,7 @@ class WHLocation extends Table {
 class WHInOutWards extends Table {
   DateTimeColumn get updatedDateAndTime => dateTime()();
 
-  TextColumn get guId => text()();
+  TextColumn get inOutWardId => text()();
 
   IntColumn get qty => integer()();
 
@@ -71,6 +71,8 @@ class WHInOutWards extends Table {
 
   TextColumn get productId => text()();
 
+  TextColumn get productName => text()();
+
   TextColumn get auditDetailId => text()();
 
   @override
@@ -84,7 +86,7 @@ class WHInOutWards extends Table {
 class WHAuditing extends Table {
   DateTimeColumn get updatedDateAndTime => dateTime()();
 
-  TextColumn get guId => text()();
+  TextColumn get auditingId => text()();
 
   IntColumn get qty => integer()();
 
@@ -95,6 +97,8 @@ class WHAuditing extends Table {
   TextColumn get productQuality => text()();
 
   TextColumn get productId => text()();
+
+  TextColumn get productName => text()();
 
   TextColumn get whLocationId => text()();
 
@@ -110,6 +114,8 @@ class WHAuditing extends Table {
   @override
   Set<Column> get primaryKey => {auditDetailId,whLocationId,productId};
 }
+
+
 
 /*
 * This class represents Data base and their tables*/

@@ -101,7 +101,7 @@ class _WHInOutWardsScreenState extends CustomState<WHInOutWardsScreen> {
                                         children: [
                                           Expanded(
                                             child: Text(
-                                              "Product:   ${inOutWard.productId}",
+                                              "Product:   ${inOutWard.productName}",
                                               style: const TextStyle(
                                                   color: CustomColor.black,
                                                   fontSize: 14,
@@ -159,16 +159,6 @@ class _WHInOutWardsScreenState extends CustomState<WHInOutWardsScreen> {
                                                 ),
                                               ))
                                         ],
-                                      ),
-                                      const SizedBox(
-                                        height: 10,
-                                      ),
-                                      Text(
-                                        "Location:    ${inOutWard.whLocationId}",
-                                        style: const TextStyle(
-                                            color: CustomColor.black,
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.normal),
                                       ),
                                       const SizedBox(
                                         height: 10,
@@ -271,7 +261,7 @@ class _WHInOutWardsScreenState extends CustomState<WHInOutWardsScreen> {
   void updateWHInOutWardsScreen() async {
     DatabaseRepository()
         .getWHInOutWardByAuditId(
-            widget.auditDetails.id ?? "", widget.location.guId)
+            widget.auditDetails.id ?? "", widget.location.locationId)
         .then((value) {
       list.clear();
       list.addAll(value);
@@ -296,7 +286,7 @@ class _WHInOutWardsScreenState extends CustomState<WHInOutWardsScreen> {
   }
 
   void deleteLocation(WHInOutWardsTable location) async {
-    await DatabaseRepository().deleteWHInOutWard(guid: location.guId);
+    await DatabaseRepository().deleteWHInOutWard(guid: location.inOutWardId);
     Navigator.pop(context);
     updateWHInOutWardsScreen();
   }

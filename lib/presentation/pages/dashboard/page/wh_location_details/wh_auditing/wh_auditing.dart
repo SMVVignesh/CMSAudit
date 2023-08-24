@@ -100,7 +100,7 @@ class _WHAuditingScreenState extends CustomState<WHAuditingScreen> {
                                         children: [
                                           Expanded(
                                             child: Text(
-                                              "Id:   ${inOutWard.guId}",
+                                              "Id:   ${inOutWard.auditingId}",
                                               style: const TextStyle(
                                                   color: CustomColor.black,
                                                   fontSize: 14,
@@ -163,7 +163,7 @@ class _WHAuditingScreenState extends CustomState<WHAuditingScreen> {
                                         height: 10,
                                       ),
                                       Text(
-                                        "Product:    ${inOutWard.productId}",
+                                        "Product:    ${inOutWard.productName}",
                                         style: const TextStyle(
                                             color: CustomColor.black,
                                             fontSize: 14,
@@ -174,16 +174,6 @@ class _WHAuditingScreenState extends CustomState<WHAuditingScreen> {
                                       ),
                                       Text(
                                         "Product Quality:    ${inOutWard.productQuality}",
-                                        style: const TextStyle(
-                                            color: CustomColor.black,
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.normal),
-                                      ),
-                                      const SizedBox(
-                                        height: 10,
-                                      ),
-                                      Text(
-                                        "Location:    ${inOutWard.whLocationId}",
                                         style: const TextStyle(
                                             color: CustomColor.black,
                                             fontSize: 14,
@@ -270,7 +260,7 @@ class _WHAuditingScreenState extends CustomState<WHAuditingScreen> {
   void updateWHInOutWardsScreen() async {
     DatabaseRepository()
         .getWHAuditingByAuditId(
-        widget.auditDetails.id ?? "", widget.location.guId)
+        widget.auditDetails.id ?? "", widget.location.locationId)
         .then((value) {
       list.clear();
       list.addAll(value);
@@ -283,7 +273,7 @@ class _WHAuditingScreenState extends CustomState<WHAuditingScreen> {
         context: context,
         themeColor: CustomColor.splashScreenTop,
         heading: "",
-        desc: "Are you sure you want to Delete Id: ${auditingTable.guId}?",
+        desc: "Are you sure you want to Delete Id: ${auditingTable.auditingId}?",
         positiveBtn: "Delete",
         positiveClick: () {
           deleteLocation(auditingTable);
@@ -295,7 +285,7 @@ class _WHAuditingScreenState extends CustomState<WHAuditingScreen> {
   }
 
   void deleteLocation(WHAuditingTable auditingTable) async {
-    await DatabaseRepository().deleteWHAuditing(guid: auditingTable.guId);
+    await DatabaseRepository().deleteWHAuditing(guid: auditingTable.auditingId);
     Navigator.pop(context);
     updateWHInOutWardsScreen();
   }

@@ -153,6 +153,7 @@ class DatabaseRepository {
     required String customerName,
     required String whLocationId,
     required String auditDetailId,
+    required String productName,
     required String productId}) async {
     final encryptedData = await databaseHelper.insertWHInOutWard(
         qty: qty,
@@ -164,6 +165,7 @@ class DatabaseRepository {
         customerName: customerName,
         whLocationId: whLocationId,
         productId: productId,
+        productName:productName,
         auditDetailId: auditDetailId);
     return encryptedData;
   }
@@ -178,6 +180,7 @@ class DatabaseRepository {
     required String auditDetailId,
     required String description,
     required String mfDate,
+    required String productName,
     required String file}) async {
     final encryptedData = await databaseHelper.insertWHAuditing(qty: qty,
         bestBefore: bestBefore,
@@ -188,6 +191,7 @@ class DatabaseRepository {
         auditDetailId: auditDetailId,
         description: description,
         mfDate: mfDate,
+        productName: productName,
         file: file);
     return encryptedData;
   }

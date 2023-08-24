@@ -328,7 +328,7 @@ class _WHLocationsState extends CustomState<WHLocations> {
 
   void deleteLocation(WHLocationTable location) async {
     await DatabaseRepository().deleteWHLocation(
-        guid: location.guId);
+        guid: location.locationId);
     Navigator.pop(context);
     updateWHLocations();
   }

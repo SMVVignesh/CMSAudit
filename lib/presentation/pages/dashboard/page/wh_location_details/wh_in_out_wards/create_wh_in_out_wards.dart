@@ -239,9 +239,11 @@ class _CreateWHInOutWardsScreenState extends State<CreateWHInOutWardsScreen> {
             invoType: selectedInvoiceType?.key ?? "",
             invoDate: invoiceDate,
             customerName: customerName,
-            whLocationId: widget.location?.guId ?? "",
+            whLocationId: widget.location?.locationId ?? "",
             auditDetailId: widget.auditDetails.id??"",
-            productId: selectedProducts?.key ?? "");
+            productId: selectedProducts?.key ?? "",
+            productName: selectedProducts?.value??""
+        );
         if (context.mounted) {
           Navigator.pop(context);
         }

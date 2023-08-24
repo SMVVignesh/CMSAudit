@@ -73,7 +73,7 @@ class DatabaseHelper {
         description: description,
         auditDetailId: auditDetailId,
         isActive: isActive,
-        guId: Utils.getNewGuId()));
+        locationId: Utils.getNewGuId()));
     return await query;
   }
 
@@ -81,7 +81,7 @@ class DatabaseHelper {
   * This method is used to delete WHLocations*/
   Future<int> deleteWHLocation({required String guid}) async {
     final query = _database.delete(_database.wHLocation)
-      ..where((tbl) => tbl.guId.equals(guid));
+      ..where((tbl) => tbl.locationId.equals(guid));
     return await query.go();
   }
 
@@ -89,7 +89,7 @@ class DatabaseHelper {
   * This method is used to delete WHLocations*/
   Future<int> deleteWHInOutWard({required String guid}) async {
     final query = _database.delete(_database.wHInOutWards)
-      ..where((tbl) => tbl.guId.equals(guid));
+      ..where((tbl) => tbl.inOutWardId.equals(guid));
     return await query.go();
   }
 
@@ -97,7 +97,7 @@ class DatabaseHelper {
   * This method is used to delete WHLocations*/
   Future<int> deleteWHAuditing({required String guid}) async {
     final query = _database.delete(_database.wHAuditing)
-      ..where((tbl) => tbl.guId.equals(guid));
+      ..where((tbl) => tbl.auditingId.equals(guid));
     return await query.go();
   }
 
@@ -148,10 +148,11 @@ class DatabaseHelper {
       required String customerName,
       required String whLocationId,
       required String auditDetailId,
+      required String productName,
       required String productId}) async {
     final query = _database.into(_database.wHInOutWards).insert(
         WHInOutWardsTable(
-            guId: Utils.getNewGuId(),
+            inOutWardId: Utils.getNewGuId(),
             updatedDateAndTime: DateTime.now(),
             qty: qty,
             stockType: stockType,
@@ -162,6 +163,7 @@ class DatabaseHelper {
             customerName: customerName,
             whLocationId: whLocationId,
             productId: productId,
+            productName: productName,
             auditDetailId: auditDetailId));
     return await query;
   }
@@ -178,10 +180,11 @@ class DatabaseHelper {
       required String auditDetailId,
       required String description,
       required String mfDate,
+      required String productName,
       required String file}) async {
     final query = _database.into(_database.wHAuditing).insert(WHAuditingTable(
         updatedDateAndTime: DateTime.now(),
-        guId: Utils.getNewGuId(),
+        auditingId: Utils.getNewGuId(),
         qty: qty,
         bestBefore: bestBefore,
         stockType: stockType,
@@ -191,6 +194,7 @@ class DatabaseHelper {
         auditDetailId: auditDetailId,
         description: description,
         mfDate: mfDate,
+        productName:productName ,
         file: file));
     return await query;
   }
