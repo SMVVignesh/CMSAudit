@@ -629,13 +629,1194 @@ class WHLocationCompanion extends UpdateCompanion<WHLocationTable> {
   }
 }
 
+class $WHInOutWardsTable extends WHInOutWards
+    with TableInfo<$WHInOutWardsTable, WHInOutWardsTable> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $WHInOutWardsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _updatedDateAndTimeMeta =
+      const VerificationMeta('updatedDateAndTime');
+  @override
+  late final GeneratedColumn<DateTime> updatedDateAndTime =
+      GeneratedColumn<DateTime>('updated_date_and_time', aliasedName, false,
+          type: DriftSqlType.dateTime, requiredDuringInsert: true);
+  static const VerificationMeta _guIdMeta = const VerificationMeta('guId');
+  @override
+  late final GeneratedColumn<String> guId = GeneratedColumn<String>(
+      'gu_id', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _qtyMeta = const VerificationMeta('qty');
+  @override
+  late final GeneratedColumn<int> qty = GeneratedColumn<int>(
+      'qty', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _stockTypeMeta =
+      const VerificationMeta('stockType');
+  @override
+  late final GeneratedColumn<String> stockType = GeneratedColumn<String>(
+      'stock_type', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _descriptionMeta =
+      const VerificationMeta('description');
+  @override
+  late final GeneratedColumn<String> description = GeneratedColumn<String>(
+      'description', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _invoNoMeta = const VerificationMeta('invoNo');
+  @override
+  late final GeneratedColumn<String> invoNo = GeneratedColumn<String>(
+      'invo_no', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _invoTypeMeta =
+      const VerificationMeta('invoType');
+  @override
+  late final GeneratedColumn<String> invoType = GeneratedColumn<String>(
+      'invo_type', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _invoDateMeta =
+      const VerificationMeta('invoDate');
+  @override
+  late final GeneratedColumn<String> invoDate = GeneratedColumn<String>(
+      'invo_date', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _customerNameMeta =
+      const VerificationMeta('customerName');
+  @override
+  late final GeneratedColumn<String> customerName = GeneratedColumn<String>(
+      'customer_name', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _whLocationIdMeta =
+      const VerificationMeta('whLocationId');
+  @override
+  late final GeneratedColumn<String> whLocationId = GeneratedColumn<String>(
+      'wh_location_id', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _productIdMeta =
+      const VerificationMeta('productId');
+  @override
+  late final GeneratedColumn<String> productId = GeneratedColumn<String>(
+      'product_id', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _auditDetailIdMeta =
+      const VerificationMeta('auditDetailId');
+  @override
+  late final GeneratedColumn<String> auditDetailId = GeneratedColumn<String>(
+      'audit_detail_id', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  @override
+  List<GeneratedColumn> get $columns => [
+        updatedDateAndTime,
+        guId,
+        qty,
+        stockType,
+        description,
+        invoNo,
+        invoType,
+        invoDate,
+        customerName,
+        whLocationId,
+        productId,
+        auditDetailId
+      ];
+  @override
+  String get aliasedName => _alias ?? 'w_h_in_out_wards';
+  @override
+  String get actualTableName => 'w_h_in_out_wards';
+  @override
+  VerificationContext validateIntegrity(Insertable<WHInOutWardsTable> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('updated_date_and_time')) {
+      context.handle(
+          _updatedDateAndTimeMeta,
+          updatedDateAndTime.isAcceptableOrUnknown(
+              data['updated_date_and_time']!, _updatedDateAndTimeMeta));
+    } else if (isInserting) {
+      context.missing(_updatedDateAndTimeMeta);
+    }
+    if (data.containsKey('gu_id')) {
+      context.handle(
+          _guIdMeta, guId.isAcceptableOrUnknown(data['gu_id']!, _guIdMeta));
+    } else if (isInserting) {
+      context.missing(_guIdMeta);
+    }
+    if (data.containsKey('qty')) {
+      context.handle(
+          _qtyMeta, qty.isAcceptableOrUnknown(data['qty']!, _qtyMeta));
+    } else if (isInserting) {
+      context.missing(_qtyMeta);
+    }
+    if (data.containsKey('stock_type')) {
+      context.handle(_stockTypeMeta,
+          stockType.isAcceptableOrUnknown(data['stock_type']!, _stockTypeMeta));
+    } else if (isInserting) {
+      context.missing(_stockTypeMeta);
+    }
+    if (data.containsKey('description')) {
+      context.handle(
+          _descriptionMeta,
+          description.isAcceptableOrUnknown(
+              data['description']!, _descriptionMeta));
+    } else if (isInserting) {
+      context.missing(_descriptionMeta);
+    }
+    if (data.containsKey('invo_no')) {
+      context.handle(_invoNoMeta,
+          invoNo.isAcceptableOrUnknown(data['invo_no']!, _invoNoMeta));
+    } else if (isInserting) {
+      context.missing(_invoNoMeta);
+    }
+    if (data.containsKey('invo_type')) {
+      context.handle(_invoTypeMeta,
+          invoType.isAcceptableOrUnknown(data['invo_type']!, _invoTypeMeta));
+    } else if (isInserting) {
+      context.missing(_invoTypeMeta);
+    }
+    if (data.containsKey('invo_date')) {
+      context.handle(_invoDateMeta,
+          invoDate.isAcceptableOrUnknown(data['invo_date']!, _invoDateMeta));
+    } else if (isInserting) {
+      context.missing(_invoDateMeta);
+    }
+    if (data.containsKey('customer_name')) {
+      context.handle(
+          _customerNameMeta,
+          customerName.isAcceptableOrUnknown(
+              data['customer_name']!, _customerNameMeta));
+    } else if (isInserting) {
+      context.missing(_customerNameMeta);
+    }
+    if (data.containsKey('wh_location_id')) {
+      context.handle(
+          _whLocationIdMeta,
+          whLocationId.isAcceptableOrUnknown(
+              data['wh_location_id']!, _whLocationIdMeta));
+    } else if (isInserting) {
+      context.missing(_whLocationIdMeta);
+    }
+    if (data.containsKey('product_id')) {
+      context.handle(_productIdMeta,
+          productId.isAcceptableOrUnknown(data['product_id']!, _productIdMeta));
+    } else if (isInserting) {
+      context.missing(_productIdMeta);
+    }
+    if (data.containsKey('audit_detail_id')) {
+      context.handle(
+          _auditDetailIdMeta,
+          auditDetailId.isAcceptableOrUnknown(
+              data['audit_detail_id']!, _auditDetailIdMeta));
+    } else if (isInserting) {
+      context.missing(_auditDetailIdMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey =>
+      {invoNo, auditDetailId, whLocationId, productId};
+  @override
+  WHInOutWardsTable map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return WHInOutWardsTable(
+      updatedDateAndTime: attachedDatabase.typeMapping.read(
+          DriftSqlType.dateTime,
+          data['${effectivePrefix}updated_date_and_time'])!,
+      guId: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}gu_id'])!,
+      qty: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}qty'])!,
+      stockType: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}stock_type'])!,
+      description: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}description'])!,
+      invoNo: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}invo_no'])!,
+      invoType: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}invo_type'])!,
+      invoDate: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}invo_date'])!,
+      customerName: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}customer_name'])!,
+      whLocationId: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}wh_location_id'])!,
+      productId: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}product_id'])!,
+      auditDetailId: attachedDatabase.typeMapping.read(
+          DriftSqlType.string, data['${effectivePrefix}audit_detail_id'])!,
+    );
+  }
+
+  @override
+  $WHInOutWardsTable createAlias(String alias) {
+    return $WHInOutWardsTable(attachedDatabase, alias);
+  }
+}
+
+class WHInOutWardsTable extends DataClass
+    implements Insertable<WHInOutWardsTable> {
+  final DateTime updatedDateAndTime;
+  final String guId;
+  final int qty;
+  final String stockType;
+  final String description;
+  final String invoNo;
+  final String invoType;
+  final String invoDate;
+  final String customerName;
+  final String whLocationId;
+  final String productId;
+  final String auditDetailId;
+  const WHInOutWardsTable(
+      {required this.updatedDateAndTime,
+      required this.guId,
+      required this.qty,
+      required this.stockType,
+      required this.description,
+      required this.invoNo,
+      required this.invoType,
+      required this.invoDate,
+      required this.customerName,
+      required this.whLocationId,
+      required this.productId,
+      required this.auditDetailId});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['updated_date_and_time'] = Variable<DateTime>(updatedDateAndTime);
+    map['gu_id'] = Variable<String>(guId);
+    map['qty'] = Variable<int>(qty);
+    map['stock_type'] = Variable<String>(stockType);
+    map['description'] = Variable<String>(description);
+    map['invo_no'] = Variable<String>(invoNo);
+    map['invo_type'] = Variable<String>(invoType);
+    map['invo_date'] = Variable<String>(invoDate);
+    map['customer_name'] = Variable<String>(customerName);
+    map['wh_location_id'] = Variable<String>(whLocationId);
+    map['product_id'] = Variable<String>(productId);
+    map['audit_detail_id'] = Variable<String>(auditDetailId);
+    return map;
+  }
+
+  WHInOutWardsCompanion toCompanion(bool nullToAbsent) {
+    return WHInOutWardsCompanion(
+      updatedDateAndTime: Value(updatedDateAndTime),
+      guId: Value(guId),
+      qty: Value(qty),
+      stockType: Value(stockType),
+      description: Value(description),
+      invoNo: Value(invoNo),
+      invoType: Value(invoType),
+      invoDate: Value(invoDate),
+      customerName: Value(customerName),
+      whLocationId: Value(whLocationId),
+      productId: Value(productId),
+      auditDetailId: Value(auditDetailId),
+    );
+  }
+
+  factory WHInOutWardsTable.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return WHInOutWardsTable(
+      updatedDateAndTime:
+          serializer.fromJson<DateTime>(json['updatedDateAndTime']),
+      guId: serializer.fromJson<String>(json['guId']),
+      qty: serializer.fromJson<int>(json['qty']),
+      stockType: serializer.fromJson<String>(json['stockType']),
+      description: serializer.fromJson<String>(json['description']),
+      invoNo: serializer.fromJson<String>(json['invoNo']),
+      invoType: serializer.fromJson<String>(json['invoType']),
+      invoDate: serializer.fromJson<String>(json['invoDate']),
+      customerName: serializer.fromJson<String>(json['customerName']),
+      whLocationId: serializer.fromJson<String>(json['whLocationId']),
+      productId: serializer.fromJson<String>(json['productId']),
+      auditDetailId: serializer.fromJson<String>(json['auditDetailId']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'updatedDateAndTime': serializer.toJson<DateTime>(updatedDateAndTime),
+      'guId': serializer.toJson<String>(guId),
+      'qty': serializer.toJson<int>(qty),
+      'stockType': serializer.toJson<String>(stockType),
+      'description': serializer.toJson<String>(description),
+      'invoNo': serializer.toJson<String>(invoNo),
+      'invoType': serializer.toJson<String>(invoType),
+      'invoDate': serializer.toJson<String>(invoDate),
+      'customerName': serializer.toJson<String>(customerName),
+      'whLocationId': serializer.toJson<String>(whLocationId),
+      'productId': serializer.toJson<String>(productId),
+      'auditDetailId': serializer.toJson<String>(auditDetailId),
+    };
+  }
+
+  WHInOutWardsTable copyWith(
+          {DateTime? updatedDateAndTime,
+          String? guId,
+          int? qty,
+          String? stockType,
+          String? description,
+          String? invoNo,
+          String? invoType,
+          String? invoDate,
+          String? customerName,
+          String? whLocationId,
+          String? productId,
+          String? auditDetailId}) =>
+      WHInOutWardsTable(
+        updatedDateAndTime: updatedDateAndTime ?? this.updatedDateAndTime,
+        guId: guId ?? this.guId,
+        qty: qty ?? this.qty,
+        stockType: stockType ?? this.stockType,
+        description: description ?? this.description,
+        invoNo: invoNo ?? this.invoNo,
+        invoType: invoType ?? this.invoType,
+        invoDate: invoDate ?? this.invoDate,
+        customerName: customerName ?? this.customerName,
+        whLocationId: whLocationId ?? this.whLocationId,
+        productId: productId ?? this.productId,
+        auditDetailId: auditDetailId ?? this.auditDetailId,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('WHInOutWardsTable(')
+          ..write('updatedDateAndTime: $updatedDateAndTime, ')
+          ..write('guId: $guId, ')
+          ..write('qty: $qty, ')
+          ..write('stockType: $stockType, ')
+          ..write('description: $description, ')
+          ..write('invoNo: $invoNo, ')
+          ..write('invoType: $invoType, ')
+          ..write('invoDate: $invoDate, ')
+          ..write('customerName: $customerName, ')
+          ..write('whLocationId: $whLocationId, ')
+          ..write('productId: $productId, ')
+          ..write('auditDetailId: $auditDetailId')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      updatedDateAndTime,
+      guId,
+      qty,
+      stockType,
+      description,
+      invoNo,
+      invoType,
+      invoDate,
+      customerName,
+      whLocationId,
+      productId,
+      auditDetailId);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is WHInOutWardsTable &&
+          other.updatedDateAndTime == this.updatedDateAndTime &&
+          other.guId == this.guId &&
+          other.qty == this.qty &&
+          other.stockType == this.stockType &&
+          other.description == this.description &&
+          other.invoNo == this.invoNo &&
+          other.invoType == this.invoType &&
+          other.invoDate == this.invoDate &&
+          other.customerName == this.customerName &&
+          other.whLocationId == this.whLocationId &&
+          other.productId == this.productId &&
+          other.auditDetailId == this.auditDetailId);
+}
+
+class WHInOutWardsCompanion extends UpdateCompanion<WHInOutWardsTable> {
+  final Value<DateTime> updatedDateAndTime;
+  final Value<String> guId;
+  final Value<int> qty;
+  final Value<String> stockType;
+  final Value<String> description;
+  final Value<String> invoNo;
+  final Value<String> invoType;
+  final Value<String> invoDate;
+  final Value<String> customerName;
+  final Value<String> whLocationId;
+  final Value<String> productId;
+  final Value<String> auditDetailId;
+  final Value<int> rowid;
+  const WHInOutWardsCompanion({
+    this.updatedDateAndTime = const Value.absent(),
+    this.guId = const Value.absent(),
+    this.qty = const Value.absent(),
+    this.stockType = const Value.absent(),
+    this.description = const Value.absent(),
+    this.invoNo = const Value.absent(),
+    this.invoType = const Value.absent(),
+    this.invoDate = const Value.absent(),
+    this.customerName = const Value.absent(),
+    this.whLocationId = const Value.absent(),
+    this.productId = const Value.absent(),
+    this.auditDetailId = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  WHInOutWardsCompanion.insert({
+    required DateTime updatedDateAndTime,
+    required String guId,
+    required int qty,
+    required String stockType,
+    required String description,
+    required String invoNo,
+    required String invoType,
+    required String invoDate,
+    required String customerName,
+    required String whLocationId,
+    required String productId,
+    required String auditDetailId,
+    this.rowid = const Value.absent(),
+  })  : updatedDateAndTime = Value(updatedDateAndTime),
+        guId = Value(guId),
+        qty = Value(qty),
+        stockType = Value(stockType),
+        description = Value(description),
+        invoNo = Value(invoNo),
+        invoType = Value(invoType),
+        invoDate = Value(invoDate),
+        customerName = Value(customerName),
+        whLocationId = Value(whLocationId),
+        productId = Value(productId),
+        auditDetailId = Value(auditDetailId);
+  static Insertable<WHInOutWardsTable> custom({
+    Expression<DateTime>? updatedDateAndTime,
+    Expression<String>? guId,
+    Expression<int>? qty,
+    Expression<String>? stockType,
+    Expression<String>? description,
+    Expression<String>? invoNo,
+    Expression<String>? invoType,
+    Expression<String>? invoDate,
+    Expression<String>? customerName,
+    Expression<String>? whLocationId,
+    Expression<String>? productId,
+    Expression<String>? auditDetailId,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (updatedDateAndTime != null)
+        'updated_date_and_time': updatedDateAndTime,
+      if (guId != null) 'gu_id': guId,
+      if (qty != null) 'qty': qty,
+      if (stockType != null) 'stock_type': stockType,
+      if (description != null) 'description': description,
+      if (invoNo != null) 'invo_no': invoNo,
+      if (invoType != null) 'invo_type': invoType,
+      if (invoDate != null) 'invo_date': invoDate,
+      if (customerName != null) 'customer_name': customerName,
+      if (whLocationId != null) 'wh_location_id': whLocationId,
+      if (productId != null) 'product_id': productId,
+      if (auditDetailId != null) 'audit_detail_id': auditDetailId,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  WHInOutWardsCompanion copyWith(
+      {Value<DateTime>? updatedDateAndTime,
+      Value<String>? guId,
+      Value<int>? qty,
+      Value<String>? stockType,
+      Value<String>? description,
+      Value<String>? invoNo,
+      Value<String>? invoType,
+      Value<String>? invoDate,
+      Value<String>? customerName,
+      Value<String>? whLocationId,
+      Value<String>? productId,
+      Value<String>? auditDetailId,
+      Value<int>? rowid}) {
+    return WHInOutWardsCompanion(
+      updatedDateAndTime: updatedDateAndTime ?? this.updatedDateAndTime,
+      guId: guId ?? this.guId,
+      qty: qty ?? this.qty,
+      stockType: stockType ?? this.stockType,
+      description: description ?? this.description,
+      invoNo: invoNo ?? this.invoNo,
+      invoType: invoType ?? this.invoType,
+      invoDate: invoDate ?? this.invoDate,
+      customerName: customerName ?? this.customerName,
+      whLocationId: whLocationId ?? this.whLocationId,
+      productId: productId ?? this.productId,
+      auditDetailId: auditDetailId ?? this.auditDetailId,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (updatedDateAndTime.present) {
+      map['updated_date_and_time'] =
+          Variable<DateTime>(updatedDateAndTime.value);
+    }
+    if (guId.present) {
+      map['gu_id'] = Variable<String>(guId.value);
+    }
+    if (qty.present) {
+      map['qty'] = Variable<int>(qty.value);
+    }
+    if (stockType.present) {
+      map['stock_type'] = Variable<String>(stockType.value);
+    }
+    if (description.present) {
+      map['description'] = Variable<String>(description.value);
+    }
+    if (invoNo.present) {
+      map['invo_no'] = Variable<String>(invoNo.value);
+    }
+    if (invoType.present) {
+      map['invo_type'] = Variable<String>(invoType.value);
+    }
+    if (invoDate.present) {
+      map['invo_date'] = Variable<String>(invoDate.value);
+    }
+    if (customerName.present) {
+      map['customer_name'] = Variable<String>(customerName.value);
+    }
+    if (whLocationId.present) {
+      map['wh_location_id'] = Variable<String>(whLocationId.value);
+    }
+    if (productId.present) {
+      map['product_id'] = Variable<String>(productId.value);
+    }
+    if (auditDetailId.present) {
+      map['audit_detail_id'] = Variable<String>(auditDetailId.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('WHInOutWardsCompanion(')
+          ..write('updatedDateAndTime: $updatedDateAndTime, ')
+          ..write('guId: $guId, ')
+          ..write('qty: $qty, ')
+          ..write('stockType: $stockType, ')
+          ..write('description: $description, ')
+          ..write('invoNo: $invoNo, ')
+          ..write('invoType: $invoType, ')
+          ..write('invoDate: $invoDate, ')
+          ..write('customerName: $customerName, ')
+          ..write('whLocationId: $whLocationId, ')
+          ..write('productId: $productId, ')
+          ..write('auditDetailId: $auditDetailId, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $WHAuditingTable extends WHAuditing
+    with TableInfo<$WHAuditingTable, WHAuditingTable> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $WHAuditingTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _updatedDateAndTimeMeta =
+      const VerificationMeta('updatedDateAndTime');
+  @override
+  late final GeneratedColumn<DateTime> updatedDateAndTime =
+      GeneratedColumn<DateTime>('updated_date_and_time', aliasedName, false,
+          type: DriftSqlType.dateTime, requiredDuringInsert: true);
+  static const VerificationMeta _guIdMeta = const VerificationMeta('guId');
+  @override
+  late final GeneratedColumn<String> guId = GeneratedColumn<String>(
+      'gu_id', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _qtyMeta = const VerificationMeta('qty');
+  @override
+  late final GeneratedColumn<int> qty = GeneratedColumn<int>(
+      'qty', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _bestBeforeMeta =
+      const VerificationMeta('bestBefore');
+  @override
+  late final GeneratedColumn<int> bestBefore = GeneratedColumn<int>(
+      'best_before', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _stockTypeMeta =
+      const VerificationMeta('stockType');
+  @override
+  late final GeneratedColumn<String> stockType = GeneratedColumn<String>(
+      'stock_type', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _productQualityMeta =
+      const VerificationMeta('productQuality');
+  @override
+  late final GeneratedColumn<String> productQuality = GeneratedColumn<String>(
+      'product_quality', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _productIdMeta =
+      const VerificationMeta('productId');
+  @override
+  late final GeneratedColumn<String> productId = GeneratedColumn<String>(
+      'product_id', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _whLocationIdMeta =
+      const VerificationMeta('whLocationId');
+  @override
+  late final GeneratedColumn<String> whLocationId = GeneratedColumn<String>(
+      'wh_location_id', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _auditDetailIdMeta =
+      const VerificationMeta('auditDetailId');
+  @override
+  late final GeneratedColumn<String> auditDetailId = GeneratedColumn<String>(
+      'audit_detail_id', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _descriptionMeta =
+      const VerificationMeta('description');
+  @override
+  late final GeneratedColumn<String> description = GeneratedColumn<String>(
+      'description', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _mfDateMeta = const VerificationMeta('mfDate');
+  @override
+  late final GeneratedColumn<String> mfDate = GeneratedColumn<String>(
+      'mf_date', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _fileMeta = const VerificationMeta('file');
+  @override
+  late final GeneratedColumn<String> file = GeneratedColumn<String>(
+      'file', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  @override
+  List<GeneratedColumn> get $columns => [
+        updatedDateAndTime,
+        guId,
+        qty,
+        bestBefore,
+        stockType,
+        productQuality,
+        productId,
+        whLocationId,
+        auditDetailId,
+        description,
+        mfDate,
+        file
+      ];
+  @override
+  String get aliasedName => _alias ?? 'w_h_auditing';
+  @override
+  String get actualTableName => 'w_h_auditing';
+  @override
+  VerificationContext validateIntegrity(Insertable<WHAuditingTable> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('updated_date_and_time')) {
+      context.handle(
+          _updatedDateAndTimeMeta,
+          updatedDateAndTime.isAcceptableOrUnknown(
+              data['updated_date_and_time']!, _updatedDateAndTimeMeta));
+    } else if (isInserting) {
+      context.missing(_updatedDateAndTimeMeta);
+    }
+    if (data.containsKey('gu_id')) {
+      context.handle(
+          _guIdMeta, guId.isAcceptableOrUnknown(data['gu_id']!, _guIdMeta));
+    } else if (isInserting) {
+      context.missing(_guIdMeta);
+    }
+    if (data.containsKey('qty')) {
+      context.handle(
+          _qtyMeta, qty.isAcceptableOrUnknown(data['qty']!, _qtyMeta));
+    } else if (isInserting) {
+      context.missing(_qtyMeta);
+    }
+    if (data.containsKey('best_before')) {
+      context.handle(
+          _bestBeforeMeta,
+          bestBefore.isAcceptableOrUnknown(
+              data['best_before']!, _bestBeforeMeta));
+    } else if (isInserting) {
+      context.missing(_bestBeforeMeta);
+    }
+    if (data.containsKey('stock_type')) {
+      context.handle(_stockTypeMeta,
+          stockType.isAcceptableOrUnknown(data['stock_type']!, _stockTypeMeta));
+    } else if (isInserting) {
+      context.missing(_stockTypeMeta);
+    }
+    if (data.containsKey('product_quality')) {
+      context.handle(
+          _productQualityMeta,
+          productQuality.isAcceptableOrUnknown(
+              data['product_quality']!, _productQualityMeta));
+    } else if (isInserting) {
+      context.missing(_productQualityMeta);
+    }
+    if (data.containsKey('product_id')) {
+      context.handle(_productIdMeta,
+          productId.isAcceptableOrUnknown(data['product_id']!, _productIdMeta));
+    } else if (isInserting) {
+      context.missing(_productIdMeta);
+    }
+    if (data.containsKey('wh_location_id')) {
+      context.handle(
+          _whLocationIdMeta,
+          whLocationId.isAcceptableOrUnknown(
+              data['wh_location_id']!, _whLocationIdMeta));
+    } else if (isInserting) {
+      context.missing(_whLocationIdMeta);
+    }
+    if (data.containsKey('audit_detail_id')) {
+      context.handle(
+          _auditDetailIdMeta,
+          auditDetailId.isAcceptableOrUnknown(
+              data['audit_detail_id']!, _auditDetailIdMeta));
+    } else if (isInserting) {
+      context.missing(_auditDetailIdMeta);
+    }
+    if (data.containsKey('description')) {
+      context.handle(
+          _descriptionMeta,
+          description.isAcceptableOrUnknown(
+              data['description']!, _descriptionMeta));
+    } else if (isInserting) {
+      context.missing(_descriptionMeta);
+    }
+    if (data.containsKey('mf_date')) {
+      context.handle(_mfDateMeta,
+          mfDate.isAcceptableOrUnknown(data['mf_date']!, _mfDateMeta));
+    } else if (isInserting) {
+      context.missing(_mfDateMeta);
+    }
+    if (data.containsKey('file')) {
+      context.handle(
+          _fileMeta, file.isAcceptableOrUnknown(data['file']!, _fileMeta));
+    } else if (isInserting) {
+      context.missing(_fileMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey =>
+      {auditDetailId, whLocationId, productId};
+  @override
+  WHAuditingTable map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return WHAuditingTable(
+      updatedDateAndTime: attachedDatabase.typeMapping.read(
+          DriftSqlType.dateTime,
+          data['${effectivePrefix}updated_date_and_time'])!,
+      guId: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}gu_id'])!,
+      qty: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}qty'])!,
+      bestBefore: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}best_before'])!,
+      stockType: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}stock_type'])!,
+      productQuality: attachedDatabase.typeMapping.read(
+          DriftSqlType.string, data['${effectivePrefix}product_quality'])!,
+      productId: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}product_id'])!,
+      whLocationId: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}wh_location_id'])!,
+      auditDetailId: attachedDatabase.typeMapping.read(
+          DriftSqlType.string, data['${effectivePrefix}audit_detail_id'])!,
+      description: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}description'])!,
+      mfDate: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}mf_date'])!,
+      file: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}file'])!,
+    );
+  }
+
+  @override
+  $WHAuditingTable createAlias(String alias) {
+    return $WHAuditingTable(attachedDatabase, alias);
+  }
+}
+
+class WHAuditingTable extends DataClass implements Insertable<WHAuditingTable> {
+  final DateTime updatedDateAndTime;
+  final String guId;
+  final int qty;
+  final int bestBefore;
+  final String stockType;
+  final String productQuality;
+  final String productId;
+  final String whLocationId;
+  final String auditDetailId;
+  final String description;
+  final String mfDate;
+  final String file;
+  const WHAuditingTable(
+      {required this.updatedDateAndTime,
+      required this.guId,
+      required this.qty,
+      required this.bestBefore,
+      required this.stockType,
+      required this.productQuality,
+      required this.productId,
+      required this.whLocationId,
+      required this.auditDetailId,
+      required this.description,
+      required this.mfDate,
+      required this.file});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['updated_date_and_time'] = Variable<DateTime>(updatedDateAndTime);
+    map['gu_id'] = Variable<String>(guId);
+    map['qty'] = Variable<int>(qty);
+    map['best_before'] = Variable<int>(bestBefore);
+    map['stock_type'] = Variable<String>(stockType);
+    map['product_quality'] = Variable<String>(productQuality);
+    map['product_id'] = Variable<String>(productId);
+    map['wh_location_id'] = Variable<String>(whLocationId);
+    map['audit_detail_id'] = Variable<String>(auditDetailId);
+    map['description'] = Variable<String>(description);
+    map['mf_date'] = Variable<String>(mfDate);
+    map['file'] = Variable<String>(file);
+    return map;
+  }
+
+  WHAuditingCompanion toCompanion(bool nullToAbsent) {
+    return WHAuditingCompanion(
+      updatedDateAndTime: Value(updatedDateAndTime),
+      guId: Value(guId),
+      qty: Value(qty),
+      bestBefore: Value(bestBefore),
+      stockType: Value(stockType),
+      productQuality: Value(productQuality),
+      productId: Value(productId),
+      whLocationId: Value(whLocationId),
+      auditDetailId: Value(auditDetailId),
+      description: Value(description),
+      mfDate: Value(mfDate),
+      file: Value(file),
+    );
+  }
+
+  factory WHAuditingTable.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return WHAuditingTable(
+      updatedDateAndTime:
+          serializer.fromJson<DateTime>(json['updatedDateAndTime']),
+      guId: serializer.fromJson<String>(json['guId']),
+      qty: serializer.fromJson<int>(json['qty']),
+      bestBefore: serializer.fromJson<int>(json['bestBefore']),
+      stockType: serializer.fromJson<String>(json['stockType']),
+      productQuality: serializer.fromJson<String>(json['productQuality']),
+      productId: serializer.fromJson<String>(json['productId']),
+      whLocationId: serializer.fromJson<String>(json['whLocationId']),
+      auditDetailId: serializer.fromJson<String>(json['auditDetailId']),
+      description: serializer.fromJson<String>(json['description']),
+      mfDate: serializer.fromJson<String>(json['mfDate']),
+      file: serializer.fromJson<String>(json['file']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'updatedDateAndTime': serializer.toJson<DateTime>(updatedDateAndTime),
+      'guId': serializer.toJson<String>(guId),
+      'qty': serializer.toJson<int>(qty),
+      'bestBefore': serializer.toJson<int>(bestBefore),
+      'stockType': serializer.toJson<String>(stockType),
+      'productQuality': serializer.toJson<String>(productQuality),
+      'productId': serializer.toJson<String>(productId),
+      'whLocationId': serializer.toJson<String>(whLocationId),
+      'auditDetailId': serializer.toJson<String>(auditDetailId),
+      'description': serializer.toJson<String>(description),
+      'mfDate': serializer.toJson<String>(mfDate),
+      'file': serializer.toJson<String>(file),
+    };
+  }
+
+  WHAuditingTable copyWith(
+          {DateTime? updatedDateAndTime,
+          String? guId,
+          int? qty,
+          int? bestBefore,
+          String? stockType,
+          String? productQuality,
+          String? productId,
+          String? whLocationId,
+          String? auditDetailId,
+          String? description,
+          String? mfDate,
+          String? file}) =>
+      WHAuditingTable(
+        updatedDateAndTime: updatedDateAndTime ?? this.updatedDateAndTime,
+        guId: guId ?? this.guId,
+        qty: qty ?? this.qty,
+        bestBefore: bestBefore ?? this.bestBefore,
+        stockType: stockType ?? this.stockType,
+        productQuality: productQuality ?? this.productQuality,
+        productId: productId ?? this.productId,
+        whLocationId: whLocationId ?? this.whLocationId,
+        auditDetailId: auditDetailId ?? this.auditDetailId,
+        description: description ?? this.description,
+        mfDate: mfDate ?? this.mfDate,
+        file: file ?? this.file,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('WHAuditingTable(')
+          ..write('updatedDateAndTime: $updatedDateAndTime, ')
+          ..write('guId: $guId, ')
+          ..write('qty: $qty, ')
+          ..write('bestBefore: $bestBefore, ')
+          ..write('stockType: $stockType, ')
+          ..write('productQuality: $productQuality, ')
+          ..write('productId: $productId, ')
+          ..write('whLocationId: $whLocationId, ')
+          ..write('auditDetailId: $auditDetailId, ')
+          ..write('description: $description, ')
+          ..write('mfDate: $mfDate, ')
+          ..write('file: $file')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      updatedDateAndTime,
+      guId,
+      qty,
+      bestBefore,
+      stockType,
+      productQuality,
+      productId,
+      whLocationId,
+      auditDetailId,
+      description,
+      mfDate,
+      file);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is WHAuditingTable &&
+          other.updatedDateAndTime == this.updatedDateAndTime &&
+          other.guId == this.guId &&
+          other.qty == this.qty &&
+          other.bestBefore == this.bestBefore &&
+          other.stockType == this.stockType &&
+          other.productQuality == this.productQuality &&
+          other.productId == this.productId &&
+          other.whLocationId == this.whLocationId &&
+          other.auditDetailId == this.auditDetailId &&
+          other.description == this.description &&
+          other.mfDate == this.mfDate &&
+          other.file == this.file);
+}
+
+class WHAuditingCompanion extends UpdateCompanion<WHAuditingTable> {
+  final Value<DateTime> updatedDateAndTime;
+  final Value<String> guId;
+  final Value<int> qty;
+  final Value<int> bestBefore;
+  final Value<String> stockType;
+  final Value<String> productQuality;
+  final Value<String> productId;
+  final Value<String> whLocationId;
+  final Value<String> auditDetailId;
+  final Value<String> description;
+  final Value<String> mfDate;
+  final Value<String> file;
+  final Value<int> rowid;
+  const WHAuditingCompanion({
+    this.updatedDateAndTime = const Value.absent(),
+    this.guId = const Value.absent(),
+    this.qty = const Value.absent(),
+    this.bestBefore = const Value.absent(),
+    this.stockType = const Value.absent(),
+    this.productQuality = const Value.absent(),
+    this.productId = const Value.absent(),
+    this.whLocationId = const Value.absent(),
+    this.auditDetailId = const Value.absent(),
+    this.description = const Value.absent(),
+    this.mfDate = const Value.absent(),
+    this.file = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  WHAuditingCompanion.insert({
+    required DateTime updatedDateAndTime,
+    required String guId,
+    required int qty,
+    required int bestBefore,
+    required String stockType,
+    required String productQuality,
+    required String productId,
+    required String whLocationId,
+    required String auditDetailId,
+    required String description,
+    required String mfDate,
+    required String file,
+    this.rowid = const Value.absent(),
+  })  : updatedDateAndTime = Value(updatedDateAndTime),
+        guId = Value(guId),
+        qty = Value(qty),
+        bestBefore = Value(bestBefore),
+        stockType = Value(stockType),
+        productQuality = Value(productQuality),
+        productId = Value(productId),
+        whLocationId = Value(whLocationId),
+        auditDetailId = Value(auditDetailId),
+        description = Value(description),
+        mfDate = Value(mfDate),
+        file = Value(file);
+  static Insertable<WHAuditingTable> custom({
+    Expression<DateTime>? updatedDateAndTime,
+    Expression<String>? guId,
+    Expression<int>? qty,
+    Expression<int>? bestBefore,
+    Expression<String>? stockType,
+    Expression<String>? productQuality,
+    Expression<String>? productId,
+    Expression<String>? whLocationId,
+    Expression<String>? auditDetailId,
+    Expression<String>? description,
+    Expression<String>? mfDate,
+    Expression<String>? file,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (updatedDateAndTime != null)
+        'updated_date_and_time': updatedDateAndTime,
+      if (guId != null) 'gu_id': guId,
+      if (qty != null) 'qty': qty,
+      if (bestBefore != null) 'best_before': bestBefore,
+      if (stockType != null) 'stock_type': stockType,
+      if (productQuality != null) 'product_quality': productQuality,
+      if (productId != null) 'product_id': productId,
+      if (whLocationId != null) 'wh_location_id': whLocationId,
+      if (auditDetailId != null) 'audit_detail_id': auditDetailId,
+      if (description != null) 'description': description,
+      if (mfDate != null) 'mf_date': mfDate,
+      if (file != null) 'file': file,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  WHAuditingCompanion copyWith(
+      {Value<DateTime>? updatedDateAndTime,
+      Value<String>? guId,
+      Value<int>? qty,
+      Value<int>? bestBefore,
+      Value<String>? stockType,
+      Value<String>? productQuality,
+      Value<String>? productId,
+      Value<String>? whLocationId,
+      Value<String>? auditDetailId,
+      Value<String>? description,
+      Value<String>? mfDate,
+      Value<String>? file,
+      Value<int>? rowid}) {
+    return WHAuditingCompanion(
+      updatedDateAndTime: updatedDateAndTime ?? this.updatedDateAndTime,
+      guId: guId ?? this.guId,
+      qty: qty ?? this.qty,
+      bestBefore: bestBefore ?? this.bestBefore,
+      stockType: stockType ?? this.stockType,
+      productQuality: productQuality ?? this.productQuality,
+      productId: productId ?? this.productId,
+      whLocationId: whLocationId ?? this.whLocationId,
+      auditDetailId: auditDetailId ?? this.auditDetailId,
+      description: description ?? this.description,
+      mfDate: mfDate ?? this.mfDate,
+      file: file ?? this.file,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (updatedDateAndTime.present) {
+      map['updated_date_and_time'] =
+          Variable<DateTime>(updatedDateAndTime.value);
+    }
+    if (guId.present) {
+      map['gu_id'] = Variable<String>(guId.value);
+    }
+    if (qty.present) {
+      map['qty'] = Variable<int>(qty.value);
+    }
+    if (bestBefore.present) {
+      map['best_before'] = Variable<int>(bestBefore.value);
+    }
+    if (stockType.present) {
+      map['stock_type'] = Variable<String>(stockType.value);
+    }
+    if (productQuality.present) {
+      map['product_quality'] = Variable<String>(productQuality.value);
+    }
+    if (productId.present) {
+      map['product_id'] = Variable<String>(productId.value);
+    }
+    if (whLocationId.present) {
+      map['wh_location_id'] = Variable<String>(whLocationId.value);
+    }
+    if (auditDetailId.present) {
+      map['audit_detail_id'] = Variable<String>(auditDetailId.value);
+    }
+    if (description.present) {
+      map['description'] = Variable<String>(description.value);
+    }
+    if (mfDate.present) {
+      map['mf_date'] = Variable<String>(mfDate.value);
+    }
+    if (file.present) {
+      map['file'] = Variable<String>(file.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('WHAuditingCompanion(')
+          ..write('updatedDateAndTime: $updatedDateAndTime, ')
+          ..write('guId: $guId, ')
+          ..write('qty: $qty, ')
+          ..write('bestBefore: $bestBefore, ')
+          ..write('stockType: $stockType, ')
+          ..write('productQuality: $productQuality, ')
+          ..write('productId: $productId, ')
+          ..write('whLocationId: $whLocationId, ')
+          ..write('auditDetailId: $auditDetailId, ')
+          ..write('description: $description, ')
+          ..write('mfDate: $mfDate, ')
+          ..write('file: $file, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$Database extends GeneratedDatabase {
   _$Database(QueryExecutor e) : super(e);
   late final $ApiDataTable apiData = $ApiDataTable(this);
   late final $WHLocationTable wHLocation = $WHLocationTable(this);
+  late final $WHInOutWardsTable wHInOutWards = $WHInOutWardsTable(this);
+  late final $WHAuditingTable wHAuditing = $WHAuditingTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
-  List<DatabaseSchemaEntity> get allSchemaEntities => [apiData, wHLocation];
+  List<DatabaseSchemaEntity> get allSchemaEntities =>
+      [apiData, wHLocation, wHInOutWards, wHAuditing];
 }

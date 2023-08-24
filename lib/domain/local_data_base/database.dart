@@ -9,13 +9,11 @@ part 'database.g.dart';
 
 // flutter packages pub run build_runner build
 
-
 /*
 * This class represents the data base table for Api cache*/
 @DataClassName("ApiDataTable")
 class ApiData extends Table {
-
- DateTimeColumn get updatedDateAndTime => dateTime()();
+  DateTimeColumn get updatedDateAndTime => dateTime()();
 
   TextColumn get data => text()();
 
@@ -25,40 +23,109 @@ class ApiData extends Table {
   Set<Column> get primaryKey => {tag};
 }
 
-
-
 /*
 * This class represents the data base table for Api cache*/
 @DataClassName("WHLocationTable")
 class WHLocation extends Table {
-
-
   DateTimeColumn get updatedDateAndTime => dateTime()();
 
   TextColumn get guId => text()();
+
   TextColumn get locationName => text()();
+
   TextColumn get palletNumber => text()();
+
   TextColumn get description => text()();
+
   TextColumn get auditDetailId => text()();
+
   BoolColumn get isActive => boolean()();
 
   @override
-  Set<Column> get primaryKey => {locationName,palletNumber,auditDetailId};
+  Set<Column> get primaryKey => {locationName, palletNumber, auditDetailId};
+}
+
+/*
+* This class represents the data base table for Api cache*/
+@DataClassName("WHInOutWardsTable")
+class WHInOutWards extends Table {
+  DateTimeColumn get updatedDateAndTime => dateTime()();
+
+  TextColumn get guId => text()();
+
+  IntColumn get qty => integer()();
+
+  TextColumn get stockType => text()();
+
+  TextColumn get description => text()();
+
+  TextColumn get invoNo => text()();
+
+  TextColumn get invoType => text()();
+
+  TextColumn get invoDate => text()();
+
+  TextColumn get customerName => text()();
+
+  TextColumn get whLocationId => text()();
+
+  TextColumn get productId => text()();
+
+  TextColumn get auditDetailId => text()();
+
+  @override
+  Set<Column> get primaryKey => {invoNo, auditDetailId,whLocationId,productId};
 }
 
 
 /*
+* This class represents the data base table for Api cache*/
+@DataClassName("WHAuditingTable")
+class WHAuditing extends Table {
+  DateTimeColumn get updatedDateAndTime => dateTime()();
+
+  TextColumn get guId => text()();
+
+  IntColumn get qty => integer()();
+
+  IntColumn get bestBefore => integer()();
+
+  TextColumn get stockType => text()();
+
+  TextColumn get productQuality => text()();
+
+  TextColumn get productId => text()();
+
+  TextColumn get whLocationId => text()();
+
+  TextColumn get auditDetailId => text()();
+
+  TextColumn get description => text()();
+
+  TextColumn get mfDate => text()();
+
+  TextColumn get file => text()();
+
+
+  @override
+  Set<Column> get primaryKey => {auditDetailId,whLocationId,productId};
+}
+
+/*
 * This class represents Data base and their tables*/
-@DriftDatabase(tables: [ApiData,WHLocation], views: [])
+@DriftDatabase(tables: [ApiData, WHLocation, WHInOutWards,WHAuditing], views: [])
 class Database extends _$Database {
   Database() : super(_openConnection());
 
   @override
-  int get schemaVersion => 2;
+  int get schemaVersion => 5;
 
   @override
+  @DriftDatabase(tables: [ApiData, WHLocation, WHInOutWards])
   MigrationStrategy get migration {
-    return MigrationStrategy();
+    return MigrationStrategy(onUpgrade: (migrator, from, to) async {
+      await migrator.createAll();
+    });
   }
 }
 

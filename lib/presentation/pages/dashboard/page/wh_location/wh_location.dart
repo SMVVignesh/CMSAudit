@@ -173,7 +173,7 @@ class _WHLocationsState extends CustomState<WHLocations> {
                                                           Colors.transparent,
                                                       builder: (context) {
                                                         return CreateWHLocationScreen(
-                                                            whLocationTable:
+                                                            location:
                                                                 location,
                                                             auditDetails: widget
                                                                 .auditDetails);
@@ -315,7 +315,7 @@ class _WHLocationsState extends CustomState<WHLocations> {
         context: context,
         themeColor: CustomColor.splashScreenTop,
         heading: "",
-        desc: "Are you sure you want to Delete ${location.locationName}?",
+        desc: "Are you sure you want to Delete ${location.palletNumber}?",
         positiveBtn: "Delete",
         positiveClick: () {
           deleteLocation(location);
@@ -328,9 +328,8 @@ class _WHLocationsState extends CustomState<WHLocations> {
 
   void deleteLocation(WHLocationTable location) async {
     await DatabaseRepository().deleteWHLocation(
-        locationName: location.locationName,
-        palletNumber: location.palletNumber,
-        auditDetailId: location.auditDetailId);
+        guid: location.guId);
+    Navigator.pop(context);
     updateWHLocations();
   }
 }

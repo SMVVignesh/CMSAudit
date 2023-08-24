@@ -2,24 +2,25 @@ import 'package:cms_audit/core/utils/custom_color.dart';
 import 'package:cms_audit/domain/local_data_base/database.dart';
 import 'package:cms_audit/presentation/base/custom_state.dart';
 import 'package:cms_audit/presentation/pages/dashboard/page/audit_details/model/audit_response.dart';
-import 'package:cms_audit/presentation/pages/dashboard/page/wh_location_details/wh_auditing/create_wh_auditing.dart';
+import 'package:cms_audit/presentation/pages/dashboard/page/wh_location_details/wh_in_out_wards/create_wh_in_out_wards.dart';
 import 'package:flutter/material.dart';
 import 'package:tool_kit/tool_kit.dart';
 
 import '../../../../../../domain/local_data_base/data_base_repository.dart';
 
-class WHAuditingScreen extends StatefulWidget {
+class WHInOutWardsScreen extends StatefulWidget {
   Data auditDetails;
   WHLocationTable location;
 
-  WHAuditingScreen({super.key, required this.auditDetails, required this.location});
+  WHInOutWardsScreen(
+      {super.key, required this.auditDetails, required this.location});
 
   @override
-  State<WHAuditingScreen> createState() => _WHAuditingScreenState();
+  State<WHInOutWardsScreen> createState() => _WHInOutWardsScreenState();
 }
 
-class _WHAuditingScreenState extends CustomState<WHAuditingScreen> {
-  List<WHAuditingTable> list = [];
+class _WHInOutWardsScreenState extends CustomState<WHInOutWardsScreen> {
+  List<WHInOutWardsTable> list = [];
 
   @override
   void initState() {
@@ -33,50 +34,50 @@ class _WHAuditingScreenState extends CustomState<WHAuditingScreen> {
       color: CustomColor.toolbarBg,
       child: SafeArea(
           child: Scaffold(
-            backgroundColor: CustomColor.appBG,
-            floatingActionButton: GestureDetector(
-              onTap: () async {
-                await showDialog(
-                    context: context,
-                    barrierColor: Colors.transparent,
-                    builder: (context) {
-                      return CreateWHAuditingScreen(
-                          location: widget.location,
-                          auditDetails: widget.auditDetails);
-                    });
-                updateWHInOutWardsScreen();
-              },
-              child: Container(
-                decoration: const BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: CustomColor.toolbarBg,
-                ),
-                child: const Padding(
-                  padding: EdgeInsets.all(15),
-                  child: Icon(
-                    Icons.add,
-                    color: CustomColor.white,
-                  ),
-                ),
+        backgroundColor: CustomColor.appBG,
+        floatingActionButton: GestureDetector(
+          onTap: () async {
+            await showDialog(
+                context: context,
+                barrierColor: Colors.transparent,
+                builder: (context) {
+                  return CreateWHInOutWardsScreen(
+                      location: widget.location,
+                      auditDetails: widget.auditDetails);
+                });
+            updateWHInOutWardsScreen();
+          },
+          child: Container(
+            decoration: const BoxDecoration(
+              shape: BoxShape.circle,
+              color: CustomColor.toolbarBg,
+            ),
+            child: const Padding(
+              padding: EdgeInsets.all(15),
+              child: Icon(
+                Icons.add,
+                color: CustomColor.white,
               ),
             ),
-            body: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                children: [
-                  Expanded(
-                      child: (list.length == 0)
-                          ? const Center(
-                        child: Text(
-                          "No Audit available",
-                          style: TextStyle(
-                              color: CustomColor.black, fontSize: 14),
-                        ),
-                      )
-                          : ListView.builder(
+          ),
+        ),
+        body: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            children: [
+              Expanded(
+                  child: (list.length == 0)
+                      ? const Center(
+                          child: Text(
+                            "No In Out ward available",
+                            style: TextStyle(
+                                color: CustomColor.black, fontSize: 14),
+                          ),
+                        )
+                      : ListView.builder(
                           itemCount: list.length,
                           itemBuilder: (context, index) {
-                            WHAuditingTable inOutWard = list[index];
+                            WHInOutWardsTable inOutWard = list[index];
                             return Padding(
                               padding: const EdgeInsets.only(top: 10),
                               child: Container(
@@ -93,19 +94,19 @@ class _WHAuditingScreenState extends CustomState<WHAuditingScreen> {
                                   padding: const EdgeInsets.all(10),
                                   child: Column(
                                     crossAxisAlignment:
-                                    CrossAxisAlignment.start,
+                                        CrossAxisAlignment.start,
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
                                       Row(
                                         children: [
                                           Expanded(
                                             child: Text(
-                                              "Id:   ${inOutWard.guId}",
+                                              "Product:   ${inOutWard.productId}",
                                               style: const TextStyle(
                                                   color: CustomColor.black,
                                                   fontSize: 14,
                                                   fontWeight:
-                                                  FontWeight.normal),
+                                                      FontWeight.normal),
                                             ),
                                           ),
                                           const SizedBox(
@@ -116,14 +117,14 @@ class _WHAuditingScreenState extends CustomState<WHAuditingScreen> {
                                                 await showDialog(
                                                     context: context,
                                                     barrierColor:
-                                                    Colors.transparent,
+                                                        Colors.transparent,
                                                     builder: (context) {
-                                                      return CreateWHAuditingScreen(
+                                                      return CreateWHInOutWardsScreen(
                                                         location:
-                                                        widget.location,
+                                                            widget.location,
                                                         auditDetails:
-                                                        widget.auditDetails,
-                                                        auditingTable: inOutWard,
+                                                            widget.auditDetails,
+                                                        inOutWard: inOutWard,
                                                       );
                                                     });
                                                 updateWHInOutWardsScreen();
@@ -132,7 +133,7 @@ class _WHAuditingScreenState extends CustomState<WHAuditingScreen> {
                                                 color: Colors.transparent,
                                                 child: Padding(
                                                   padding:
-                                                  const EdgeInsets.all(5),
+                                                      const EdgeInsets.all(5),
                                                   child: Icon(
                                                     Icons.edit,
                                                     color: Colors.blue,
@@ -149,7 +150,7 @@ class _WHAuditingScreenState extends CustomState<WHAuditingScreen> {
                                                 color: Colors.transparent,
                                                 child: Padding(
                                                   padding:
-                                                  const EdgeInsets.all(5),
+                                                      const EdgeInsets.all(5),
                                                   child: Icon(
                                                     Icons.delete,
                                                     color: Colors.redAccent,
@@ -158,26 +159,6 @@ class _WHAuditingScreenState extends CustomState<WHAuditingScreen> {
                                                 ),
                                               ))
                                         ],
-                                      ),
-                                      const SizedBox(
-                                        height: 10,
-                                      ),
-                                      Text(
-                                        "Product:    ${inOutWard.productId}",
-                                        style: const TextStyle(
-                                            color: CustomColor.black,
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.normal),
-                                      ),
-                                      const SizedBox(
-                                        height: 10,
-                                      ),
-                                      Text(
-                                        "Product Quality:    ${inOutWard.productQuality}",
-                                        style: const TextStyle(
-                                            color: CustomColor.black,
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.normal),
                                       ),
                                       const SizedBox(
                                         height: 10,
@@ -208,17 +189,37 @@ class _WHAuditingScreenState extends CustomState<WHAuditingScreen> {
                                             color: CustomColor.black,
                                             fontSize: 14,
                                             fontWeight: FontWeight.normal),
-                                      )
+                                      ),
+                                      const SizedBox(
+                                        height: 10,
+                                      ),
+                                      Text(
+                                        "Invoice:    ${inOutWard.invoNo}",
+                                        style: const TextStyle(
+                                            color: CustomColor.black,
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.normal),
+                                      ),
+                                      const SizedBox(
+                                        height: 10,
+                                      ),
+                                      Text(
+                                        "Invoice Type:    ${inOutWard.invoType}",
+                                        style: const TextStyle(
+                                            color: CustomColor.black,
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.normal),
+                                      ),
                                     ],
                                   ),
                                 ),
                               ),
                             );
                           }))
-                ],
-              ),
-            ),
-          )),
+            ],
+          ),
+        ),
+      )),
     );
   }
 
@@ -269,8 +270,8 @@ class _WHAuditingScreenState extends CustomState<WHAuditingScreen> {
 
   void updateWHInOutWardsScreen() async {
     DatabaseRepository()
-        .getWHAuditingByAuditId(
-        widget.auditDetails.id ?? "", widget.location.guId)
+        .getWHInOutWardByAuditId(
+            widget.auditDetails.id ?? "", widget.location.guId)
         .then((value) {
       list.clear();
       list.addAll(value);
@@ -278,15 +279,15 @@ class _WHAuditingScreenState extends CustomState<WHAuditingScreen> {
     });
   }
 
-  void showDeleteConfirmationPopUp(WHAuditingTable auditingTable) {
+  void showDeleteConfirmationPopUp(WHInOutWardsTable inOutWardsTable) {
     DialogUtils.showCustomDialog(
         context: context,
         themeColor: CustomColor.splashScreenTop,
         heading: "",
-        desc: "Are you sure you want to Delete Id: ${auditingTable.guId}?",
+        desc: "Are you sure you want to Delete Id: ${inOutWardsTable.productId}?",
         positiveBtn: "Delete",
         positiveClick: () {
-          deleteLocation(auditingTable);
+          deleteLocation(inOutWardsTable);
         },
         negativeBtn: "Cancel",
         negativeClick: () {
@@ -294,8 +295,8 @@ class _WHAuditingScreenState extends CustomState<WHAuditingScreen> {
         });
   }
 
-  void deleteLocation(WHAuditingTable auditingTable) async {
-    await DatabaseRepository().deleteWHAuditing(guid: auditingTable.guId);
+  void deleteLocation(WHInOutWardsTable location) async {
+    await DatabaseRepository().deleteWHInOutWard(guid: location.guId);
     Navigator.pop(context);
     updateWHInOutWardsScreen();
   }

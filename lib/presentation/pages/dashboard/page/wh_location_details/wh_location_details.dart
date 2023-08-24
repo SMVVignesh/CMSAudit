@@ -3,6 +3,7 @@ import 'package:cms_audit/domain/local_data_base/database.dart';
 import 'package:cms_audit/presentation/base/custom_state.dart';
 import 'package:cms_audit/presentation/pages/dashboard/page/audit_details/model/audit_response.dart';
 import 'package:cms_audit/presentation/pages/dashboard/page/wh_location_details/wh_auditing/wh_auditing.dart';
+import 'package:cms_audit/presentation/pages/dashboard/page/wh_location_details/wh_in_out_wards/wh_in_out_wards_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:tool_kit/tool_kit.dart';
 import '../../../../../domain/local_data_base/data_base_repository.dart';
@@ -20,8 +21,6 @@ class WHLocationsDetails extends StatefulWidget {
 
 class _WHLocationsDetailsState extends CustomState<WHLocationsDetails>
     with TickerProviderStateMixin {
-  List<WHLocationTable> list = [];
-
   TabController? _tabController;
 
   @override
@@ -35,7 +34,6 @@ class _WHLocationsDetailsState extends CustomState<WHLocationsDetails>
         currentIndex = _tabController?.index ?? 0;
       });
     });
-    updateWHLocationsDetails();
   }
 
   updateTabs() {
@@ -161,40 +159,6 @@ class _WHLocationsDetailsState extends CustomState<WHLocationsDetails>
     return "WHLocation";
   }
 
-  void updateWHLocationsDetails() async {
-    DatabaseRepository()
-        .getWHLocationByAuditId(widget.auditDetails.id ?? "")
-        .then((value) {
-      list.clear();
-      list.addAll(value);
-      setState(() {});
-    });
-  }
-
-  void showDeleteConfirmationPopUp(WHLocationTable location) {
-    DialogUtils.showCustomDialog(
-        context: context,
-        themeColor: CustomColor.splashScreenTop,
-        heading: "",
-        desc: "Are you sure you want to Delete ${location.locationName}?",
-        positiveBtn: "Delete",
-        positiveClick: () {
-          deleteLocation(location);
-        },
-        negativeBtn: "Cancel",
-        negativeClick: () {
-          Navigator.pop(context);
-        });
-  }
-
-  void deleteLocation(WHLocationTable location) async {
-    await DatabaseRepository().deleteWHLocation(
-        locationName: location.locationName,
-        palletNumber: location.palletNumber,
-        auditDetailId: location.auditDetailId);
-    updateWHLocationsDetails();
-  }
-
   int currentIndex = 0;
 
   List<TabModel> tabs = [];
@@ -202,32 +166,30 @@ class _WHLocationsDetailsState extends CustomState<WHLocationsDetails>
   Widget getVersionUi() {
     List<Widget> tabsWidget = [];
     tabs.asMap().forEach((index, item) {
-      tabsWidget.add(Expanded(
-        child: Container(
-          decoration: BoxDecoration(
-              color: (index == currentIndex)
-                  ? CustomColor.toolbarBg
-                  : CustomColor.white,
-              borderRadius: BorderRadius.circular(5)),
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const SizedBox(
-                  width: 10,
-                ),
-                Text(
-                  item.heading,
-                  style: TextStyle(
-                      color: (index == currentIndex)
-                          ? CustomColor.white
-                          : CustomColor.toolbarBg,
-                      fontSize: 12,
-                      fontWeight: FontWeight.w500),
-                )
-              ],
-            ),
+      tabsWidget.add(Container(
+        decoration: BoxDecoration(
+            color: (index == currentIndex)
+                ? CustomColor.toolbarBg
+                : CustomColor.white,
+            borderRadius: BorderRadius.circular(5)),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const SizedBox(
+                width: 10,
+              ),
+              Text(
+                item.heading,
+                style: TextStyle(
+                    color: (index == currentIndex)
+                        ? CustomColor.white
+                        : CustomColor.toolbarBg,
+                    fontSize: 12,
+                    fontWeight: FontWeight.w500),
+              )
+            ],
           ),
         ),
       ));
@@ -236,8 +198,7 @@ class _WHLocationsDetailsState extends CustomState<WHLocationsDetails>
       decoration: BoxDecoration(
           color: CustomColor.grey, borderRadius: BorderRadius.circular(5)),
       child: Padding(
-        padding:
-            const EdgeInsets.all(5),
+        padding: const EdgeInsets.all(3),
         child: Container(
           width: double.infinity,
           decoration: BoxDecoration(
@@ -260,11 +221,13 @@ class _WHLocationsDetailsState extends CustomState<WHLocationsDetails>
   }
 
   Widget showDetailsScreen() {
-    switch(currentIndex){
+    switch (currentIndex) {
       case 0:
-        return WHAuditing(auditDetails: widget.auditDetails, location: widget.location);
+        return WHAuditingScreen(
+            auditDetails: widget.auditDetails, location: widget.location);
       default:
-        return WHAuditing(auditDetails: widget.auditDetails, location: widget.location);
+        return WHInOutWardsScreen(
+            auditDetails: widget.auditDetails, location: widget.location);
     }
   }
 }

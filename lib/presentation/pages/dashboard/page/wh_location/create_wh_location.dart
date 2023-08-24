@@ -4,14 +4,15 @@ import 'package:cms_audit/presentation/pages/dashboard/page/audit_details/model/
 import 'package:flutter/material.dart';
 import 'package:tool_kit/tool_kit.dart';
 
+import '../../../../../core/utils/utils.dart';
 import '../../../../../domain/local_data_base/database.dart';
 
 class CreateWHLocationScreen extends StatefulWidget {
   Data auditDetails;
-  WHLocationTable? whLocationTable;
+  WHLocationTable? location;
 
   CreateWHLocationScreen(
-      {super.key, required this.auditDetails, this.whLocationTable});
+      {super.key, required this.auditDetails, this.location});
 
   @override
   State<CreateWHLocationScreen> createState() => _CreateWHLocationScreenState();
@@ -27,13 +28,13 @@ class _CreateWHLocationScreenState extends State<CreateWHLocationScreen> {
   @override
   void initState() {
     super.initState();
-    if (widget.whLocationTable != null) {
+    if (widget.location != null) {
       locationTextEditingController.text =
-          widget.whLocationTable?.locationName ?? "";
+          widget.location?.locationName ?? "";
       palletNumberTextEditingController.text =
-          widget.whLocationTable?.palletNumber ?? "";
+          widget.location?.palletNumber ?? "";
       descriptionTextEditingController.text =
-          widget.whLocationTable?.description ?? "";
+          widget.location?.description ?? "";
     }
   }
 
@@ -55,7 +56,7 @@ class _CreateWHLocationScreenState extends State<CreateWHLocationScreen> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    "${(widget.whLocationTable != null) ? "Edit" : "Create"} Location",
+                    "${(widget.location != null) ? "Edit" : "Create"} Location",
                     style: const TextStyle(
                         color: CustomColor.toolbarBg,
                         fontSize: 20,
@@ -65,15 +66,15 @@ class _CreateWHLocationScreenState extends State<CreateWHLocationScreen> {
                   SizedBox(
                     height: 10,
                   ),
-                  getTextFieldComponent(
+                  Utils.getTextFieldComponent(
                       header: "Location",
                       hint: "Enter Location",
                       textEditingController: locationTextEditingController),
-                  getTextFieldComponent(
+                  Utils.getTextFieldComponent(
                       header: "Pallet Number",
                       hint: "Enter Pallet Number",
                       textEditingController: palletNumberTextEditingController),
-                  getTextFieldComponent(
+                  Utils.getTextFieldComponent(
                       header: "Description",
                       hint: "Enter Description",
                       textEditingController: descriptionTextEditingController),
@@ -136,43 +137,6 @@ class _CreateWHLocationScreenState extends State<CreateWHLocationScreen> {
     );
   }
 
-  /*This method will return the  Component with header*/
-  Widget getTextFieldComponent(
-      {required String header,
-      required String hint,
-      required TextEditingController? textEditingController}) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          header,
-          style: const TextStyle(
-              color: Colors.grey, fontSize: 13, fontWeight: FontWeight.w500),
-        ),
-        const SizedBox(
-          height: 5,
-        ),
-        SizedBox(
-          height: 56,
-          child: TextField(
-            textInputAction: TextInputAction.next,
-            style: const TextStyle(color: Colors.black, fontSize: 16),
-            controller: textEditingController,
-            decoration: InputDecoration(
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
-              contentPadding:
-                  const EdgeInsets.only(left: 15, right: 15, top: 2, bottom: 2),
-              hintText: hint,
-              filled: true,
-              fillColor: Colors.white,
-            ),
-          ),
-        )
-      ],
-    );
-  }
 
   void validateFields() async {
     String locationName = locationTextEditingController.text;

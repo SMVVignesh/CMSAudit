@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_guid/flutter_guid.dart';
 import 'package:tool_kit/tool_kit.dart';
@@ -5,7 +8,6 @@ import '../../domain/share_preference/shared_preference_repository.dart';
 import '../constants/constants.dart';
 import 'custom_color.dart';
 import 'package:intl/intl.dart';
-
 
 class Utils {
   /*
@@ -51,5 +53,307 @@ class Utils {
       print("Exception :${e.toString()}");
       return "n/a";
     }
+  }
+
+  /*This method will return the  Component with header*/
+  static Widget getTextFieldComponent(
+      {required String header,
+      required String hint,
+      required TextEditingController? textEditingController,
+      bool isNumber = false}) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          header,
+          style: const TextStyle(
+              color: Colors.grey, fontSize: 13, fontWeight: FontWeight.w500),
+        ),
+        const SizedBox(
+          height: 5,
+        ),
+        SizedBox(
+          height: 56,
+          child: TextField(
+            keyboardType: isNumber ? TextInputType.number : TextInputType.text,
+            textInputAction: TextInputAction.next,
+            style: const TextStyle(color: Colors.black, fontSize: 16),
+            controller: textEditingController,
+            decoration: InputDecoration(
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+              contentPadding:
+                  const EdgeInsets.only(left: 15, right: 15, top: 2, bottom: 2),
+              hintText: hint,
+              filled: true,
+              fillColor: Colors.white,
+            ),
+          ),
+        )
+      ],
+    );
+  }
+
+  /*This method will return the  Component with header*/
+  static Widget getDropDownComponent(
+      {required String header,
+      required String hint,
+      required List<DropdownDataModel> list,
+      required Function(DropdownDataModel?) onChange,
+      DropdownDataModel? selectedValue}) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          header,
+          style: const TextStyle(
+              color: Colors.grey, fontSize: 13, fontWeight: FontWeight.w500),
+        ),
+        const SizedBox(
+          height: 5,
+        ),
+        SizedBox(
+          height: 56,
+          child: Row(
+            children: [
+              Expanded(
+                child: Container(
+                  decoration: BoxDecoration(
+                      border: Border.all(color: CustomColor.black, width: 0.70),
+                      borderRadius: BorderRadius.circular(10)),
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 10, right: 10),
+                    child: DropdownButton<DropdownDataModel>(
+                      hint: Text(hint),
+                      borderRadius: BorderRadius.circular(10),
+                      isExpanded: true,
+                      underline: const SizedBox(),
+                      items: list.map((DropdownDataModel value) {
+                        return DropdownMenuItem<DropdownDataModel>(
+                          value: value,
+                          child: Text(value.value),
+                        );
+                      }).toList(),
+                      value: selectedValue,
+                      onChanged: (value) {
+                        print("Inside Selected Value: ${value?.value}");
+                        onChange(value);
+                      },
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        )
+      ],
+    );
+  }
+
+  /*This method will return the  Component with header*/
+  static Widget getSearchDropDownComponent(
+      {required String header,
+      required String hint,
+      required List<DropdownDataModel> list,
+      required Function(DropdownDataModel?) onChange,
+      DropdownDataModel? selectedValue}) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          header,
+          style: const TextStyle(
+              color: Colors.grey, fontSize: 13, fontWeight: FontWeight.w500),
+        ),
+        const SizedBox(
+          height: 5,
+        ),
+        SizedBox(
+          height: 56,
+          child: Row(
+            children: [
+              Expanded(
+                child: Container(
+                  decoration: BoxDecoration(
+                      border: Border.all(color: CustomColor.black, width: 0.70),
+                      borderRadius: BorderRadius.circular(10)),
+                  child: DropdownSearch<DropdownDataModel>(
+                      clearButtonProps: const ClearButtonProps(isVisible: true),
+                      asyncItems: (String filter) {
+                        return getFilterData(filter, list);
+                      },
+                      itemAsString: (DropdownDataModel u) => u.value,
+                      onChanged: (DropdownDataModel? data) {
+                        onChange(data);
+                      },
+                      // selectedItem: selectedValue,
+                      dropdownDecoratorProps: DropDownDecoratorProps(),
+                      popupProps: PopupPropsMultiSelection.modalBottomSheet(
+                        title: Container(
+                          width: double.infinity,
+                          height: 60,
+                          color: CustomColor.toolbarBg,
+                          child: Center(
+                            child: Text(
+                              header,
+                              style: const TextStyle(
+                                  color: CustomColor.white, fontSize: 14),
+                            ),
+                          ),
+                        ),
+                        isFilterOnline: true,
+                        searchDelay: const Duration(microseconds: 1),
+                        showSelectedItems: false,
+                        showSearchBox: true,
+                        searchFieldProps: TextFieldProps(
+                            decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          contentPadding: const EdgeInsets.only(
+                              left: 15, right: 15, top: 2, bottom: 2),
+                          hintText: "Search $header",
+                          filled: true,
+                          fillColor: Colors.white,
+                        )),
+                        itemBuilder: (context, value, b) {
+                          return Column(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(10),
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      child: Text(
+                                        value.value,
+                                        style: TextStyle(fontSize: 16,fontWeight: FontWeight.normal),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Container(
+                                width: double.infinity,
+                                height: 1,
+                                color: CustomColor.grey,
+                              )
+                            ],
+                          );
+                        },
+                      )),
+                ),
+              ),
+            ],
+          ),
+        )
+      ],
+    );
+  }
+
+  /*This method will return the  Component with header*/
+  static Widget getDatePickerTextFieldComponent(
+      {required String header,
+      required String hint,
+      required TextEditingController? textEditingController,
+      required BuildContext context}) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          header,
+          style: const TextStyle(
+              color: Colors.grey, fontSize: 13, fontWeight: FontWeight.w500),
+        ),
+        const SizedBox(
+          height: 5,
+        ),
+        SizedBox(
+          height: 56,
+          child: TextField(
+            onTap: () {
+              _selectDate(context, textEditingController);
+            },
+            focusNode: AlwaysDisabledFocusNode(),
+            textInputAction: TextInputAction.next,
+            style: const TextStyle(color: Colors.black, fontSize: 16),
+            controller: textEditingController,
+            decoration: InputDecoration(
+              suffixIcon: Icon(
+                Icons.calendar_today,
+                size: 15,
+                color: CustomColor.black,
+              ),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+              contentPadding:
+                  const EdgeInsets.only(left: 15, right: 15, top: 2, bottom: 2),
+              hintText: hint,
+              filled: true,
+              fillColor: Colors.white,
+            ),
+          ),
+        )
+      ],
+    );
+  }
+
+  static _selectDate(BuildContext context,
+      TextEditingController? textEditingController) async {
+    final DateFormat outputFormatter = DateFormat("yyyy-MM-dd");
+    DateTime? newSelectedDate = await showDatePicker(
+      context: context,
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2040),
+      initialDate: DateTime.now(),
+    );
+    if (newSelectedDate != null) {
+      textEditingController?.text = outputFormatter.format(newSelectedDate);
+    }
+  }
+
+  static Future<List<DropdownDataModel>> getFilterData(
+      String filter, List<DropdownDataModel> list) async {
+    if (filter.length == 0) {
+      return list;
+    } else {
+      List<DropdownDataModel> filteredList =
+          list.where((e) => e.value.toLowerCase().contains(filter.toLowerCase())).toList();
+      return filteredList;
+    }
+  }
+
+   static List<DropdownDataModel> stockType = [
+    DropdownDataModel(key: "Case", value: "Case"),
+    DropdownDataModel(key: "Pkt", value: "Pkt"),
+    DropdownDataModel(key: "Kg", value: "kg")
+  ];
+  static List<DropdownDataModel>  invoiceType = [
+    DropdownDataModel(key: "InWard", value: "InWard"),
+    DropdownDataModel(key: "OutWard", value: "OutWard"),
+  ];
+  static List<DropdownDataModel>  productType = [
+    DropdownDataModel(key: "Good", value: "Good"),
+    DropdownDataModel(key: "Bad", value: "Bad"),
+  ];
+}
+
+class AlwaysDisabledFocusNode extends FocusNode {
+  @override
+  bool get hasFocus => false;
+}
+
+class DropdownDataModel {
+  String key;
+  String value;
+
+  DropdownDataModel({required this.key, required this.value});
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['value'] = this.value;
+    data['key'] = this.key;
+    return data;
   }
 }

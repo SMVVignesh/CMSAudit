@@ -30,7 +30,7 @@ class _DashboardScreenState extends CustomState<DashboardScreen> {
   @override
   Widget myBuild(BuildContext context) {
     updateDrawerMenus();
-    selectedMenu ??= menus[0];
+    selectedMenu ??= menus[1];
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(

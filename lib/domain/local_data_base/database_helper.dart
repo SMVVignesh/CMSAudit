@@ -79,14 +79,25 @@ class DatabaseHelper {
 
   /*
   * This method is used to delete WHLocations*/
-  Future<int> deleteWHLocation(
-      {required String locationName,
-      required String palletNumber,
-      required String auditDetailId}) async {
+  Future<int> deleteWHLocation({required String guid}) async {
     final query = _database.delete(_database.wHLocation)
-      ..where((tbl) => tbl.locationName.equals(locationName))
-      ..where((tbl) => tbl.palletNumber.equals(palletNumber))
-      ..where((tbl) => tbl.auditDetailId.equals(auditDetailId));
+      ..where((tbl) => tbl.guId.equals(guid));
+    return await query.go();
+  }
+
+  /*
+  * This method is used to delete WHLocations*/
+  Future<int> deleteWHInOutWard({required String guid}) async {
+    final query = _database.delete(_database.wHInOutWards)
+      ..where((tbl) => tbl.guId.equals(guid));
+    return await query.go();
+  }
+
+  /*
+  * This method is used to delete WHLocations*/
+  Future<int> deleteWHAuditing({required String guid}) async {
+    final query = _database.delete(_database.wHAuditing)
+      ..where((tbl) => tbl.guId.equals(guid));
     return await query.go();
   }
 
@@ -99,5 +110,88 @@ class DatabaseHelper {
       return tbl.auditDetailId == auditId;
     }).toList();
     return whLocations;
+  }
+
+  /*
+  * This method will return only one record by tag in ApiDataTable*/
+  Future<List<WHInOutWardsTable>> getWHInOutWard(
+      String auditId, String locationId) async {
+    List<WHInOutWardsTable> query =
+        await _database.select(_database.wHInOutWards).get();
+    List<WHInOutWardsTable> whLocations = query.where((tbl) {
+      return (tbl.auditDetailId == auditId) && (tbl.whLocationId == locationId);
+    }).toList();
+    return whLocations;
+  }
+
+  /*
+  * This method will return only one record by tag in ApiDataTable*/
+  Future<List<WHAuditingTable>> getWHAuditing(
+      String auditId, String locationId) async {
+    List<WHAuditingTable> query =
+        await _database.select(_database.wHAuditing).get();
+    List<WHAuditingTable> whLocations = query.where((tbl) {
+      return (tbl.auditDetailId == auditId) && (tbl.whLocationId == locationId);
+    }).toList();
+    return whLocations;
+  }
+
+  /*
+  * This method is used to insert the data in ApiDataTable by tag*/
+  Future<int> insertWHInOutWard(
+      {required int qty,
+      required String stockType,
+      required String description,
+      required String invoNo,
+      required String invoType,
+      required String invoDate,
+      required String customerName,
+      required String whLocationId,
+      required String auditDetailId,
+      required String productId}) async {
+    final query = _database.into(_database.wHInOutWards).insert(
+        WHInOutWardsTable(
+            guId: Utils.getNewGuId(),
+            updatedDateAndTime: DateTime.now(),
+            qty: qty,
+            stockType: stockType,
+            description: description,
+            invoNo: invoNo,
+            invoType: invoType,
+            invoDate: invoDate,
+            customerName: customerName,
+            whLocationId: whLocationId,
+            productId: productId,
+            auditDetailId: auditDetailId));
+    return await query;
+  }
+
+  /*
+  * This method is used to insert the data in ApiDataTable by tag*/
+  Future<int> insertWHAuditing(
+      {required int qty,
+      required int bestBefore,
+      required String stockType,
+      required String productQuality,
+      required String productId,
+      required String whLocationId,
+      required String auditDetailId,
+      required String description,
+      required String mfDate,
+      required String file}) async {
+    final query = _database.into(_database.wHAuditing).insert(WHAuditingTable(
+        updatedDateAndTime: DateTime.now(),
+        guId: Utils.getNewGuId(),
+        qty: qty,
+        bestBefore: bestBefore,
+        stockType: stockType,
+        productQuality: productQuality,
+        productId: productId,
+        whLocationId: whLocationId,
+        auditDetailId: auditDetailId,
+        description: description,
+        mfDate: mfDate,
+        file: file));
+    return await query;
   }
 }
