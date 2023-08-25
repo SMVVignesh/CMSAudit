@@ -1,3 +1,4 @@
+import 'package:cms_audit/core/utils/utils.dart';
 import 'package:cms_audit/domain/api/api_repository.dart';
 import 'package:cms_audit/domain/local_data_base/data_base_repository.dart';
 import 'package:cms_audit/presentation/pages/dashboard/page/audit_details/model/audit_response.dart';
@@ -85,11 +86,12 @@ class _UpdateListScreenState extends State<UpdateListScreen> {
                                 color: CustomColor.blue,
                                 borderRadius: BorderRadius.circular(10)),
                             child: const Padding(
-                              padding: EdgeInsets.all(8.0),
+                              padding: EdgeInsets.only(
+                                  left: 15, right: 15, top: 10, bottom: 10),
                               child: Text(
                                 "Update",
                                 style: TextStyle(
-                                    color: CustomColor.white, fontSize: 12),
+                                    color: CustomColor.white, fontSize: 14),
                               ),
                             ),
                           ),
@@ -118,7 +120,10 @@ class _UpdateListScreenState extends State<UpdateListScreen> {
               loadingMessage,
               style: const TextStyle(fontSize: 14, color: CustomColor.black),
             ),
-          )
+          ),
+        const SizedBox(
+          height: 10,
+        )
       ],
     );
   }
@@ -127,7 +132,8 @@ class _UpdateListScreenState extends State<UpdateListScreen> {
     list.clear();
     list.add(UpdateModel(
         id: 1, name: "Products", lastUpdatedDate: productLastUpdatedDate));
-    list.add(UpdateModel(id: 2, name: "Audit", lastUpdatedDate: auditLastUpdatedDate));
+    list.add(UpdateModel(
+        id: 2, name: "Audit", lastUpdatedDate: auditLastUpdatedDate));
   }
 
   void updateApi(UpdateModel item) {
@@ -149,11 +155,14 @@ class _UpdateListScreenState extends State<UpdateListScreen> {
       updateLastUpdateDates();
       showLoading(false);
       SnackBarUtils.showSuccess(context, "Updated Products");
+    } on UnauthorisedException {
+      showLoading(false);
+      Utils.showUnAuthorizedToken(context);
     } catch (e) {
+      showLoading(false);
       SnackBarUtils.showError(context, e.toString());
     }
   }
-
 
   void getAuditList() async {
     try {
@@ -163,7 +172,11 @@ class _UpdateListScreenState extends State<UpdateListScreen> {
       updateLastUpdateDates();
       showLoading(false);
       SnackBarUtils.showSuccess(context, "Updated Audit");
+    } on UnauthorisedException {
+      showLoading(false);
+      Utils.showUnAuthorizedToken(context);
     } catch (e) {
+      showLoading(false);
       SnackBarUtils.showError(context, e.toString());
     }
   }
@@ -186,7 +199,7 @@ class _UpdateListScreenState extends State<UpdateListScreen> {
     }
 
     DateTime? auditUpdatedDateTime =
-    await DatabaseRepository().getAuditUpdatedDate();
+        await DatabaseRepository().getAuditUpdatedDate();
     if (auditUpdatedDateTime != null) {
       setState(() {
         auditLastUpdatedDate = formatter.format(auditUpdatedDateTime);

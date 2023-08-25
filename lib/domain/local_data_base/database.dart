@@ -123,7 +123,7 @@ class Database extends _$Database {
   Database() : super(_openConnection());
 
   @override
-  int get schemaVersion => 6;
+  int get schemaVersion => 8;
 
   @override
   @DriftDatabase(tables: [ApiData, WHLocation, WHInOutWards, WHAuditing])
@@ -131,7 +131,8 @@ class Database extends _$Database {
     return MigrationStrategy(onUpgrade: (_migrator, from, to) async {
       print("MigrationStrategy :: Triggered");
       for(var item in allTables){
-        item.delete();
+        _migrator.drop(item);
+        _migrator.create(item);
       }
     });
   }
