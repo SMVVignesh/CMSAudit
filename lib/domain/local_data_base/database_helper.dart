@@ -1,5 +1,7 @@
 import 'dart:ffi';
 
+import 'package:drift/drift.dart';
+
 import '../../core/utils/utils.dart';
 import 'database.dart';
 
@@ -75,6 +77,28 @@ class DatabaseHelper {
         isActive: isActive,
         locationId: Utils.getNewGuId()));
     return await query;
+  }
+
+  /*
+  * This method is used to insert the data in ApiDataTable by tag*/
+  Future<int> updateWHLocation({
+    required String locationName,
+    required String palletNumber,
+    required String description,
+    required bool isActive,
+    required String auditDetailId,
+    required String locationId,
+  }) async {
+    WHLocationCompanion entity = WHLocationCompanion(
+        locationName: Value(locationName),
+        palletNumber: Value(palletNumber),
+        description: Value(description),
+        isActive: Value(isActive));
+    final query = _database.update(_database.wHLocation)
+      ..where((tbl) => tbl.locationId.equals(locationId))
+      ..write(entity);
+    await query;
+    return 1;
   }
 
   /*
@@ -194,7 +218,8 @@ class DatabaseHelper {
         auditDetailId: auditDetailId,
         description: description,
         mfDate: mfDate,
-        productName:productName ,
+        productName: productName,
+        isUploaded: false,
         file: file));
     return await query;
   }

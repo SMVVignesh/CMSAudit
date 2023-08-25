@@ -76,9 +76,8 @@ class WHInOutWards extends Table {
   TextColumn get auditDetailId => text()();
 
   @override
-  Set<Column> get primaryKey => {invoNo, auditDetailId,whLocationId,productId};
+  Set<Column> get primaryKey => {invoNo, inOutWardId, auditDetailId};
 }
-
 
 /*
 * This class represents the data base table for Api cache*/
@@ -108,29 +107,32 @@ class WHAuditing extends Table {
 
   TextColumn get mfDate => text()();
 
+  BoolColumn get isUploaded => boolean()();
+
   TextColumn get file => text()();
 
-
   @override
-  Set<Column> get primaryKey => {auditDetailId,whLocationId,productId};
+  Set<Column> get primaryKey => {auditingId, auditDetailId};
 }
-
-
 
 /*
 * This class represents Data base and their tables*/
-@DriftDatabase(tables: [ApiData, WHLocation, WHInOutWards,WHAuditing], views: [])
+@DriftDatabase(
+    tables: [ApiData, WHLocation, WHInOutWards, WHAuditing], views: [])
 class Database extends _$Database {
   Database() : super(_openConnection());
 
   @override
-  int get schemaVersion => 5;
+  int get schemaVersion => 6;
 
   @override
-  @DriftDatabase(tables: [ApiData, WHLocation, WHInOutWards])
+  @DriftDatabase(tables: [ApiData, WHLocation, WHInOutWards, WHAuditing])
   MigrationStrategy get migration {
-    return MigrationStrategy(onUpgrade: (migrator, from, to) async {
-      await migrator.createAll();
+    return MigrationStrategy(onUpgrade: (_migrator, from, to) async {
+      print("MigrationStrategy :: Triggered");
+      for(var item in allTables){
+        item.delete();
+      }
     });
   }
 }

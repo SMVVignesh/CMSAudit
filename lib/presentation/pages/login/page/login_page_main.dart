@@ -55,7 +55,7 @@ class _LoginPageState extends CustomState<LoginPage> {
 
     double topPadding = 53;
     return Scaffold(
-      backgroundColor: CustomColor.white,
+      backgroundColor: CustomColor.toolbarBg,
       body: Center(
         child: SingleChildScrollView(
           scrollDirection: Axis.vertical,
@@ -78,7 +78,7 @@ class _LoginPageState extends CustomState<LoginPage> {
                 const Text(
                   "CMS Audit",
                   style: TextStyle(
-                      color: CustomColor.toolbarBg,
+                      color: CustomColor.white,
                       fontSize: 20,
                       fontWeight: FontWeight.normal),
                 ),
@@ -125,7 +125,7 @@ class _LoginPageState extends CustomState<LoginPage> {
         Text(
           header,
           style: const TextStyle(
-              color: Colors.grey, fontSize: 13, fontWeight: FontWeight.w500),
+              color: Colors.white, fontSize: 13, fontWeight: FontWeight.w500),
         ),
         const SizedBox(
           height: 5,
@@ -165,23 +165,11 @@ class _LoginPageState extends CustomState<LoginPage> {
               child: Text(
                 header,
                 style: const TextStyle(
-                    color: Colors.grey,
+                    color: Colors.white,
                     fontSize: 13,
                     fontWeight: FontWeight.w500),
               ),
             ),
-            // GestureDetector(
-            //   onTap: () {
-            //
-            //   },
-            //   child: Text(
-            //     AppLocalizations.of(context)!.trans(FORGOT_PASSWORD),
-            //     style: const TextStyle(
-            //         color: CustomColor.white,
-            //         fontSize: 13,
-            //         fontWeight: FontWeight.normal),
-            //   ),
-            // )
           ],
         ),
         const SizedBox(

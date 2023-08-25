@@ -35,7 +35,7 @@ class _SplashState extends CustomState<Splash> {
   Widget myBuild(BuildContext context) {
     return Scaffold(
       body: Container(
-        color: CustomColor.white,
+        color: CustomColor.toolbarBg,
         child: Stack(
           children: [
             SizedBox(

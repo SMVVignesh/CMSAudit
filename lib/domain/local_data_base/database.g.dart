@@ -835,8 +835,7 @@ class $WHInOutWardsTable extends WHInOutWards
   }
 
   @override
-  Set<GeneratedColumn> get $primaryKey =>
-      {invoNo, auditDetailId, whLocationId, productId};
+  Set<GeneratedColumn> get $primaryKey => {invoNo, inOutWardId, auditDetailId};
   @override
   WHInOutWardsTable map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
@@ -1340,6 +1339,15 @@ class $WHAuditingTable extends WHAuditing
   late final GeneratedColumn<String> mfDate = GeneratedColumn<String>(
       'mf_date', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _isUploadedMeta =
+      const VerificationMeta('isUploaded');
+  @override
+  late final GeneratedColumn<bool> isUploaded = GeneratedColumn<bool>(
+      'is_uploaded', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: true,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'CHECK ("is_uploaded" IN (0, 1))'));
   static const VerificationMeta _fileMeta = const VerificationMeta('file');
   @override
   late final GeneratedColumn<String> file = GeneratedColumn<String>(
@@ -1359,6 +1367,7 @@ class $WHAuditingTable extends WHAuditing
         auditDetailId,
         description,
         mfDate,
+        isUploaded,
         file
       ];
   @override
@@ -1458,6 +1467,14 @@ class $WHAuditingTable extends WHAuditing
     } else if (isInserting) {
       context.missing(_mfDateMeta);
     }
+    if (data.containsKey('is_uploaded')) {
+      context.handle(
+          _isUploadedMeta,
+          isUploaded.isAcceptableOrUnknown(
+              data['is_uploaded']!, _isUploadedMeta));
+    } else if (isInserting) {
+      context.missing(_isUploadedMeta);
+    }
     if (data.containsKey('file')) {
       context.handle(
           _fileMeta, file.isAcceptableOrUnknown(data['file']!, _fileMeta));
@@ -1468,8 +1485,7 @@ class $WHAuditingTable extends WHAuditing
   }
 
   @override
-  Set<GeneratedColumn> get $primaryKey =>
-      {auditDetailId, whLocationId, productId};
+  Set<GeneratedColumn> get $primaryKey => {auditingId, auditDetailId};
   @override
   WHAuditingTable map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
@@ -1499,6 +1515,8 @@ class $WHAuditingTable extends WHAuditing
           .read(DriftSqlType.string, data['${effectivePrefix}description'])!,
       mfDate: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}mf_date'])!,
+      isUploaded: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}is_uploaded'])!,
       file: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}file'])!,
     );
@@ -1523,6 +1541,7 @@ class WHAuditingTable extends DataClass implements Insertable<WHAuditingTable> {
   final String auditDetailId;
   final String description;
   final String mfDate;
+  final bool isUploaded;
   final String file;
   const WHAuditingTable(
       {required this.updatedDateAndTime,
@@ -1537,6 +1556,7 @@ class WHAuditingTable extends DataClass implements Insertable<WHAuditingTable> {
       required this.auditDetailId,
       required this.description,
       required this.mfDate,
+      required this.isUploaded,
       required this.file});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -1553,6 +1573,7 @@ class WHAuditingTable extends DataClass implements Insertable<WHAuditingTable> {
     map['audit_detail_id'] = Variable<String>(auditDetailId);
     map['description'] = Variable<String>(description);
     map['mf_date'] = Variable<String>(mfDate);
+    map['is_uploaded'] = Variable<bool>(isUploaded);
     map['file'] = Variable<String>(file);
     return map;
   }
@@ -1571,6 +1592,7 @@ class WHAuditingTable extends DataClass implements Insertable<WHAuditingTable> {
       auditDetailId: Value(auditDetailId),
       description: Value(description),
       mfDate: Value(mfDate),
+      isUploaded: Value(isUploaded),
       file: Value(file),
     );
   }
@@ -1592,6 +1614,7 @@ class WHAuditingTable extends DataClass implements Insertable<WHAuditingTable> {
       auditDetailId: serializer.fromJson<String>(json['auditDetailId']),
       description: serializer.fromJson<String>(json['description']),
       mfDate: serializer.fromJson<String>(json['mfDate']),
+      isUploaded: serializer.fromJson<bool>(json['isUploaded']),
       file: serializer.fromJson<String>(json['file']),
     );
   }
@@ -1611,6 +1634,7 @@ class WHAuditingTable extends DataClass implements Insertable<WHAuditingTable> {
       'auditDetailId': serializer.toJson<String>(auditDetailId),
       'description': serializer.toJson<String>(description),
       'mfDate': serializer.toJson<String>(mfDate),
+      'isUploaded': serializer.toJson<bool>(isUploaded),
       'file': serializer.toJson<String>(file),
     };
   }
@@ -1628,6 +1652,7 @@ class WHAuditingTable extends DataClass implements Insertable<WHAuditingTable> {
           String? auditDetailId,
           String? description,
           String? mfDate,
+          bool? isUploaded,
           String? file}) =>
       WHAuditingTable(
         updatedDateAndTime: updatedDateAndTime ?? this.updatedDateAndTime,
@@ -1642,6 +1667,7 @@ class WHAuditingTable extends DataClass implements Insertable<WHAuditingTable> {
         auditDetailId: auditDetailId ?? this.auditDetailId,
         description: description ?? this.description,
         mfDate: mfDate ?? this.mfDate,
+        isUploaded: isUploaded ?? this.isUploaded,
         file: file ?? this.file,
       );
   @override
@@ -1659,6 +1685,7 @@ class WHAuditingTable extends DataClass implements Insertable<WHAuditingTable> {
           ..write('auditDetailId: $auditDetailId, ')
           ..write('description: $description, ')
           ..write('mfDate: $mfDate, ')
+          ..write('isUploaded: $isUploaded, ')
           ..write('file: $file')
           ..write(')'))
         .toString();
@@ -1678,6 +1705,7 @@ class WHAuditingTable extends DataClass implements Insertable<WHAuditingTable> {
       auditDetailId,
       description,
       mfDate,
+      isUploaded,
       file);
   @override
   bool operator ==(Object other) =>
@@ -1695,6 +1723,7 @@ class WHAuditingTable extends DataClass implements Insertable<WHAuditingTable> {
           other.auditDetailId == this.auditDetailId &&
           other.description == this.description &&
           other.mfDate == this.mfDate &&
+          other.isUploaded == this.isUploaded &&
           other.file == this.file);
 }
 
@@ -1711,6 +1740,7 @@ class WHAuditingCompanion extends UpdateCompanion<WHAuditingTable> {
   final Value<String> auditDetailId;
   final Value<String> description;
   final Value<String> mfDate;
+  final Value<bool> isUploaded;
   final Value<String> file;
   final Value<int> rowid;
   const WHAuditingCompanion({
@@ -1726,6 +1756,7 @@ class WHAuditingCompanion extends UpdateCompanion<WHAuditingTable> {
     this.auditDetailId = const Value.absent(),
     this.description = const Value.absent(),
     this.mfDate = const Value.absent(),
+    this.isUploaded = const Value.absent(),
     this.file = const Value.absent(),
     this.rowid = const Value.absent(),
   });
@@ -1742,6 +1773,7 @@ class WHAuditingCompanion extends UpdateCompanion<WHAuditingTable> {
     required String auditDetailId,
     required String description,
     required String mfDate,
+    required bool isUploaded,
     required String file,
     this.rowid = const Value.absent(),
   })  : updatedDateAndTime = Value(updatedDateAndTime),
@@ -1756,6 +1788,7 @@ class WHAuditingCompanion extends UpdateCompanion<WHAuditingTable> {
         auditDetailId = Value(auditDetailId),
         description = Value(description),
         mfDate = Value(mfDate),
+        isUploaded = Value(isUploaded),
         file = Value(file);
   static Insertable<WHAuditingTable> custom({
     Expression<DateTime>? updatedDateAndTime,
@@ -1770,6 +1803,7 @@ class WHAuditingCompanion extends UpdateCompanion<WHAuditingTable> {
     Expression<String>? auditDetailId,
     Expression<String>? description,
     Expression<String>? mfDate,
+    Expression<bool>? isUploaded,
     Expression<String>? file,
     Expression<int>? rowid,
   }) {
@@ -1787,6 +1821,7 @@ class WHAuditingCompanion extends UpdateCompanion<WHAuditingTable> {
       if (auditDetailId != null) 'audit_detail_id': auditDetailId,
       if (description != null) 'description': description,
       if (mfDate != null) 'mf_date': mfDate,
+      if (isUploaded != null) 'is_uploaded': isUploaded,
       if (file != null) 'file': file,
       if (rowid != null) 'rowid': rowid,
     });
@@ -1805,6 +1840,7 @@ class WHAuditingCompanion extends UpdateCompanion<WHAuditingTable> {
       Value<String>? auditDetailId,
       Value<String>? description,
       Value<String>? mfDate,
+      Value<bool>? isUploaded,
       Value<String>? file,
       Value<int>? rowid}) {
     return WHAuditingCompanion(
@@ -1820,6 +1856,7 @@ class WHAuditingCompanion extends UpdateCompanion<WHAuditingTable> {
       auditDetailId: auditDetailId ?? this.auditDetailId,
       description: description ?? this.description,
       mfDate: mfDate ?? this.mfDate,
+      isUploaded: isUploaded ?? this.isUploaded,
       file: file ?? this.file,
       rowid: rowid ?? this.rowid,
     );
@@ -1865,6 +1902,9 @@ class WHAuditingCompanion extends UpdateCompanion<WHAuditingTable> {
     if (mfDate.present) {
       map['mf_date'] = Variable<String>(mfDate.value);
     }
+    if (isUploaded.present) {
+      map['is_uploaded'] = Variable<bool>(isUploaded.value);
+    }
     if (file.present) {
       map['file'] = Variable<String>(file.value);
     }
@@ -1889,6 +1929,7 @@ class WHAuditingCompanion extends UpdateCompanion<WHAuditingTable> {
           ..write('auditDetailId: $auditDetailId, ')
           ..write('description: $description, ')
           ..write('mfDate: $mfDate, ')
+          ..write('isUploaded: $isUploaded, ')
           ..write('file: $file, ')
           ..write('rowid: $rowid')
           ..write(')'))

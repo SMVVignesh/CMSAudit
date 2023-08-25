@@ -75,6 +75,7 @@ class Utils {
         SizedBox(
           height: 56,
           child: TextField(
+            textCapitalization: TextCapitalization.sentences,
             keyboardType: isNumber ? TextInputType.number : TextInputType.text,
             textInputAction: TextInputAction.next,
             style: const TextStyle(color: Colors.black, fontSize: 16),
@@ -187,12 +188,13 @@ class Utils {
                       onChanged: (DropdownDataModel? data) {
                         onChange(data);
                       },
-                      // selectedItem: selectedValue,
+                      selectedItem: selectedValue,
                       dropdownDecoratorProps: DropDownDecoratorProps(),
-                      popupProps: PopupPropsMultiSelection.modalBottomSheet(
+                      popupProps: PopupPropsMultiSelection.dialog(
+                        fit: FlexFit.tight,
                         title: Container(
                           width: double.infinity,
-                          height: 60,
+                          height: 50,
                           color: CustomColor.toolbarBg,
                           child: Center(
                             child: Text(
@@ -227,7 +229,9 @@ class Utils {
                                     Expanded(
                                       child: Text(
                                         value.value,
-                                        style: TextStyle(fontSize: 16,fontWeight: FontWeight.normal),
+                                        style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.normal),
                                       ),
                                     ),
                                   ],
@@ -318,24 +322,26 @@ class Utils {
     if (filter.length == 0) {
       return list;
     } else {
-      List<DropdownDataModel> filteredList =
-          list.where((e) => e.value.toLowerCase().contains(filter.toLowerCase())).toList();
+      List<DropdownDataModel> filteredList = list
+          .where((e) => e.value.toLowerCase().contains(filter.toLowerCase()))
+          .toList();
       return filteredList;
     }
   }
 
-   static List<DropdownDataModel> stockType = [
+  static List<DropdownDataModel> stockType = [
     DropdownDataModel(key: "Case", value: "Case"),
     DropdownDataModel(key: "Pkt", value: "Pkt"),
     DropdownDataModel(key: "Kg", value: "kg")
   ];
-  static List<DropdownDataModel>  invoiceType = [
+  static List<DropdownDataModel> invoiceType = [
     DropdownDataModel(key: "InWard", value: "InWard"),
     DropdownDataModel(key: "OutWard", value: "OutWard"),
   ];
-  static List<DropdownDataModel>  productType = [
+  static List<DropdownDataModel> productType = [
     DropdownDataModel(key: "Good", value: "Good"),
-    DropdownDataModel(key: "Bad", value: "Bad"),
+    DropdownDataModel(key: "Damage", value: "Damage"),
+    DropdownDataModel(key: "Expired", value: "Expired"),
   ];
 }
 

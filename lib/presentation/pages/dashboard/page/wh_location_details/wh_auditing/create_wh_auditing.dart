@@ -15,10 +15,11 @@ class CreateWHAuditingScreen extends StatefulWidget {
   WHLocationTable? location;
   WHAuditingTable? auditingTable;
 
-  CreateWHAuditingScreen({super.key,
-    required this.auditDetails,
-    required this.location,
-    this.auditingTable});
+  CreateWHAuditingScreen(
+      {super.key,
+      required this.auditDetails,
+      required this.location,
+      this.auditingTable});
 
   @override
   State<CreateWHAuditingScreen> createState() => _CreateWHAuditingScreenState();
@@ -26,11 +27,9 @@ class CreateWHAuditingScreen extends StatefulWidget {
 
 class _CreateWHAuditingScreenState extends State<CreateWHAuditingScreen> {
   TextEditingController bestBeforeTextEditingController =
-  TextEditingController();
-  TextEditingController invoiceNumberTextEditingController =
-  TextEditingController();
+      TextEditingController();
   TextEditingController descriptionTextEditingController =
-  TextEditingController();
+      TextEditingController();
   TextEditingController qtyTextEditingController = TextEditingController();
   TextEditingController mFDateTextEditingController = TextEditingController();
   DropdownDataModel? selectedStockType;
@@ -44,12 +43,21 @@ class _CreateWHAuditingScreenState extends State<CreateWHAuditingScreen> {
     super.initState();
     updateProductList();
     if (widget.auditingTable != null) {
-      // bestBeforeTextEditingController.text =
-      //     widget.location?.locationName ?? "";
-      // invoiceNumberTextEditingController.text =
-      //     widget.location?.palletNumber ?? "";
-      // descriptionTextEditingController.text =
-      //     widget.location?.description ?? "";
+      bestBeforeTextEditingController.text =
+          widget.auditingTable?.bestBefore.toString() ?? "";
+      descriptionTextEditingController.text =
+          widget.auditingTable?.description ?? "";
+      qtyTextEditingController.text =
+          widget.auditingTable?.qty.toString() ?? "";
+      mFDateTextEditingController.text = widget.auditingTable?.mfDate ?? "";
+      selectedStockType = Utils.stockType
+          .where((element) =>
+              element.key == (widget.auditingTable?.stockType ?? ""))
+          .first;
+      selectedProductType = Utils.productType
+          .where((element) =>
+              element.key == (widget.auditingTable?.productQuality ?? ""))
+          .first;
     }
   }
 
@@ -72,15 +80,36 @@ class _CreateWHAuditingScreenState extends State<CreateWHAuditingScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text(
-                      "${(widget.auditingTable != null)
-                          ? "Edit"
-                          : "Create"} Auditing",
-                      style: const TextStyle(
-                          color: CustomColor.toolbarBg,
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold),
-                      textAlign: TextAlign.center,
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Expanded(
+                          child: Text(
+                            "${(widget.auditingTable != null) ? "Edit" : "Create"} Auditing",
+                            style: const TextStyle(
+                                color: CustomColor.toolbarBg,
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold),
+                            textAlign: TextAlign.start,
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                          child: Container(
+                            color: Colors.transparent,
+                            child: const Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: Icon(
+                                Icons.close,
+                                size: 20,
+                                color: CustomColor.black,
+                              ),
+                            ),
+                          ),
+                        )
+                      ],
                     ),
                     SizedBox(
                       height: 10,
@@ -134,7 +163,7 @@ class _CreateWHAuditingScreenState extends State<CreateWHAuditingScreen> {
                         header: "Description",
                         hint: "Enter Description",
                         textEditingController:
-                        descriptionTextEditingController),
+                            descriptionTextEditingController),
                     SizedBox(
                       height: 10,
                     ),
@@ -142,47 +171,47 @@ class _CreateWHAuditingScreenState extends State<CreateWHAuditingScreen> {
                       children: [
                         Expanded(
                             child: GestureDetector(
-                              onTap: () {
-                                Navigator.pop(context);
-                              },
-                              child: Container(
-                                decoration: BoxDecoration(
-                                    color: CustomColor.grey,
-                                    borderRadius: BorderRadius.circular(5)),
-                                child: const Padding(
-                                  padding: EdgeInsets.all(10),
-                                  child: Text(
-                                    "Cancel",
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        fontSize: 14, color: CustomColor.black),
-                                  ),
-                                ),
+                          onTap: () {
+                            validateFields(true);
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                                color: CustomColor.toolbarBg.withOpacity(0.7),
+                                borderRadius: BorderRadius.circular(5)),
+                            child: const Padding(
+                              padding: EdgeInsets.all(10),
+                              child: Text(
+                                "Save & Create another",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    fontSize: 14, color: CustomColor.white),
                               ),
-                            )),
+                            ),
+                          ),
+                        )),
                         const SizedBox(
                           width: 25,
                         ),
                         Expanded(
                             child: GestureDetector(
-                              onTap: () {
-                                validateFields();
-                              },
-                              child: Container(
-                                decoration: BoxDecoration(
-                                    color: CustomColor.toolbarBg,
-                                    borderRadius: BorderRadius.circular(5)),
-                                child: const Padding(
-                                  padding: EdgeInsets.all(10),
-                                  child: Text(
-                                    textAlign: TextAlign.center,
-                                    "Save",
-                                    style: TextStyle(
-                                        fontSize: 14, color: CustomColor.white),
-                                  ),
-                                ),
+                          onTap: () {
+                            validateFields(false);
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                                color: CustomColor.toolbarBg,
+                                borderRadius: BorderRadius.circular(5)),
+                            child: const Padding(
+                              padding: EdgeInsets.all(10),
+                              child: Text(
+                                textAlign: TextAlign.center,
+                                "Save",
+                                style: TextStyle(
+                                    fontSize: 14, color: CustomColor.white),
                               ),
-                            ))
+                            ),
+                          ),
+                        )),
                       ],
                     )
                   ],
@@ -195,10 +224,9 @@ class _CreateWHAuditingScreenState extends State<CreateWHAuditingScreen> {
     );
   }
 
-  void validateFields() async {
+  void validateFields(bool createAnother) async {
     String qty = qtyTextEditingController.text;
     String bestBefore = bestBeforeTextEditingController.text;
-    String invoiceNumber = invoiceNumberTextEditingController.text;
     String description = descriptionTextEditingController.text;
     String mfDate = mFDateTextEditingController.text;
 
@@ -216,19 +244,24 @@ class _CreateWHAuditingScreenState extends State<CreateWHAuditingScreen> {
       SnackBarUtils.showError(context, "Enter Best Before");
     } else {
       try {
-        await DatabaseRepository().insertWHAuditing(qty: convertToInt(qty),
+        await DatabaseRepository().insertWHAuditing(
+            qty: convertToInt(qty),
             bestBefore: convertToInt(bestBefore),
-            stockType: selectedStockType?.key??"",
-            productQuality: selectedProductType?.key??"",
-            productId: selectedProducts?.key??"",
-            productName: selectedProducts?.value??"",
-            whLocationId: widget.location?.locationId??"",
-            auditDetailId: widget.auditDetails.id??"",
+            stockType: selectedStockType?.key ?? "",
+            productQuality: selectedProductType?.key ?? "",
+            productId: selectedProducts?.key ?? "",
+            productName: selectedProducts?.value ?? "",
+            whLocationId: widget.location?.locationId ?? "",
+            auditDetailId: widget.auditDetails.id ?? "",
             description: description,
             mfDate: mfDate,
             file: "");
-
-        if (context.mounted) {
+        if (createAnother) {
+          setState(() {
+            qtyTextEditingController.text = "";
+            selectedStockType = null;
+          });
+        } else if (context.mounted) {
           Navigator.pop(context);
         }
       } catch (e) {
@@ -242,11 +275,16 @@ class _CreateWHAuditingScreenState extends State<CreateWHAuditingScreen> {
   void updateProductList() async {
     products.clear();
     ProductResponse? productResponse =
-    await DatabaseRepository().getProductData();
+        await DatabaseRepository().getProductData();
     for (var e in productResponse?.productList ?? []) {
       products.add(DropdownDataModel(key: e.id ?? "", value: e.name ?? ""));
     }
     print("Count---> ${products.length}");
+
+    selectedProducts = products
+        .where((element) =>
+            element.key == (widget.auditingTable?.productId ?? ""))
+        .first;
     setState(() {});
   }
 

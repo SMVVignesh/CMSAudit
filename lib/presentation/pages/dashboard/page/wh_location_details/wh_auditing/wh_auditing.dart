@@ -97,6 +97,8 @@ class _WHAuditingScreenState extends CustomState<WHAuditingScreen> {
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
                                       Row(
+                                        crossAxisAlignment:CrossAxisAlignment.start,
+                                        mainAxisAlignment: MainAxisAlignment.start,
                                         children: [
                                           Expanded(
                                             child: Text(
@@ -136,10 +138,13 @@ class _WHAuditingScreenState extends CustomState<WHAuditingScreen> {
                                                   child: Icon(
                                                     Icons.edit,
                                                     color: Colors.blue,
-                                                    size: 14,
+                                                    size: 20,
                                                   ),
                                                 ),
                                               )),
+                                          const SizedBox(
+                                            width: 10,
+                                          ),
                                           GestureDetector(
                                               onTap: () {
                                                 showDeleteConfirmationPopUp(
@@ -153,7 +158,7 @@ class _WHAuditingScreenState extends CustomState<WHAuditingScreen> {
                                                   child: Icon(
                                                     Icons.delete,
                                                     color: Colors.redAccent,
-                                                    size: 14,
+                                                    size: 20,
                                                   ),
                                                 ),
                                               ))

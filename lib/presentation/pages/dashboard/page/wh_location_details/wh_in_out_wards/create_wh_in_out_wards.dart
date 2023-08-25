@@ -36,17 +36,6 @@ class _CreateWHInOutWardsScreenState extends State<CreateWHInOutWardsScreen> {
   DropdownDataModel? selectedStockType;
   DropdownDataModel? selectedInvoiceType;
   DropdownDataModel? selectedProducts;
-
-  final stockType = [
-    DropdownDataModel(key: "Case", value: "Case"),
-    DropdownDataModel(key: "Pkt", value: "Pkt"),
-    DropdownDataModel(key: "Kg", value: "kg")
-  ];
-  final invoiceType = [
-    DropdownDataModel(key: "InWard", value: "InWard"),
-    DropdownDataModel(key: "OutWard", value: "OutWard"),
-  ];
-
   List<DropdownDataModel> products = [];
 
   @override
@@ -54,12 +43,24 @@ class _CreateWHInOutWardsScreenState extends State<CreateWHInOutWardsScreen> {
     super.initState();
     updateProductList();
     if (widget.inOutWard != null) {
-      // customerNameTextEditingController.text =
-      //     widget.location?.locationName ?? "";
-      // invoiceNumberTextEditingController.text =
-      //     widget.location?.palletNumber ?? "";
-      // descriptionTextEditingController.text =
-      //     widget.location?.description ?? "";
+      qtyTextEditingController.text =
+          widget.inOutWard?.qty.toString()??"";
+      invoiceNumberTextEditingController.text =
+          widget.inOutWard?.invoNo ?? "";
+      invoiceDateTextEditingController.text =
+          widget.inOutWard?.invoDate ?? "";
+      customerNameTextEditingController.text =
+          widget.location?.locationName ?? "";
+      descriptionTextEditingController.text =
+          widget.location?.description ?? "";
+      selectedStockType = Utils.stockType
+          .where((element) =>
+          element.key == (widget.inOutWard?.stockType ?? ""))
+          .first;
+      selectedInvoiceType = Utils.invoiceType
+          .where((element) =>
+          element.key == (widget.inOutWard?.invoType ?? ""))
+          .first;
     }
   }
 
@@ -112,7 +113,7 @@ class _CreateWHInOutWardsScreenState extends State<CreateWHInOutWardsScreen> {
                         header: "Stock Type",
                         hint: "Select Stock Type",
                         selectedValue: selectedStockType,
-                        list: stockType,
+                        list: Utils.stockType,
                         onChange: (value) {
                           setState(() {
                             selectedStockType = value;
@@ -127,7 +128,7 @@ class _CreateWHInOutWardsScreenState extends State<CreateWHInOutWardsScreen> {
                         header: "Invoice Type",
                         hint: "Select Invoice Type",
                         selectedValue: selectedInvoiceType,
-                        list: invoiceType,
+                        list: Utils.invoiceType,
                         onChange: (value) {
                           setState(() {
                             selectedInvoiceType = value;
@@ -262,6 +263,10 @@ class _CreateWHInOutWardsScreenState extends State<CreateWHInOutWardsScreen> {
     for (var e in productResponse?.productList ?? []) {
       products.add(DropdownDataModel(key: e.id ?? "", value: e.name ?? ""));
     }
+    selectedProducts = products
+        .where((element) =>
+        element.key == (widget.inOutWard?.productId ?? ""))
+        .first;
     print("Count---> ${products.length}");
     setState(() {});
   }

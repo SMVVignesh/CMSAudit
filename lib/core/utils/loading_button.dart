@@ -35,7 +35,7 @@ class _LoadingButtonState extends State<LoadingButton> {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(15),
           color: Colors.transparent,
-          border: Border.all(width: 1, color: CustomColor.grey),
+          border: Border.all(width: 1, color: CustomColor.white),
         ),
         child: Center(
           child: widget.isLoading
@@ -46,7 +46,7 @@ class _LoadingButtonState extends State<LoadingButton> {
               : Text(widget.btnName ?? "",
                   style: const TextStyle(
                       backgroundColor: Colors.transparent,
-                      color: Colors.grey,
+                      color: Colors.white,
                       fontSize: 18,
                       fontWeight: FontWeight.w500)),
         ),

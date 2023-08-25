@@ -99,7 +99,7 @@ class DatabaseRepository {
 
   Future<DateTime?> getAuditUpdatedDate() async {
     final encryptedData =
-    await databaseHelper.getApiDataByTag(LocalDatabaseConstants.AUDIT_DATA);
+        await databaseHelper.getApiDataByTag(LocalDatabaseConstants.AUDIT_DATA);
     if (encryptedData != null) {
       return encryptedData.updatedDateAndTime;
     } else {
@@ -108,20 +108,17 @@ class DatabaseRepository {
   }
 
   Future<int> deleteWHLocation({required String guid}) async {
-    final encryptedData = await databaseHelper.deleteWHLocation(
-        guid: guid);
+    final encryptedData = await databaseHelper.deleteWHLocation(guid: guid);
     return encryptedData;
   }
 
   Future<int> deleteWHInOutWard({required String guid}) async {
-    final encryptedData = await databaseHelper.deleteWHInOutWard(
-        guid: guid);
+    final encryptedData = await databaseHelper.deleteWHInOutWard(guid: guid);
     return encryptedData;
   }
 
   Future<int> deleteWHAuditing({required String guid}) async {
-    final encryptedData = await databaseHelper.deleteWHAuditing(
-        guid: guid);
+    final encryptedData = await databaseHelper.deleteWHAuditing(guid: guid);
     return encryptedData;
   }
 
@@ -130,11 +127,12 @@ class DatabaseRepository {
     return encryptedData;
   }
 
-  Future<int> insertWHLocation({required String locationName,
-    required String palletNumber,
-    required String description,
-    required String auditDetailId,
-    required bool isActive}) async {
+  Future<int> insertWHLocation(
+      {required String locationName,
+      required String palletNumber,
+      required String description,
+      required String auditDetailId,
+      required bool isActive}) async {
     final encryptedData = await databaseHelper.insertWHLocation(
         locationName: locationName,
         palletNumber: palletNumber,
@@ -144,17 +142,35 @@ class DatabaseRepository {
     return encryptedData;
   }
 
-  Future<int> insertWHInOutWard({required int qty,
-    required String stockType,
-    required String description,
-    required String invoNo,
-    required String invoType,
-    required String invoDate,
-    required String customerName,
-    required String whLocationId,
-    required String auditDetailId,
-    required String productName,
-    required String productId}) async {
+  Future<int> updateWHLocation(
+      {required String locationName,
+      required String palletNumber,
+      required String description,
+      required String auditDetailId,
+      required String locationId,
+      required bool isActive}) async {
+    final encryptedData = await databaseHelper.updateWHLocation(
+        locationName: locationName,
+        palletNumber: palletNumber,
+        description: description,
+        isActive: isActive,
+        auditDetailId: auditDetailId,
+        locationId: locationId);
+    return encryptedData;
+  }
+
+  Future<int> insertWHInOutWard(
+      {required int qty,
+      required String stockType,
+      required String description,
+      required String invoNo,
+      required String invoType,
+      required String invoDate,
+      required String customerName,
+      required String whLocationId,
+      required String auditDetailId,
+      required String productName,
+      required String productId}) async {
     final encryptedData = await databaseHelper.insertWHInOutWard(
         qty: qty,
         stockType: stockType,
@@ -165,24 +181,25 @@ class DatabaseRepository {
         customerName: customerName,
         whLocationId: whLocationId,
         productId: productId,
-        productName:productName,
+        productName: productName,
         auditDetailId: auditDetailId);
     return encryptedData;
   }
 
-
-  Future<int> insertWHAuditing({required int qty,
-    required int bestBefore,
-    required String stockType,
-    required String productQuality,
-    required String productId,
-    required String whLocationId,
-    required String auditDetailId,
-    required String description,
-    required String mfDate,
-    required String productName,
-    required String file}) async {
-    final encryptedData = await databaseHelper.insertWHAuditing(qty: qty,
+  Future<int> insertWHAuditing(
+      {required int qty,
+      required int bestBefore,
+      required String stockType,
+      required String productQuality,
+      required String productId,
+      required String whLocationId,
+      required String auditDetailId,
+      required String description,
+      required String mfDate,
+      required String productName,
+      required String file}) async {
+    final encryptedData = await databaseHelper.insertWHAuditing(
+        qty: qty,
         bestBefore: bestBefore,
         stockType: stockType,
         productQuality: productQuality,
@@ -196,18 +213,17 @@ class DatabaseRepository {
     return encryptedData;
   }
 
-
-  Future<List<WHInOutWardsTable>> getWHInOutWardByAuditId(String auditId,
-      String locationId) async {
-    final encryptedData = await databaseHelper.getWHInOutWard(
-        auditId, locationId);
+  Future<List<WHInOutWardsTable>> getWHInOutWardByAuditId(
+      String auditId, String locationId) async {
+    final encryptedData =
+        await databaseHelper.getWHInOutWard(auditId, locationId);
     return encryptedData;
   }
 
-  Future<List<WHAuditingTable>> getWHAuditingByAuditId(String auditId,
-      String locationId) async {
-    final encryptedData = await databaseHelper.getWHAuditing(
-        auditId, locationId);
+  Future<List<WHAuditingTable>> getWHAuditingByAuditId(
+      String auditId, String locationId) async {
+    final encryptedData =
+        await databaseHelper.getWHAuditing(auditId, locationId);
     return encryptedData;
   }
 }

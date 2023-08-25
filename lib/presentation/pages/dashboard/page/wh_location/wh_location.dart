@@ -188,10 +188,13 @@ class _WHLocationsState extends CustomState<WHLocations> {
                                                     child: Icon(
                                                       Icons.edit,
                                                       color: Colors.blue,
-                                                      size: 14,
+                                                      size: 20,
                                                     ),
                                                   ),
                                                 )),
+                                            const SizedBox(
+                                              width: 10,
+                                            ),
                                             GestureDetector(
                                                 onTap: () {
                                                   showDeleteConfirmationPopUp(
@@ -205,7 +208,7 @@ class _WHLocationsState extends CustomState<WHLocations> {
                                                     child: Icon(
                                                       Icons.delete,
                                                       color: Colors.redAccent,
-                                                      size: 14,
+                                                      size: 20,
                                                     ),
                                                   ),
                                                 ))

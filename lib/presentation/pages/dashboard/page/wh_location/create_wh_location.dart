@@ -29,8 +29,7 @@ class _CreateWHLocationScreenState extends State<CreateWHLocationScreen> {
   void initState() {
     super.initState();
     if (widget.location != null) {
-      locationTextEditingController.text =
-          widget.location?.locationName ?? "";
+      locationTextEditingController.text = widget.location?.locationName ?? "";
       palletNumberTextEditingController.text =
           widget.location?.palletNumber ?? "";
       descriptionTextEditingController.text =
@@ -50,7 +49,7 @@ class _CreateWHLocationScreenState extends State<CreateWHLocationScreen> {
                 color: Colors.white, borderRadius: BorderRadius.circular(15)),
             child: Padding(
               padding: const EdgeInsets.only(
-                  top: 20, bottom: 20, right: 10, left: 10),
+                  top: 10, bottom: 20, right: 10, left: 10),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 mainAxisSize: MainAxisSize.min,
@@ -137,7 +136,6 @@ class _CreateWHLocationScreenState extends State<CreateWHLocationScreen> {
     );
   }
 
-
   void validateFields() async {
     String locationName = locationTextEditingController.text;
     String palletNumber = palletNumberTextEditingController.text;
@@ -149,18 +147,29 @@ class _CreateWHLocationScreenState extends State<CreateWHLocationScreen> {
       SnackBarUtils.showError(context, "Enter the Pallet Number");
     } else {
       try {
-        await DatabaseRepository().insertWHLocation(
-            locationName: locationName,
-            palletNumber: "$locationName$palletNumber",
-            description: description,
-            auditDetailId: widget.auditDetails.id ?? "",
-            isActive: true);
+        if (widget.location != null) {
+          await DatabaseRepository().updateWHLocation(
+              locationName: locationName,
+              palletNumber: "$locationName$palletNumber",
+              description: description,
+              auditDetailId: widget.auditDetails.id ?? "",
+              locationId: widget.location?.locationId ?? "",
+              isActive: true);
+        } else {
+          await DatabaseRepository().insertWHLocation(
+              locationName: locationName,
+              palletNumber: "$locationName$palletNumber",
+              description: description,
+              auditDetailId: widget.auditDetails.id ?? "",
+              isActive: true);
+        }
         if (context.mounted) {
           Navigator.pop(context);
         }
       } catch (e) {
         print(e.toString());
-        SnackBarUtils.showError(context, "This Location and Pallet is already exists");
+        SnackBarUtils.showError(
+            context, "This Location and Pallet is already exists");
       }
     }
   }
