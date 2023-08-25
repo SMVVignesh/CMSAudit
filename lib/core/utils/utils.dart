@@ -307,6 +307,7 @@ class Utils {
       TextEditingController? textEditingController) async {
     final DateFormat outputFormatter = DateFormat("yyyy-MM-dd");
     DateTime? newSelectedDate = await showDatePicker(
+      initialEntryMode:DatePickerEntryMode.input,
       context: context,
       firstDate: DateTime(2000),
       lastDate: DateTime(2040),
