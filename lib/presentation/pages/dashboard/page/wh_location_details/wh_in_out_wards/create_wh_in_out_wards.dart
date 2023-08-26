@@ -50,9 +50,9 @@ class _CreateWHInOutWardsScreenState extends State<CreateWHInOutWardsScreen> {
       invoiceNumberTextEditingController.text = widget.inOutWard?.invoNo ?? "";
       invoiceDateTextEditingController.text = widget.inOutWard?.invoDate ?? "";
       customerNameTextEditingController.text =
-          widget.location?.locationName ?? "";
+          widget.inOutWard?.customerName ?? "";
       descriptionTextEditingController.text =
-          widget.location?.description ?? "";
+          widget.inOutWard?.description ?? "";
       selectedStockType = Utils.stockType
           .where(
               (element) => element.key == (widget.inOutWard?.stockType ?? ""))
@@ -185,12 +185,12 @@ class _CreateWHInOutWardsScreenState extends State<CreateWHInOutWardsScreen> {
                             decoration: BoxDecoration(
                                 color: CustomColor.toolbarBg,
                                 borderRadius: BorderRadius.circular(5)),
-                            child: const Padding(
-                              padding: EdgeInsets.all(10),
+                            child: Padding(
+                              padding: const EdgeInsets.all(10),
                               child: Text(
                                 textAlign: TextAlign.center,
-                                "Save",
-                                style: TextStyle(
+                                (widget.inOutWard == null) ? "Save" : "Update",
+                                style: const TextStyle(
                                     fontSize: 14, color: CustomColor.white),
                               ),
                             ),

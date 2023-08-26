@@ -114,12 +114,12 @@ class _CreateWHLocationScreenState extends State<CreateWHLocationScreen> {
                           decoration: BoxDecoration(
                               color: CustomColor.toolbarBg,
                               borderRadius: BorderRadius.circular(5)),
-                          child: const Padding(
-                            padding: EdgeInsets.all(10),
+                          child: Padding(
+                            padding: const EdgeInsets.all(10),
                             child: Text(
                               textAlign: TextAlign.center,
-                              "Save",
-                              style: TextStyle(
+                              (widget.location == null) ? "Save" : "Update",
+                              style: const TextStyle(
                                   fontSize: 14, color: CustomColor.white),
                             ),
                           ),

@@ -169,29 +169,31 @@ class _CreateWHAuditingScreenState extends State<CreateWHAuditingScreen> {
                     ),
                     Row(
                       children: [
-                        Expanded(
-                            child: GestureDetector(
-                          onTap: () {
-                            validateFields(true);
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                                color: CustomColor.toolbarBg.withOpacity(0.7),
-                                borderRadius: BorderRadius.circular(5)),
-                            child: const Padding(
-                              padding: EdgeInsets.all(10),
-                              child: Text(
-                                "Save & Create another",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    fontSize: 14, color: CustomColor.white),
+                        if (widget.auditingTable == null)
+                          Expanded(
+                              child: GestureDetector(
+                            onTap: () {
+                              validateFields(true);
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  color: CustomColor.toolbarBg.withOpacity(0.7),
+                                  borderRadius: BorderRadius.circular(5)),
+                              child: const Padding(
+                                padding: EdgeInsets.all(10),
+                                child: Text(
+                                  "Save & Create",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontSize: 14, color: CustomColor.white),
+                                ),
                               ),
                             ),
+                          )),
+                        if (widget.auditingTable == null)
+                          const SizedBox(
+                            width: 25,
                           ),
-                        )),
-                        const SizedBox(
-                          width: 25,
-                        ),
                         Expanded(
                             child: GestureDetector(
                           onTap: () {
@@ -201,11 +203,13 @@ class _CreateWHAuditingScreenState extends State<CreateWHAuditingScreen> {
                             decoration: BoxDecoration(
                                 color: CustomColor.toolbarBg,
                                 borderRadius: BorderRadius.circular(5)),
-                            child: const Padding(
+                            child: Padding(
                               padding: EdgeInsets.all(10),
                               child: Text(
                                 textAlign: TextAlign.center,
-                                "Save",
+                                (widget.auditingTable == null)
+                                    ? "Save"
+                                    : "Update",
                                 style: TextStyle(
                                     fontSize: 14, color: CustomColor.white),
                               ),
