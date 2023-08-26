@@ -16,7 +16,10 @@ class CreateWHInOutWardsScreen extends StatefulWidget {
   WHInOutWardsTable? inOutWard;
 
   CreateWHInOutWardsScreen(
-      {super.key, required this.auditDetails,required this.location,this.inOutWard});
+      {super.key,
+      required this.auditDetails,
+      required this.location,
+      this.inOutWard});
 
   @override
   State<CreateWHInOutWardsScreen> createState() =>
@@ -43,23 +46,19 @@ class _CreateWHInOutWardsScreenState extends State<CreateWHInOutWardsScreen> {
     super.initState();
     updateProductList();
     if (widget.inOutWard != null) {
-      qtyTextEditingController.text =
-          widget.inOutWard?.qty.toString()??"";
-      invoiceNumberTextEditingController.text =
-          widget.inOutWard?.invoNo ?? "";
-      invoiceDateTextEditingController.text =
-          widget.inOutWard?.invoDate ?? "";
+      qtyTextEditingController.text = widget.inOutWard?.qty.toString() ?? "";
+      invoiceNumberTextEditingController.text = widget.inOutWard?.invoNo ?? "";
+      invoiceDateTextEditingController.text = widget.inOutWard?.invoDate ?? "";
       customerNameTextEditingController.text =
           widget.location?.locationName ?? "";
       descriptionTextEditingController.text =
           widget.location?.description ?? "";
       selectedStockType = Utils.stockType
-          .where((element) =>
-          element.key == (widget.inOutWard?.stockType ?? ""))
+          .where(
+              (element) => element.key == (widget.inOutWard?.stockType ?? ""))
           .first;
       selectedInvoiceType = Utils.invoiceType
-          .where((element) =>
-          element.key == (widget.inOutWard?.invoType ?? ""))
+          .where((element) => element.key == (widget.inOutWard?.invoType ?? ""))
           .first;
     }
   }
@@ -232,19 +231,34 @@ class _CreateWHInOutWardsScreenState extends State<CreateWHInOutWardsScreen> {
       SnackBarUtils.showError(context, "Enter Customer Name");
     } else {
       try {
-        await DatabaseRepository().insertWHInOutWard(
-            qty: convertToInt(qty),
-            stockType: selectedStockType?.key ?? "",
-            description: description,
-            invoNo: invoiceNumber,
-            invoType: selectedInvoiceType?.key ?? "",
-            invoDate: invoiceDate,
-            customerName: customerName,
-            whLocationId: widget.location?.locationId ?? "",
-            auditDetailId: widget.auditDetails.id??"",
-            productId: selectedProducts?.key ?? "",
-            productName: selectedProducts?.value??""
-        );
+        if (widget.inOutWard != null) {
+          await DatabaseRepository().updateWHInOutWard(
+              qty: convertToInt(qty),
+              stockType: selectedStockType?.key ?? "",
+              description: description,
+              invoNo: invoiceNumber,
+              invoType: selectedInvoiceType?.key ?? "",
+              invoDate: invoiceDate,
+              customerName: customerName,
+              whLocationId: widget.location?.locationId ?? "",
+              auditDetailId: widget.auditDetails.id ?? "",
+              productId: selectedProducts?.key ?? "",
+              productName: selectedProducts?.value ?? "",
+              inOutWardId: widget.inOutWard?.inOutWardId ?? "");
+        } else {
+          await DatabaseRepository().insertWHInOutWard(
+              qty: convertToInt(qty),
+              stockType: selectedStockType?.key ?? "",
+              description: description,
+              invoNo: invoiceNumber,
+              invoType: selectedInvoiceType?.key ?? "",
+              invoDate: invoiceDate,
+              customerName: customerName,
+              whLocationId: widget.location?.locationId ?? "",
+              auditDetailId: widget.auditDetails.id ?? "",
+              productId: selectedProducts?.key ?? "",
+              productName: selectedProducts?.value ?? "");
+        }
         if (context.mounted) {
           Navigator.pop(context);
         }
@@ -264,8 +278,7 @@ class _CreateWHInOutWardsScreenState extends State<CreateWHInOutWardsScreen> {
       products.add(DropdownDataModel(key: e.id ?? "", value: e.name ?? ""));
     }
     selectedProducts = products
-        .where((element) =>
-        element.key == (widget.inOutWard?.productId ?? ""))
+        .where((element) => element.key == (widget.inOutWard?.productId ?? ""))
         .first;
     print("Count---> ${products.length}");
     setState(() {});

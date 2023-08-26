@@ -244,18 +244,34 @@ class _CreateWHAuditingScreenState extends State<CreateWHAuditingScreen> {
       SnackBarUtils.showError(context, "Enter Best Before");
     } else {
       try {
-        await DatabaseRepository().insertWHAuditing(
-            qty: convertToInt(qty),
-            bestBefore: convertToInt(bestBefore),
-            stockType: selectedStockType?.key ?? "",
-            productQuality: selectedProductType?.key ?? "",
-            productId: selectedProducts?.key ?? "",
-            productName: selectedProducts?.value ?? "",
-            whLocationId: widget.location?.locationId ?? "",
-            auditDetailId: widget.auditDetails.id ?? "",
-            description: description,
-            mfDate: mfDate,
-            file: "");
+        if (widget.auditingTable != null) {
+          await DatabaseRepository().updateWHAuditing(
+              qty: convertToInt(qty),
+              bestBefore: convertToInt(bestBefore),
+              stockType: selectedStockType?.key ?? "",
+              productQuality: selectedProductType?.key ?? "",
+              productId: selectedProducts?.key ?? "",
+              productName: selectedProducts?.value ?? "",
+              whLocationId: widget.location?.locationId ?? "",
+              auditDetailId: widget.auditDetails.id ?? "",
+              description: description,
+              mfDate: mfDate,
+              file: "",
+              auditingId: widget.auditingTable?.auditingId ?? "");
+        } else {
+          await DatabaseRepository().insertWHAuditing(
+              qty: convertToInt(qty),
+              bestBefore: convertToInt(bestBefore),
+              stockType: selectedStockType?.key ?? "",
+              productQuality: selectedProductType?.key ?? "",
+              productId: selectedProducts?.key ?? "",
+              productName: selectedProducts?.value ?? "",
+              whLocationId: widget.location?.locationId ?? "",
+              auditDetailId: widget.auditDetails.id ?? "",
+              description: description,
+              mfDate: mfDate,
+              file: "");
+        }
         if (createAnother) {
           setState(() {
             qtyTextEditingController.text = "";
@@ -282,8 +298,8 @@ class _CreateWHAuditingScreenState extends State<CreateWHAuditingScreen> {
     print("Count---> ${products.length}");
 
     selectedProducts = products
-        .where((element) =>
-            element.key == (widget.auditingTable?.productId ?? ""))
+        .where(
+            (element) => element.key == (widget.auditingTable?.productId ?? ""))
         .first;
     setState(() {});
   }

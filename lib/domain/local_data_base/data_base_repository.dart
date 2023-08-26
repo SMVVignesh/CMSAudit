@@ -186,6 +186,37 @@ class DatabaseRepository {
     return encryptedData;
   }
 
+  /*
+  * This method is used to insert the data in ApiDataTable by tag*/
+  Future<int> updateWHInOutWard(
+      {required int qty,
+      required String stockType,
+      required String description,
+      required String invoNo,
+      required String invoType,
+      required String invoDate,
+      required String customerName,
+      required String whLocationId,
+      required String auditDetailId,
+      required String productName,
+      required String productId,
+      required String inOutWardId}) async {
+    final encryptedData = await databaseHelper.updateWHInOutWard(
+        qty: qty,
+        stockType: stockType,
+        description: description,
+        invoNo: invoNo,
+        invoType: invoType,
+        invoDate: invoDate,
+        customerName: customerName,
+        whLocationId: whLocationId,
+        auditDetailId: auditDetailId,
+        productName: productName,
+        productId: productId,
+        inOutWardId: inOutWardId);
+    return encryptedData;
+  }
+
   Future<int> insertWHAuditing(
       {required int qty,
       required int bestBefore,
@@ -210,6 +241,35 @@ class DatabaseRepository {
         mfDate: mfDate,
         productName: productName,
         file: file);
+    return encryptedData;
+  }
+
+  Future<int> updateWHAuditing(
+      {required int qty,
+      required int bestBefore,
+      required String stockType,
+      required String productQuality,
+      required String productId,
+      required String whLocationId,
+      required String auditDetailId,
+      required String description,
+      required String mfDate,
+      required String productName,
+      required String file,
+      required String auditingId}) async {
+    final encryptedData = await databaseHelper.updateWHAuditing(
+        qty: qty,
+        bestBefore: bestBefore,
+        stockType: stockType,
+        productQuality: productQuality,
+        productId: productId,
+        whLocationId: whLocationId,
+        auditDetailId: auditDetailId,
+        description: description,
+        mfDate: mfDate,
+        productName: productName,
+        file: file,
+        auditingId: auditingId);
     return encryptedData;
   }
 

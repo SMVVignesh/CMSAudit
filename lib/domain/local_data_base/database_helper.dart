@@ -194,6 +194,37 @@ class DatabaseHelper {
 
   /*
   * This method is used to insert the data in ApiDataTable by tag*/
+  Future<int> updateWHInOutWard(
+      {required int qty,
+      required String stockType,
+      required String description,
+      required String invoNo,
+      required String invoType,
+      required String invoDate,
+      required String customerName,
+      required String whLocationId,
+      required String auditDetailId,
+      required String productName,
+      required String productId,
+      required String inOutWardId}) async {
+    WHInOutWardsCompanion entity = WHInOutWardsCompanion(
+        qty: Value(qty),
+        stockType: Value(stockType),
+        description: Value(description),
+        invoNo: Value(invoNo),
+        invoType: Value(invoType),
+        customerName: Value(customerName),
+        productName: Value(productName),
+        productId: Value(productId));
+    final query = _database.update(_database.wHInOutWards)
+      ..where((tbl) => tbl.inOutWardId.equals(inOutWardId))
+      ..write(entity);
+    await query;
+    return 1;
+  }
+
+  /*
+  * This method is used to insert the data in ApiDataTable by tag*/
   Future<int> insertWHAuditing(
       {required int qty,
       required int bestBefore,
@@ -222,5 +253,37 @@ class DatabaseHelper {
         isUploaded: false,
         file: file));
     return await query;
+  }
+
+  /*
+  * This method is used to insert the data in ApiDataTable by tag*/
+  Future<int> updateWHAuditing(
+      {required int qty,
+      required int bestBefore,
+      required String stockType,
+      required String productQuality,
+      required String productId,
+      required String whLocationId,
+      required String auditDetailId,
+      required String description,
+      required String mfDate,
+      required String productName,
+      required String file,
+      required String auditingId}) async {
+    WHAuditingCompanion entity = WHAuditingCompanion(
+        qty: Value(qty),
+        bestBefore: Value(bestBefore),
+        stockType: Value(stockType),
+        productQuality: Value(productQuality),
+        description: Value(description),
+        productName: Value(productName),
+        productId: Value(productId),
+        mfDate: Value(mfDate),
+        file: Value(file));
+    final query = _database.update(_database.wHAuditing)
+      ..where((tbl) => tbl.auditingId.equals(auditingId))
+      ..write(entity);
+    await query;
+    return 1;
   }
 }
