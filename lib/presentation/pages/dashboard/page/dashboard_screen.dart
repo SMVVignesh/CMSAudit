@@ -4,6 +4,7 @@ import 'package:cms_audit/presentation/pages/dashboard/model/dashboard_menu_mode
 import 'package:cms_audit/presentation/pages/dashboard/page/audit_details/page/audit_details_screen.dart';
 import 'package:cms_audit/presentation/pages/dashboard/page/products/page/product_screen.dart';
 import 'package:cms_audit/presentation/pages/dashboard/page/update_list/page/update_list_screen.dart';
+import 'package:cms_audit/presentation/pages/dashboard/page/upload_data/page/upload_data_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:tool_kit/tool_kit.dart';
 
@@ -91,7 +92,7 @@ class _DashboardScreenState extends CustomState<DashboardScreen> {
                                 padding: const EdgeInsets.only(left: 10),
                                 child: Row(
                                   children: [
-                                    Icon(item.iconData,size: 20,),
+                                    Icon(item.iconData,size: 20,color: CustomColor.toolbarBg,),
                                     const SizedBox(width: 10,),
                                     Expanded(
                                       child: Text(
@@ -138,7 +139,9 @@ class _DashboardScreenState extends CustomState<DashboardScreen> {
     menus.add(DashboardMenuModel(
         id: 2, name: "Audits",iconData:Icons.account_balance, screen: const AuditDetailsScreen()));
     menus.add(DashboardMenuModel(
-        id: 3, name: "Update Details",iconData:Icons.update, screen: const UpdateListScreen()));
+        id: 3, name: "Update Details",iconData:Icons.cloud_download_outlined, screen: const UpdateListScreen()));
+    menus.add(DashboardMenuModel(
+        id: 5, name: "Upload Data",iconData:Icons.upload_file, screen: const UploadDataScreen()));
     menus.add(DashboardMenuModel(id: 4,iconData:Icons.logout, name: "Logout"));
   }
 

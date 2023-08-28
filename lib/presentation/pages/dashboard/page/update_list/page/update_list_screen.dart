@@ -18,11 +18,12 @@ class UpdateListScreen extends StatefulWidget {
 }
 
 class _UpdateListScreenState extends State<UpdateListScreen> {
-  bool isLoading = false;
-  String loadingMessage = "";
   List<UpdateModel> list = [];
   String? productLastUpdatedDate;
   String? auditLastUpdatedDate;
+
+  bool isProductLoading = false;
+  bool isAuditLoading = false;
 
   @override
   void initState() {
@@ -75,27 +76,41 @@ class _UpdateListScreenState extends State<UpdateListScreen> {
                             ],
                           ),
                         ),
-                        GestureDetector(
-                          onTap: () {
-                            if (!isLoading) {
-                              updateApi(item);
-                            }
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                                color: CustomColor.blue,
-                                borderRadius: BorderRadius.circular(10)),
-                            child: const Padding(
-                              padding: EdgeInsets.only(
-                                  left: 15, right: 15, top: 10, bottom: 10),
-                              child: Text(
-                                "Update",
-                                style: TextStyle(
-                                    color: CustomColor.white, fontSize: 14),
-                              ),
-                            ),
-                          ),
-                        )
+                        (item.isLoading)
+                            ? const Padding(
+                              padding: EdgeInsets.only(right: 20),
+                              child: SizedBox(
+                                  width: 24,
+                                  height: 24,
+                                  child: CircularProgressIndicator(
+                                    color: Colors.blue,
+                                    strokeWidth: 3,
+                                  ),
+                                ),
+                            )
+                            : GestureDetector(
+                                onTap: () {
+                                  updateApi(item);
+                                },
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      color: CustomColor.blue,
+                                      borderRadius: BorderRadius.circular(10)),
+                                  child: const Padding(
+                                    padding: EdgeInsets.only(
+                                        left: 15,
+                                        right: 15,
+                                        top: 10,
+                                        bottom: 10),
+                                    child: Text(
+                                      "Update",
+                                      style: TextStyle(
+                                          color: CustomColor.white,
+                                          fontSize: 14),
+                                    ),
+                                  ),
+                                ),
+                              )
                       ],
                     ),
                   ),
@@ -112,17 +127,6 @@ class _UpdateListScreenState extends State<UpdateListScreen> {
             },
             itemCount: list.length,
           ),
-        ),
-        if (isLoading)
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              loadingMessage,
-              style: const TextStyle(fontSize: 14, color: CustomColor.black),
-            ),
-          ),
-        const SizedBox(
-          height: 10,
         )
       ],
     );
@@ -131,60 +135,78 @@ class _UpdateListScreenState extends State<UpdateListScreen> {
   void updateModel() {
     list.clear();
     list.add(UpdateModel(
-        id: 1, name: "Products", lastUpdatedDate: productLastUpdatedDate));
+        id: 1,
+        name: "Products",
+        lastUpdatedDate: productLastUpdatedDate,
+        isLoading: isProductLoading));
     list.add(UpdateModel(
-        id: 2, name: "Audit", lastUpdatedDate: auditLastUpdatedDate));
+        id: 2,
+        name: "Audit",
+        lastUpdatedDate: auditLastUpdatedDate,
+        isLoading: isAuditLoading));
   }
 
   void updateApi(UpdateModel item) {
-    switch (item.id) {
-      case 1:
-        getProducts();
-        break;
-      case 2:
-        getAuditList();
-        break;
+    if (isProductLoading == false && isAuditLoading == false) {
+      switch (item.id) {
+        case 1:
+          getProducts();
+          break;
+        case 2:
+          getAuditList();
+          break;
+      }
     }
   }
 
   void getProducts() async {
     try {
-      showLoading(true, message: "Fetching Products...");
+      showLoading(0, true, message: "Fetching Products...");
       ProductResponse productResponse = await ApiRepository().getProducts();
       await DatabaseRepository().saveProductData(productResponse);
       updateLastUpdateDates();
-      showLoading(false);
+      showLoading(0, false);
       SnackBarUtils.showSuccess(context, "Updated Products");
     } on UnauthorisedException {
-      showLoading(false);
+      showLoading(0, false);
       Utils.showUnAuthorizedToken(context);
     } catch (e) {
-      showLoading(false);
+      showLoading(0, false);
       SnackBarUtils.showError(context, e.toString());
     }
   }
 
   void getAuditList() async {
     try {
-      showLoading(true, message: "Fetching All Audit...");
+      showLoading(1, true, message: "Fetching All Audit...");
       AuditResponse auditResponse = await ApiRepository().getAuditList();
       await DatabaseRepository().saveAuditData(auditResponse);
       updateLastUpdateDates();
-      showLoading(false);
+      showLoading(1, false);
       SnackBarUtils.showSuccess(context, "Updated Audit");
     } on UnauthorisedException {
-      showLoading(false);
+      showLoading(1, false);
       Utils.showUnAuthorizedToken(context);
     } catch (e) {
-      showLoading(false);
+      showLoading(1, false);
       SnackBarUtils.showError(context, e.toString());
     }
   }
 
-  showLoading(bool loading, {String? message}) {
+  showLoading(int index, bool loading, {String? message}) {
     setState(() {
-      isLoading = loading;
-      loadingMessage = message ?? "";
+      switch (index) {
+        case 0:
+          {
+            isProductLoading = loading;
+            break;
+          }
+        case 1:
+          {
+            isAuditLoading = loading;
+            break;
+          }
+      }
     });
   }
 

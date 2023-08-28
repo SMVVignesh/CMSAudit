@@ -7,6 +7,7 @@ import '../../config/Environment.dart';
 import '../../core/constants/api_end_points.dart';
 import '../../data/login/new_login_response.dart';
 import '../../presentation/pages/dashboard/page/products/model/product_response.dart';
+import '../../presentation/pages/dashboard/page/upload_data/page/model/create_location_model.dart';
 import '../../presentation/pages/login/model/login_response.dart';
 import '../share_preference/shared_preference_repository.dart';
 
@@ -74,5 +75,26 @@ class ApiRepository {
         ApiEndPoints.AUDIT_SEARCH, body, await getHeaderWithAuth());
     auditResponse = AuditResponse.fromJson(response);
     return auditResponse;
+  }
+
+  /*This method is used to call the generate New token end point*/
+  Future<CreateLocationModel> createWHLocation(
+      {required String locationName,
+      required String palletNumber,
+      required String description,
+      required bool isActive,
+      required String auditDetailId}) async {
+    Map<String, dynamic> body = {
+      "locationName": locationName,
+      "palletNumber": palletNumber,
+      "description": description,
+      "isActive": isActive,
+      "auditDetailId": auditDetailId
+    };
+    late CreateLocationModel tokenGenerationResponseModel;
+    final response = await otherInApis.post(
+        ApiEndPoints.WH_LOCATIONS, body, await getHeaderWithAuth());
+    tokenGenerationResponseModel = CreateLocationModel.fromJson(response);
+    return tokenGenerationResponseModel;
   }
 }

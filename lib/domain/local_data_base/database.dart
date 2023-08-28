@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:cms_audit/core/utils/db_api_status.dart';
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
 import 'package:path/path.dart' as p;
@@ -38,6 +39,8 @@ class WHLocation extends Table {
 
   TextColumn get auditDetailId => text()();
 
+  TextColumn get apiStatus => text()();
+
   BoolColumn get isActive => boolean()();
 
   @override
@@ -74,6 +77,11 @@ class WHInOutWards extends Table {
 
   TextColumn get auditDetailId => text()();
 
+  TextColumn get apiStatus => text()();
+
+
+
+
   @override
   Set<Column> get primaryKey => {invoNo, inOutWardId, auditDetailId};
 }
@@ -106,9 +114,9 @@ class WHAuditing extends Table {
 
   TextColumn get mfDate => text()();
 
-  BoolColumn get isUploaded => boolean()();
-
   TextColumn get file => text()();
+
+  TextColumn get apiStatus => text()();
 
   @override
   Set<Column> get primaryKey => {auditingId, auditDetailId};
@@ -122,7 +130,7 @@ class Database extends _$Database {
   Database() : super(_openConnection());
 
   @override
-  int get schemaVersion => 8;
+  int get schemaVersion => 9;
 
   @override
   @DriftDatabase(tables: [ApiData, WHLocation, WHInOutWards, WHAuditing])

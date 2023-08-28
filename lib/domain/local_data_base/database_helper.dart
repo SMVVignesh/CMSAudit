@@ -1,5 +1,6 @@
 import 'dart:ffi';
 
+import 'package:cms_audit/core/utils/db_api_status.dart';
 import 'package:drift/drift.dart';
 
 import '../../core/utils/utils.dart';
@@ -75,6 +76,7 @@ class DatabaseHelper {
         description: description,
         auditDetailId: auditDetailId,
         isActive: isActive,
+        apiStatus: DB_API_STATUS.TODO.name,
         locationId: Utils.getNewGuId()));
     return await query;
   }
@@ -138,6 +140,27 @@ class DatabaseHelper {
 
   /*
   * This method will return only one record by tag in ApiDataTable*/
+  Future<List<WHLocationTable>> getAllWHLocation() async {
+    List<WHLocationTable> query =
+        await _database.select(_database.wHLocation).get();
+    return query;
+  }
+
+
+  Future<List<WHAuditingTable>> getAllWHAuditing() async {
+    List<WHAuditingTable> query =
+    await _database.select(_database.wHAuditing).get();
+    return query;
+  }
+
+  Future<List<WHInOutWardsTable>> getAllInOutWards() async {
+    List<WHInOutWardsTable> query =
+    await _database.select(_database.wHInOutWards).get();
+    return query;
+  }
+
+  /*
+  * This method will return only one record by tag in ApiDataTable*/
   Future<List<WHInOutWardsTable>> getWHInOutWard(
       String auditId, String locationId) async {
     List<WHInOutWardsTable> query =
@@ -188,6 +211,7 @@ class DatabaseHelper {
             whLocationId: whLocationId,
             productId: productId,
             productName: productName,
+            apiStatus: DB_API_STATUS.TODO.name,
             auditDetailId: auditDetailId));
     return await query;
   }
@@ -250,7 +274,7 @@ class DatabaseHelper {
         description: description,
         mfDate: mfDate,
         productName: productName,
-        isUploaded: false,
+        apiStatus: DB_API_STATUS.TODO.name,
         file: file));
     return await query;
   }

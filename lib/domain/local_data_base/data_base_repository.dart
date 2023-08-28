@@ -286,4 +286,19 @@ class DatabaseRepository {
         await databaseHelper.getWHAuditing(auditId, locationId);
     return encryptedData;
   }
+
+  Future<List<WHLocationTable>> getAllWHLocation() async {
+    final encryptedData = await databaseHelper.getAllWHLocation();
+    return encryptedData;
+  }
+
+  Future<List<WHAuditingTable>> getAllWHAuditing() async {
+    final encryptedData = await databaseHelper.getAllWHAuditing();
+    return encryptedData;
+  }
+
+  Future<List<WHInOutWardsTable>> getAllInOutWards() async {
+    final encryptedData = await databaseHelper.getAllInOutWards();
+    return encryptedData;
+  }
 }
