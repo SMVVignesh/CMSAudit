@@ -393,6 +393,7 @@ class _UploadDataScreenState extends State<UploadDataScreen> {
   void uploadWhAuditingData() async {
     DatabaseRepository().getAllWHAuditing().then((value) async {
       for (WHAuditingTable whAuditingItem in value) {
+        print("whAuditingItem.isLocationUpdated ${whAuditingItem.isLocationUpdated} whAuditingItem.apiStatus: ${whAuditingItem.apiStatus}");
         if (whAuditingItem.isLocationUpdated &&
             whAuditingItem.apiStatus != DB_API_STATUS.COMPLETED.name) {
           setState(() {

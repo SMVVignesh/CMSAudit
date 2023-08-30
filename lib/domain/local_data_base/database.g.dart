@@ -250,11 +250,11 @@ class $WHLocationTable extends WHLocation
   late final GeneratedColumn<String> locationId = GeneratedColumn<String>(
       'location_id', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _serverLocationIdMeta =
-      const VerificationMeta('serverLocationId');
+  static const VerificationMeta _localLocationIdMeta =
+      const VerificationMeta('localLocationId');
   @override
-  late final GeneratedColumn<String> serverLocationId = GeneratedColumn<String>(
-      'server_location_id', aliasedName, false,
+  late final GeneratedColumn<String> localLocationId = GeneratedColumn<String>(
+      'local_location_id', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true);
   static const VerificationMeta _locationNameMeta =
       const VerificationMeta('locationName');
@@ -308,7 +308,7 @@ class $WHLocationTable extends WHLocation
   List<GeneratedColumn> get $columns => [
         updatedDateAndTime,
         locationId,
-        serverLocationId,
+        localLocationId,
         locationName,
         palletNumber,
         description,
@@ -342,13 +342,13 @@ class $WHLocationTable extends WHLocation
     } else if (isInserting) {
       context.missing(_locationIdMeta);
     }
-    if (data.containsKey('server_location_id')) {
+    if (data.containsKey('local_location_id')) {
       context.handle(
-          _serverLocationIdMeta,
-          serverLocationId.isAcceptableOrUnknown(
-              data['server_location_id']!, _serverLocationIdMeta));
+          _localLocationIdMeta,
+          localLocationId.isAcceptableOrUnknown(
+              data['local_location_id']!, _localLocationIdMeta));
     } else if (isInserting) {
-      context.missing(_serverLocationIdMeta);
+      context.missing(_localLocationIdMeta);
     }
     if (data.containsKey('location_name')) {
       context.handle(
@@ -417,8 +417,8 @@ class $WHLocationTable extends WHLocation
           data['${effectivePrefix}updated_date_and_time'])!,
       locationId: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}location_id'])!,
-      serverLocationId: attachedDatabase.typeMapping.read(
-          DriftSqlType.string, data['${effectivePrefix}server_location_id'])!,
+      localLocationId: attachedDatabase.typeMapping.read(
+          DriftSqlType.string, data['${effectivePrefix}local_location_id'])!,
       locationName: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}location_name'])!,
       palletNumber: attachedDatabase.typeMapping
@@ -445,7 +445,7 @@ class $WHLocationTable extends WHLocation
 class WHLocationTable extends DataClass implements Insertable<WHLocationTable> {
   final DateTime updatedDateAndTime;
   final String locationId;
-  final String serverLocationId;
+  final String localLocationId;
   final String locationName;
   final String palletNumber;
   final String description;
@@ -456,7 +456,7 @@ class WHLocationTable extends DataClass implements Insertable<WHLocationTable> {
   const WHLocationTable(
       {required this.updatedDateAndTime,
       required this.locationId,
-      required this.serverLocationId,
+      required this.localLocationId,
       required this.locationName,
       required this.palletNumber,
       required this.description,
@@ -469,7 +469,7 @@ class WHLocationTable extends DataClass implements Insertable<WHLocationTable> {
     final map = <String, Expression>{};
     map['updated_date_and_time'] = Variable<DateTime>(updatedDateAndTime);
     map['location_id'] = Variable<String>(locationId);
-    map['server_location_id'] = Variable<String>(serverLocationId);
+    map['local_location_id'] = Variable<String>(localLocationId);
     map['location_name'] = Variable<String>(locationName);
     map['pallet_number'] = Variable<String>(palletNumber);
     map['description'] = Variable<String>(description);
@@ -484,7 +484,7 @@ class WHLocationTable extends DataClass implements Insertable<WHLocationTable> {
     return WHLocationCompanion(
       updatedDateAndTime: Value(updatedDateAndTime),
       locationId: Value(locationId),
-      serverLocationId: Value(serverLocationId),
+      localLocationId: Value(localLocationId),
       locationName: Value(locationName),
       palletNumber: Value(palletNumber),
       description: Value(description),
@@ -502,7 +502,7 @@ class WHLocationTable extends DataClass implements Insertable<WHLocationTable> {
       updatedDateAndTime:
           serializer.fromJson<DateTime>(json['updatedDateAndTime']),
       locationId: serializer.fromJson<String>(json['locationId']),
-      serverLocationId: serializer.fromJson<String>(json['serverLocationId']),
+      localLocationId: serializer.fromJson<String>(json['localLocationId']),
       locationName: serializer.fromJson<String>(json['locationName']),
       palletNumber: serializer.fromJson<String>(json['palletNumber']),
       description: serializer.fromJson<String>(json['description']),
@@ -518,7 +518,7 @@ class WHLocationTable extends DataClass implements Insertable<WHLocationTable> {
     return <String, dynamic>{
       'updatedDateAndTime': serializer.toJson<DateTime>(updatedDateAndTime),
       'locationId': serializer.toJson<String>(locationId),
-      'serverLocationId': serializer.toJson<String>(serverLocationId),
+      'localLocationId': serializer.toJson<String>(localLocationId),
       'locationName': serializer.toJson<String>(locationName),
       'palletNumber': serializer.toJson<String>(palletNumber),
       'description': serializer.toJson<String>(description),
@@ -532,7 +532,7 @@ class WHLocationTable extends DataClass implements Insertable<WHLocationTable> {
   WHLocationTable copyWith(
           {DateTime? updatedDateAndTime,
           String? locationId,
-          String? serverLocationId,
+          String? localLocationId,
           String? locationName,
           String? palletNumber,
           String? description,
@@ -543,7 +543,7 @@ class WHLocationTable extends DataClass implements Insertable<WHLocationTable> {
       WHLocationTable(
         updatedDateAndTime: updatedDateAndTime ?? this.updatedDateAndTime,
         locationId: locationId ?? this.locationId,
-        serverLocationId: serverLocationId ?? this.serverLocationId,
+        localLocationId: localLocationId ?? this.localLocationId,
         locationName: locationName ?? this.locationName,
         palletNumber: palletNumber ?? this.palletNumber,
         description: description ?? this.description,
@@ -557,7 +557,7 @@ class WHLocationTable extends DataClass implements Insertable<WHLocationTable> {
     return (StringBuffer('WHLocationTable(')
           ..write('updatedDateAndTime: $updatedDateAndTime, ')
           ..write('locationId: $locationId, ')
-          ..write('serverLocationId: $serverLocationId, ')
+          ..write('localLocationId: $localLocationId, ')
           ..write('locationName: $locationName, ')
           ..write('palletNumber: $palletNumber, ')
           ..write('description: $description, ')
@@ -573,7 +573,7 @@ class WHLocationTable extends DataClass implements Insertable<WHLocationTable> {
   int get hashCode => Object.hash(
       updatedDateAndTime,
       locationId,
-      serverLocationId,
+      localLocationId,
       locationName,
       palletNumber,
       description,
@@ -587,7 +587,7 @@ class WHLocationTable extends DataClass implements Insertable<WHLocationTable> {
       (other is WHLocationTable &&
           other.updatedDateAndTime == this.updatedDateAndTime &&
           other.locationId == this.locationId &&
-          other.serverLocationId == this.serverLocationId &&
+          other.localLocationId == this.localLocationId &&
           other.locationName == this.locationName &&
           other.palletNumber == this.palletNumber &&
           other.description == this.description &&
@@ -600,7 +600,7 @@ class WHLocationTable extends DataClass implements Insertable<WHLocationTable> {
 class WHLocationCompanion extends UpdateCompanion<WHLocationTable> {
   final Value<DateTime> updatedDateAndTime;
   final Value<String> locationId;
-  final Value<String> serverLocationId;
+  final Value<String> localLocationId;
   final Value<String> locationName;
   final Value<String> palletNumber;
   final Value<String> description;
@@ -612,7 +612,7 @@ class WHLocationCompanion extends UpdateCompanion<WHLocationTable> {
   const WHLocationCompanion({
     this.updatedDateAndTime = const Value.absent(),
     this.locationId = const Value.absent(),
-    this.serverLocationId = const Value.absent(),
+    this.localLocationId = const Value.absent(),
     this.locationName = const Value.absent(),
     this.palletNumber = const Value.absent(),
     this.description = const Value.absent(),
@@ -625,7 +625,7 @@ class WHLocationCompanion extends UpdateCompanion<WHLocationTable> {
   WHLocationCompanion.insert({
     required DateTime updatedDateAndTime,
     required String locationId,
-    required String serverLocationId,
+    required String localLocationId,
     required String locationName,
     required String palletNumber,
     required String description,
@@ -636,7 +636,7 @@ class WHLocationCompanion extends UpdateCompanion<WHLocationTable> {
     this.rowid = const Value.absent(),
   })  : updatedDateAndTime = Value(updatedDateAndTime),
         locationId = Value(locationId),
-        serverLocationId = Value(serverLocationId),
+        localLocationId = Value(localLocationId),
         locationName = Value(locationName),
         palletNumber = Value(palletNumber),
         description = Value(description),
@@ -647,7 +647,7 @@ class WHLocationCompanion extends UpdateCompanion<WHLocationTable> {
   static Insertable<WHLocationTable> custom({
     Expression<DateTime>? updatedDateAndTime,
     Expression<String>? locationId,
-    Expression<String>? serverLocationId,
+    Expression<String>? localLocationId,
     Expression<String>? locationName,
     Expression<String>? palletNumber,
     Expression<String>? description,
@@ -661,7 +661,7 @@ class WHLocationCompanion extends UpdateCompanion<WHLocationTable> {
       if (updatedDateAndTime != null)
         'updated_date_and_time': updatedDateAndTime,
       if (locationId != null) 'location_id': locationId,
-      if (serverLocationId != null) 'server_location_id': serverLocationId,
+      if (localLocationId != null) 'local_location_id': localLocationId,
       if (locationName != null) 'location_name': locationName,
       if (palletNumber != null) 'pallet_number': palletNumber,
       if (description != null) 'description': description,
@@ -676,7 +676,7 @@ class WHLocationCompanion extends UpdateCompanion<WHLocationTable> {
   WHLocationCompanion copyWith(
       {Value<DateTime>? updatedDateAndTime,
       Value<String>? locationId,
-      Value<String>? serverLocationId,
+      Value<String>? localLocationId,
       Value<String>? locationName,
       Value<String>? palletNumber,
       Value<String>? description,
@@ -688,7 +688,7 @@ class WHLocationCompanion extends UpdateCompanion<WHLocationTable> {
     return WHLocationCompanion(
       updatedDateAndTime: updatedDateAndTime ?? this.updatedDateAndTime,
       locationId: locationId ?? this.locationId,
-      serverLocationId: serverLocationId ?? this.serverLocationId,
+      localLocationId: localLocationId ?? this.localLocationId,
       locationName: locationName ?? this.locationName,
       palletNumber: palletNumber ?? this.palletNumber,
       description: description ?? this.description,
@@ -710,8 +710,8 @@ class WHLocationCompanion extends UpdateCompanion<WHLocationTable> {
     if (locationId.present) {
       map['location_id'] = Variable<String>(locationId.value);
     }
-    if (serverLocationId.present) {
-      map['server_location_id'] = Variable<String>(serverLocationId.value);
+    if (localLocationId.present) {
+      map['local_location_id'] = Variable<String>(localLocationId.value);
     }
     if (locationName.present) {
       map['location_name'] = Variable<String>(locationName.value);
@@ -745,7 +745,7 @@ class WHLocationCompanion extends UpdateCompanion<WHLocationTable> {
     return (StringBuffer('WHLocationCompanion(')
           ..write('updatedDateAndTime: $updatedDateAndTime, ')
           ..write('locationId: $locationId, ')
-          ..write('serverLocationId: $serverLocationId, ')
+          ..write('localLocationId: $localLocationId, ')
           ..write('locationName: $locationName, ')
           ..write('palletNumber: $palletNumber, ')
           ..write('description: $description, ')

@@ -231,6 +231,8 @@ class _CreateWHInOutWardsScreenState extends State<CreateWHInOutWardsScreen> {
       SnackBarUtils.showError(context, "Enter Customer Name");
     } else {
       try {
+        bool isLocationUpdated = widget.location?.isLocationUpdated ?? false;
+
         if (widget.inOutWard != null) {
           await DatabaseRepository().updateWHInOutWard(
               qty: convertToInt(qty),
@@ -257,7 +259,8 @@ class _CreateWHInOutWardsScreenState extends State<CreateWHInOutWardsScreen> {
               whLocationId: widget.location?.locationId ?? "",
               auditDetailId: widget.auditDetails.id ?? "",
               productId: selectedProducts?.key ?? "",
-              productName: selectedProducts?.value ?? "");
+              productName: selectedProducts?.value ?? "",
+              isLocationUpdated: isLocationUpdated);
         }
         if (context.mounted) {
           Navigator.pop(context);

@@ -31,7 +31,7 @@ class WHLocation extends Table {
 
   TextColumn get locationId => text()();
 
-  TextColumn get serverLocationId => text()();
+  TextColumn get localLocationId => text()();
 
   TextColumn get locationName => text()();
 
@@ -137,7 +137,7 @@ class Database extends _$Database {
   Database() : super(_openConnection());
 
   @override
-  int get schemaVersion => 12;
+  int get schemaVersion => 13;
 
   @override
   @DriftDatabase(tables: [ApiData, WHLocation, WHInOutWards, WHAuditing])

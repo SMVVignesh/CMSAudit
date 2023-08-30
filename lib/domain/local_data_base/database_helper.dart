@@ -79,7 +79,7 @@ class DatabaseHelper {
         isActive: isActive,
         apiStatus: DB_API_STATUS.TODO.name,
         locationId: locationId,
-        serverLocationId: locationId,
+        localLocationId: locationId,
         isLocationUpdated: false));
     return await query;
   }
@@ -113,7 +113,8 @@ class DatabaseHelper {
     required String newLocationId,
   }) async {
     WHLocationCompanion entity = WHLocationCompanion(
-        serverLocationId: Value(newLocationId),
+        localLocationId: Value(oldLocationId),
+        locationId: Value(newLocationId),
         isLocationUpdated: const Value(true),
         apiStatus: Value(DB_API_STATUS.COMPLETED.name));
     final query = _database.update(_database.wHLocation)
@@ -219,6 +220,7 @@ class DatabaseHelper {
       required String whLocationId,
       required String auditDetailId,
       required String productName,
+      required bool isLocationUpdated,
       required String productId}) async {
     final query = _database.into(_database.wHInOutWards).insert(
         WHInOutWardsTable(
@@ -236,7 +238,7 @@ class DatabaseHelper {
             productName: productName,
             apiStatus: DB_API_STATUS.TODO.name,
             auditDetailId: auditDetailId,
-            isLocationUpdated: false));
+            isLocationUpdated: isLocationUpdated));
     return await query;
   }
 
@@ -290,7 +292,7 @@ class DatabaseHelper {
     String? newInOutWardId,
     required DB_API_STATUS status,
   }) async {
-    WHInOutWardsCompanion entity = ((newInOutWardId?.length??0)>0)
+    WHInOutWardsCompanion entity = ((newInOutWardId?.length ?? 0) > 0)
         ? WHInOutWardsCompanion(
             apiStatus: Value(status.name),
             inOutWardId: Value(newInOutWardId ?? ""))
@@ -309,13 +311,12 @@ class DatabaseHelper {
     String? newAuditId,
     required DB_API_STATUS status,
   }) async {
-    WHAuditingCompanion entity =((newAuditId?.length??0)>0)
+    WHAuditingCompanion entity = ((newAuditId?.length ?? 0) > 0)
         ? WHAuditingCompanion(
-        apiStatus: Value(status.name),
-        auditingId: Value(newAuditId ?? ""))
+            apiStatus: Value(status.name), auditingId: Value(newAuditId ?? ""))
         : WHAuditingCompanion(
-      apiStatus: Value(status.name),
-    );
+            apiStatus: Value(status.name),
+          );
     final query = _database.update(_database.wHAuditing)
       ..where((tbl) => tbl.auditingId.equals(auditingId))
       ..write(entity);
@@ -336,7 +337,8 @@ class DatabaseHelper {
       required String description,
       required String mfDate,
       required String productName,
-      required String file}) async {
+      required String file,
+      required bool isLocationUpdated}) async {
     final query = _database.into(_database.wHAuditing).insert(WHAuditingTable(
         updatedDateAndTime: DateTime.now(),
         auditingId: Utils.getNewGuId(),
@@ -352,7 +354,7 @@ class DatabaseHelper {
         productName: productName,
         apiStatus: DB_API_STATUS.TODO.name,
         file: file,
-        isLocationUpdated: false));
+        isLocationUpdated: isLocationUpdated));
     return await query;
   }
 

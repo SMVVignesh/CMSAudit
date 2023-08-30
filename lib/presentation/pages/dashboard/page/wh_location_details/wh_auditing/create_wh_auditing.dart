@@ -248,6 +248,9 @@ class _CreateWHAuditingScreenState extends State<CreateWHAuditingScreen> {
       SnackBarUtils.showError(context, "Enter Best Before");
     } else {
       try {
+        bool isLocationUpdated = widget.location?.isLocationUpdated??false;
+        print("isLocationUpdated :$isLocationUpdated");
+
         if (widget.auditingTable != null) {
           await DatabaseRepository().updateWHAuditing(
               qty: convertToInt(qty),
@@ -256,7 +259,7 @@ class _CreateWHAuditingScreenState extends State<CreateWHAuditingScreen> {
               productQuality: selectedProductType?.key ?? "",
               productId: selectedProducts?.key ?? "",
               productName: selectedProducts?.value ?? "",
-              whLocationId: widget.location?.locationId ?? "",
+              whLocationId:widget.location?.locationId ?? "",
               auditDetailId: widget.auditDetails.id ?? "",
               description: description,
               mfDate: mfDate,
@@ -274,6 +277,7 @@ class _CreateWHAuditingScreenState extends State<CreateWHAuditingScreen> {
               auditDetailId: widget.auditDetails.id ?? "",
               description: description,
               mfDate: mfDate,
+              isLocationUpdated: isLocationUpdated,
               file: "");
         }
         if (createAnother) {
