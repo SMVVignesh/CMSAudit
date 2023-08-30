@@ -2,6 +2,7 @@ import 'package:cms_audit/core/utils/db_api_status.dart';
 import 'package:cms_audit/core/utils/utils.dart';
 import 'package:cms_audit/domain/api/api_repository.dart';
 import 'package:cms_audit/domain/local_data_base/data_base_repository.dart';
+import 'package:cms_audit/domain/local_data_base/database.dart';
 import 'package:flutter/material.dart';
 import 'package:tool_kit/tool_kit.dart';
 import '../../../../../../core/utils/custom_color.dart';
@@ -24,15 +25,15 @@ class _UploadDataScreenState extends State<UploadDataScreen> {
   int? whLocationCompletedCount;
   int? whLocationErrorCount;
 
-
   int? whAuditingTotalCount;
   int? whAuditingCompletedCount;
   int? whAuditingErrorCount;
 
-
   int? whInOutWardTotalCount;
   int? whInOutWardCompletedCount;
   int? whInOutWardErrorCount;
+
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -82,7 +83,7 @@ class _UploadDataScreenState extends State<UploadDataScreen> {
                                     fontSize: 14,
                                     fontWeight: FontWeight.normal),
                               ),
-                              if (item.errorCount != null)
+                              if ((item.errorCount ?? 0) > 0)
                                 Text(
                                   "Error :   ${item.errorCount ?? ""}",
                                   style: const TextStyle(
@@ -137,22 +138,51 @@ class _UploadDataScreenState extends State<UploadDataScreen> {
           child: Row(
             children: [
               Expanded(
-                  child: GestureDetector(
-                onTap: () {},
-                child: Container(
-                  decoration: BoxDecoration(
-                      color: CustomColor.toolbarBg,
-                      borderRadius: BorderRadius.circular(5)),
-                  child: const Padding(
-                    padding: EdgeInsets.all(10),
-                    child: Text(
-                      textAlign: TextAlign.center,
-                      "Upload Data",
-                      style: TextStyle(fontSize: 14, color: CustomColor.white),
-                    ),
-                  ),
-                ),
-              )),
+                  child: isLoading
+                      ? const Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            SizedBox(
+                              width: 24,
+                              height: 24,
+                              child: CircularProgressIndicator(
+                                color: Colors.blue,
+                                strokeWidth: 3,
+                              ),
+                            ),
+                            SizedBox(
+                              width: 15,
+                            ),
+                            Expanded(
+                              child: Text(
+                                "Please wait. We are uploading data. Don't go back or close the app.",
+                                textAlign: TextAlign.start,
+                                style: TextStyle(
+                                    color: CustomColor.black, fontSize: 14),
+                              ),
+                            ),
+                          ],
+                        )
+                      : GestureDetector(
+                          onTap: () async {
+                            uploadAllData();
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                                color: CustomColor.toolbarBg,
+                                borderRadius: BorderRadius.circular(5)),
+                            child: const Padding(
+                              padding: EdgeInsets.only(
+                                  top: 15, bottom: 15, left: 10, right: 10),
+                              child: Text(
+                                textAlign: TextAlign.center,
+                                "Upload Offline Data",
+                                style: TextStyle(
+                                    fontSize: 14, color: CustomColor.white),
+                              ),
+                            ),
+                          ),
+                        )),
             ],
           ),
         )
@@ -223,53 +253,173 @@ class _UploadDataScreenState extends State<UploadDataScreen> {
     });
   }
 
+  void updateAllData() async {
+    updateWHLocations();
 
-  uploadLocation(){
+    updateWHAuditing();
 
-
-
-
+    updateWhInOutWards();
   }
 
+  void uploadAllData() async {
+    if (whLocationTotalCount == whLocationCompletedCount &&
+        whAuditingTotalCount == whAuditingCompletedCount &&
+        whInOutWardTotalCount == whInOutWardCompletedCount) {
+      if (context.mounted) {
+        SnackBarUtils.showSuccess(context, "All data already uploaded");
+      }
+    } else {
+      // InternetInfoUtils.hasConnection().then((value) {
+      //   if (value) {
+      //     uploadWhLocationsData();
+      //     uploadWhInOutWardsData();
+      //   } else {
+      //     if (context.mounted) {
+      //       SnackBarUtils.showError(context, "No Internet Connection");
+      //     }
+      //   }
+      // });
+      uploadWhLocationsData();
+      uploadWhInOutWardsData();
+      uploadWhAuditingData();
+    }
+  }
 
-
-
-
-
-
-
-
-
-
-  void updateAllData() async {
-    DatabaseRepository().getAllWHLocation().then((value){
+  void updateWHLocations() async {
+    DatabaseRepository().getAllWHLocation().then((value) {
       whLocationTotalCount = value.length;
-      whLocationCompletedCount = (value.where((element) => element.apiStatus == DB_API_STATUS.COMPLETED.name)).length;
-      whLocationErrorCount = (value.where((element) => element.apiStatus == DB_API_STATUS.ERROR.name)).length;
-      setState(() {
-
-      });
+      whLocationCompletedCount = (value.where(
+              (element) => element.apiStatus == DB_API_STATUS.COMPLETED.name))
+          .length;
+      whLocationErrorCount = (value.where(
+          (element) => element.apiStatus == DB_API_STATUS.ERROR.name)).length;
+      if (context.mounted) {
+        setState(() {});
+      }
     });
+  }
 
-
-    DatabaseRepository().getAllWHAuditing().then((value){
+  void updateWHAuditing() async {
+    DatabaseRepository().getAllWHAuditing().then((value) {
       whAuditingTotalCount = value.length;
-      whAuditingCompletedCount = (value.where((element) => element.apiStatus == DB_API_STATUS.COMPLETED.name)).length;
-      whAuditingErrorCount = (value.where((element) => element.apiStatus == DB_API_STATUS.ERROR.name)).length;
-      setState(() {
-
-      });
+      whAuditingCompletedCount = (value.where(
+              (element) => element.apiStatus == DB_API_STATUS.COMPLETED.name))
+          .length;
+      whAuditingErrorCount = (value.where(
+          (element) => element.apiStatus == DB_API_STATUS.ERROR.name)).length;
+      if (context.mounted) {
+        setState(() {});
+      }
     });
+  }
 
-
-    DatabaseRepository().getAllInOutWards().then((value){
+  void updateWhInOutWards() async {
+    DatabaseRepository().getAllInOutWards().then((value) {
       whInOutWardTotalCount = value.length;
-      whInOutWardCompletedCount = (value.where((element) => element.apiStatus == DB_API_STATUS.COMPLETED.name)).length;
-      whInOutWardErrorCount = (value.where((element) => element.apiStatus == DB_API_STATUS.ERROR.name)).length;
-      setState(() {
-
-      });
+      whInOutWardCompletedCount = (value.where(
+              (element) => element.apiStatus == DB_API_STATUS.COMPLETED.name))
+          .length;
+      whInOutWardErrorCount = (value.where(
+          (element) => element.apiStatus == DB_API_STATUS.ERROR.name)).length;
+      if (context.mounted) {
+        setState(() {});
+      }
     });
+  }
 
+  void uploadWhLocationsData() async {
+    DatabaseRepository().getAllWHLocation().then((value) async {
+      for (WHLocationTable locationItem in value) {
+        if (!locationItem.isLocationUpdated) {
+          setState(() {
+            isLoading = true;
+          });
+          try {
+            final response = await ApiRepository()
+                .createWHLocation(whLocationTable: locationItem);
+            await DatabaseRepository().updateWHLocationId(
+                oldLocationId: locationItem.locationId,
+                newLocationId: response.locationId ?? "");
+            setState(() {
+              isLoading = false;
+            });
+            updateWHLocations();
+            uploadWhInOutWardsData();
+            uploadWhAuditingData();
+          } catch (e) {
+            setState(() {
+              isLoading = false;
+            });
+            SnackBarUtils.showError(context, e.toString());
+          }
+        }
+      }
+    });
+  }
+
+  void uploadWhInOutWardsData() async {
+    DatabaseRepository().getAllInOutWards().then((value) async {
+      for (WHInOutWardsTable whInOutItem in value) {
+        if (whInOutItem.isLocationUpdated &&
+            whInOutItem.apiStatus != DB_API_STATUS.COMPLETED.name) {
+          setState(() {
+            isLoading = true;
+          });
+          try {
+            final response = await ApiRepository()
+                .createInOutWards(whInOutWardsTable: whInOutItem);
+            await DatabaseRepository().updateWHInOutWardApiStatus(
+                inOutWardId: whInOutItem.inOutWardId,
+                newInOutWardId: response.inOutWardsId,
+                status: DB_API_STATUS.COMPLETED);
+            setState(() {
+              isLoading = false;
+            });
+            updateWhInOutWards();
+          } catch (e) {
+            await DatabaseRepository().updateWHInOutWardApiStatus(
+                inOutWardId: whInOutItem.inOutWardId,
+                status: DB_API_STATUS.ERROR);
+            setState(() {
+              isLoading = false;
+            });
+            SnackBarUtils.showError(context, e.toString());
+          }
+        }
+      }
+    });
+  }
+
+  void uploadWhAuditingData() async {
+    DatabaseRepository().getAllWHAuditing().then((value) async {
+      for (WHAuditingTable whAuditingItem in value) {
+        if (whAuditingItem.isLocationUpdated &&
+            whAuditingItem.apiStatus != DB_API_STATUS.COMPLETED.name) {
+          setState(() {
+            isLoading = true;
+          });
+          try {
+            final response = await ApiRepository()
+                .createWhAuditing(wHAuditingTable: whAuditingItem);
+            await DatabaseRepository().updateWHAuditingApiStatus(
+                auditingId: whAuditingItem.auditingId,
+                newAuditId: response.inOutWardsId,
+                status: DB_API_STATUS.COMPLETED);
+            setState(() {
+              isLoading = false;
+            });
+            updateWHAuditing();
+          } catch (e) {
+            await DatabaseRepository().updateWHAuditingApiStatus(
+                auditingId: whAuditingItem.auditingId,
+                status: DB_API_STATUS.ERROR);
+            setState(() {
+              isLoading = false;
+            });
+            SnackBarUtils.showError(context, e.toString());
+          }
+        }
+      }
+    });
   }
 }

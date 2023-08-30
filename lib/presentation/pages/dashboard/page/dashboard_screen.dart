@@ -139,9 +139,9 @@ class _DashboardScreenState extends CustomState<DashboardScreen> {
     menus.add(DashboardMenuModel(
         id: 2, name: "Audits",iconData:Icons.account_balance, screen: const AuditDetailsScreen()));
     menus.add(DashboardMenuModel(
-        id: 3, name: "Update Details",iconData:Icons.cloud_download_outlined, screen: const UpdateListScreen()));
+        id: 3, name: "Get Products & Audits",iconData:Icons.cloud_download_outlined, screen: const UpdateListScreen()));
     menus.add(DashboardMenuModel(
-        id: 5, name: "Upload Data",iconData:Icons.upload_file, screen: const UploadDataScreen()));
+        id: 5, name: "Offline data",iconData:Icons.upload_file, screen: const UploadDataScreen()));
     menus.add(DashboardMenuModel(id: 4,iconData:Icons.logout, name: "Logout"));
   }
 

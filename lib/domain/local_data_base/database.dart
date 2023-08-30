@@ -31,6 +31,8 @@ class WHLocation extends Table {
 
   TextColumn get locationId => text()();
 
+  TextColumn get serverLocationId => text()();
+
   TextColumn get locationName => text()();
 
   TextColumn get palletNumber => text()();
@@ -42,6 +44,9 @@ class WHLocation extends Table {
   TextColumn get apiStatus => text()();
 
   BoolColumn get isActive => boolean()();
+
+  BoolColumn get isLocationUpdated => boolean()();
+
 
   @override
   Set<Column> get primaryKey => {locationName, palletNumber, auditDetailId};
@@ -79,7 +84,7 @@ class WHInOutWards extends Table {
 
   TextColumn get apiStatus => text()();
 
-
+  BoolColumn get isLocationUpdated => boolean()();
 
 
   @override
@@ -118,6 +123,8 @@ class WHAuditing extends Table {
 
   TextColumn get apiStatus => text()();
 
+  BoolColumn get isLocationUpdated => boolean()();
+
   @override
   Set<Column> get primaryKey => {auditingId, auditDetailId};
 }
@@ -130,7 +137,7 @@ class Database extends _$Database {
   Database() : super(_openConnection());
 
   @override
-  int get schemaVersion => 9;
+  int get schemaVersion => 12;
 
   @override
   @DriftDatabase(tables: [ApiData, WHLocation, WHInOutWards, WHAuditing])

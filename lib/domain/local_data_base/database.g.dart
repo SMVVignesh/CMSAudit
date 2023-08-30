@@ -250,6 +250,12 @@ class $WHLocationTable extends WHLocation
   late final GeneratedColumn<String> locationId = GeneratedColumn<String>(
       'location_id', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _serverLocationIdMeta =
+      const VerificationMeta('serverLocationId');
+  @override
+  late final GeneratedColumn<String> serverLocationId = GeneratedColumn<String>(
+      'server_location_id', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
   static const VerificationMeta _locationNameMeta =
       const VerificationMeta('locationName');
   @override
@@ -289,16 +295,27 @@ class $WHLocationTable extends WHLocation
       requiredDuringInsert: true,
       defaultConstraints:
           GeneratedColumn.constraintIsAlways('CHECK ("is_active" IN (0, 1))'));
+  static const VerificationMeta _isLocationUpdatedMeta =
+      const VerificationMeta('isLocationUpdated');
+  @override
+  late final GeneratedColumn<bool> isLocationUpdated = GeneratedColumn<bool>(
+      'is_location_updated', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: true,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'CHECK ("is_location_updated" IN (0, 1))'));
   @override
   List<GeneratedColumn> get $columns => [
         updatedDateAndTime,
         locationId,
+        serverLocationId,
         locationName,
         palletNumber,
         description,
         auditDetailId,
         apiStatus,
-        isActive
+        isActive,
+        isLocationUpdated
       ];
   @override
   String get aliasedName => _alias ?? 'w_h_location';
@@ -324,6 +341,14 @@ class $WHLocationTable extends WHLocation
               data['location_id']!, _locationIdMeta));
     } else if (isInserting) {
       context.missing(_locationIdMeta);
+    }
+    if (data.containsKey('server_location_id')) {
+      context.handle(
+          _serverLocationIdMeta,
+          serverLocationId.isAcceptableOrUnknown(
+              data['server_location_id']!, _serverLocationIdMeta));
+    } else if (isInserting) {
+      context.missing(_serverLocationIdMeta);
     }
     if (data.containsKey('location_name')) {
       context.handle(
@@ -369,6 +394,14 @@ class $WHLocationTable extends WHLocation
     } else if (isInserting) {
       context.missing(_isActiveMeta);
     }
+    if (data.containsKey('is_location_updated')) {
+      context.handle(
+          _isLocationUpdatedMeta,
+          isLocationUpdated.isAcceptableOrUnknown(
+              data['is_location_updated']!, _isLocationUpdatedMeta));
+    } else if (isInserting) {
+      context.missing(_isLocationUpdatedMeta);
+    }
     return context;
   }
 
@@ -384,6 +417,8 @@ class $WHLocationTable extends WHLocation
           data['${effectivePrefix}updated_date_and_time'])!,
       locationId: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}location_id'])!,
+      serverLocationId: attachedDatabase.typeMapping.read(
+          DriftSqlType.string, data['${effectivePrefix}server_location_id'])!,
       locationName: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}location_name'])!,
       palletNumber: attachedDatabase.typeMapping
@@ -396,6 +431,8 @@ class $WHLocationTable extends WHLocation
           .read(DriftSqlType.string, data['${effectivePrefix}api_status'])!,
       isActive: attachedDatabase.typeMapping
           .read(DriftSqlType.bool, data['${effectivePrefix}is_active'])!,
+      isLocationUpdated: attachedDatabase.typeMapping.read(
+          DriftSqlType.bool, data['${effectivePrefix}is_location_updated'])!,
     );
   }
 
@@ -408,32 +445,38 @@ class $WHLocationTable extends WHLocation
 class WHLocationTable extends DataClass implements Insertable<WHLocationTable> {
   final DateTime updatedDateAndTime;
   final String locationId;
+  final String serverLocationId;
   final String locationName;
   final String palletNumber;
   final String description;
   final String auditDetailId;
   final String apiStatus;
   final bool isActive;
+  final bool isLocationUpdated;
   const WHLocationTable(
       {required this.updatedDateAndTime,
       required this.locationId,
+      required this.serverLocationId,
       required this.locationName,
       required this.palletNumber,
       required this.description,
       required this.auditDetailId,
       required this.apiStatus,
-      required this.isActive});
+      required this.isActive,
+      required this.isLocationUpdated});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['updated_date_and_time'] = Variable<DateTime>(updatedDateAndTime);
     map['location_id'] = Variable<String>(locationId);
+    map['server_location_id'] = Variable<String>(serverLocationId);
     map['location_name'] = Variable<String>(locationName);
     map['pallet_number'] = Variable<String>(palletNumber);
     map['description'] = Variable<String>(description);
     map['audit_detail_id'] = Variable<String>(auditDetailId);
     map['api_status'] = Variable<String>(apiStatus);
     map['is_active'] = Variable<bool>(isActive);
+    map['is_location_updated'] = Variable<bool>(isLocationUpdated);
     return map;
   }
 
@@ -441,12 +484,14 @@ class WHLocationTable extends DataClass implements Insertable<WHLocationTable> {
     return WHLocationCompanion(
       updatedDateAndTime: Value(updatedDateAndTime),
       locationId: Value(locationId),
+      serverLocationId: Value(serverLocationId),
       locationName: Value(locationName),
       palletNumber: Value(palletNumber),
       description: Value(description),
       auditDetailId: Value(auditDetailId),
       apiStatus: Value(apiStatus),
       isActive: Value(isActive),
+      isLocationUpdated: Value(isLocationUpdated),
     );
   }
 
@@ -457,12 +502,14 @@ class WHLocationTable extends DataClass implements Insertable<WHLocationTable> {
       updatedDateAndTime:
           serializer.fromJson<DateTime>(json['updatedDateAndTime']),
       locationId: serializer.fromJson<String>(json['locationId']),
+      serverLocationId: serializer.fromJson<String>(json['serverLocationId']),
       locationName: serializer.fromJson<String>(json['locationName']),
       palletNumber: serializer.fromJson<String>(json['palletNumber']),
       description: serializer.fromJson<String>(json['description']),
       auditDetailId: serializer.fromJson<String>(json['auditDetailId']),
       apiStatus: serializer.fromJson<String>(json['apiStatus']),
       isActive: serializer.fromJson<bool>(json['isActive']),
+      isLocationUpdated: serializer.fromJson<bool>(json['isLocationUpdated']),
     );
   }
   @override
@@ -471,126 +518,157 @@ class WHLocationTable extends DataClass implements Insertable<WHLocationTable> {
     return <String, dynamic>{
       'updatedDateAndTime': serializer.toJson<DateTime>(updatedDateAndTime),
       'locationId': serializer.toJson<String>(locationId),
+      'serverLocationId': serializer.toJson<String>(serverLocationId),
       'locationName': serializer.toJson<String>(locationName),
       'palletNumber': serializer.toJson<String>(palletNumber),
       'description': serializer.toJson<String>(description),
       'auditDetailId': serializer.toJson<String>(auditDetailId),
       'apiStatus': serializer.toJson<String>(apiStatus),
       'isActive': serializer.toJson<bool>(isActive),
+      'isLocationUpdated': serializer.toJson<bool>(isLocationUpdated),
     };
   }
 
   WHLocationTable copyWith(
           {DateTime? updatedDateAndTime,
           String? locationId,
+          String? serverLocationId,
           String? locationName,
           String? palletNumber,
           String? description,
           String? auditDetailId,
           String? apiStatus,
-          bool? isActive}) =>
+          bool? isActive,
+          bool? isLocationUpdated}) =>
       WHLocationTable(
         updatedDateAndTime: updatedDateAndTime ?? this.updatedDateAndTime,
         locationId: locationId ?? this.locationId,
+        serverLocationId: serverLocationId ?? this.serverLocationId,
         locationName: locationName ?? this.locationName,
         palletNumber: palletNumber ?? this.palletNumber,
         description: description ?? this.description,
         auditDetailId: auditDetailId ?? this.auditDetailId,
         apiStatus: apiStatus ?? this.apiStatus,
         isActive: isActive ?? this.isActive,
+        isLocationUpdated: isLocationUpdated ?? this.isLocationUpdated,
       );
   @override
   String toString() {
     return (StringBuffer('WHLocationTable(')
           ..write('updatedDateAndTime: $updatedDateAndTime, ')
           ..write('locationId: $locationId, ')
+          ..write('serverLocationId: $serverLocationId, ')
           ..write('locationName: $locationName, ')
           ..write('palletNumber: $palletNumber, ')
           ..write('description: $description, ')
           ..write('auditDetailId: $auditDetailId, ')
           ..write('apiStatus: $apiStatus, ')
-          ..write('isActive: $isActive')
+          ..write('isActive: $isActive, ')
+          ..write('isLocationUpdated: $isLocationUpdated')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(updatedDateAndTime, locationId, locationName,
-      palletNumber, description, auditDetailId, apiStatus, isActive);
+  int get hashCode => Object.hash(
+      updatedDateAndTime,
+      locationId,
+      serverLocationId,
+      locationName,
+      palletNumber,
+      description,
+      auditDetailId,
+      apiStatus,
+      isActive,
+      isLocationUpdated);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is WHLocationTable &&
           other.updatedDateAndTime == this.updatedDateAndTime &&
           other.locationId == this.locationId &&
+          other.serverLocationId == this.serverLocationId &&
           other.locationName == this.locationName &&
           other.palletNumber == this.palletNumber &&
           other.description == this.description &&
           other.auditDetailId == this.auditDetailId &&
           other.apiStatus == this.apiStatus &&
-          other.isActive == this.isActive);
+          other.isActive == this.isActive &&
+          other.isLocationUpdated == this.isLocationUpdated);
 }
 
 class WHLocationCompanion extends UpdateCompanion<WHLocationTable> {
   final Value<DateTime> updatedDateAndTime;
   final Value<String> locationId;
+  final Value<String> serverLocationId;
   final Value<String> locationName;
   final Value<String> palletNumber;
   final Value<String> description;
   final Value<String> auditDetailId;
   final Value<String> apiStatus;
   final Value<bool> isActive;
+  final Value<bool> isLocationUpdated;
   final Value<int> rowid;
   const WHLocationCompanion({
     this.updatedDateAndTime = const Value.absent(),
     this.locationId = const Value.absent(),
+    this.serverLocationId = const Value.absent(),
     this.locationName = const Value.absent(),
     this.palletNumber = const Value.absent(),
     this.description = const Value.absent(),
     this.auditDetailId = const Value.absent(),
     this.apiStatus = const Value.absent(),
     this.isActive = const Value.absent(),
+    this.isLocationUpdated = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   WHLocationCompanion.insert({
     required DateTime updatedDateAndTime,
     required String locationId,
+    required String serverLocationId,
     required String locationName,
     required String palletNumber,
     required String description,
     required String auditDetailId,
     required String apiStatus,
     required bool isActive,
+    required bool isLocationUpdated,
     this.rowid = const Value.absent(),
   })  : updatedDateAndTime = Value(updatedDateAndTime),
         locationId = Value(locationId),
+        serverLocationId = Value(serverLocationId),
         locationName = Value(locationName),
         palletNumber = Value(palletNumber),
         description = Value(description),
         auditDetailId = Value(auditDetailId),
         apiStatus = Value(apiStatus),
-        isActive = Value(isActive);
+        isActive = Value(isActive),
+        isLocationUpdated = Value(isLocationUpdated);
   static Insertable<WHLocationTable> custom({
     Expression<DateTime>? updatedDateAndTime,
     Expression<String>? locationId,
+    Expression<String>? serverLocationId,
     Expression<String>? locationName,
     Expression<String>? palletNumber,
     Expression<String>? description,
     Expression<String>? auditDetailId,
     Expression<String>? apiStatus,
     Expression<bool>? isActive,
+    Expression<bool>? isLocationUpdated,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
       if (updatedDateAndTime != null)
         'updated_date_and_time': updatedDateAndTime,
       if (locationId != null) 'location_id': locationId,
+      if (serverLocationId != null) 'server_location_id': serverLocationId,
       if (locationName != null) 'location_name': locationName,
       if (palletNumber != null) 'pallet_number': palletNumber,
       if (description != null) 'description': description,
       if (auditDetailId != null) 'audit_detail_id': auditDetailId,
       if (apiStatus != null) 'api_status': apiStatus,
       if (isActive != null) 'is_active': isActive,
+      if (isLocationUpdated != null) 'is_location_updated': isLocationUpdated,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -598,22 +676,26 @@ class WHLocationCompanion extends UpdateCompanion<WHLocationTable> {
   WHLocationCompanion copyWith(
       {Value<DateTime>? updatedDateAndTime,
       Value<String>? locationId,
+      Value<String>? serverLocationId,
       Value<String>? locationName,
       Value<String>? palletNumber,
       Value<String>? description,
       Value<String>? auditDetailId,
       Value<String>? apiStatus,
       Value<bool>? isActive,
+      Value<bool>? isLocationUpdated,
       Value<int>? rowid}) {
     return WHLocationCompanion(
       updatedDateAndTime: updatedDateAndTime ?? this.updatedDateAndTime,
       locationId: locationId ?? this.locationId,
+      serverLocationId: serverLocationId ?? this.serverLocationId,
       locationName: locationName ?? this.locationName,
       palletNumber: palletNumber ?? this.palletNumber,
       description: description ?? this.description,
       auditDetailId: auditDetailId ?? this.auditDetailId,
       apiStatus: apiStatus ?? this.apiStatus,
       isActive: isActive ?? this.isActive,
+      isLocationUpdated: isLocationUpdated ?? this.isLocationUpdated,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -627,6 +709,9 @@ class WHLocationCompanion extends UpdateCompanion<WHLocationTable> {
     }
     if (locationId.present) {
       map['location_id'] = Variable<String>(locationId.value);
+    }
+    if (serverLocationId.present) {
+      map['server_location_id'] = Variable<String>(serverLocationId.value);
     }
     if (locationName.present) {
       map['location_name'] = Variable<String>(locationName.value);
@@ -646,6 +731,9 @@ class WHLocationCompanion extends UpdateCompanion<WHLocationTable> {
     if (isActive.present) {
       map['is_active'] = Variable<bool>(isActive.value);
     }
+    if (isLocationUpdated.present) {
+      map['is_location_updated'] = Variable<bool>(isLocationUpdated.value);
+    }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
     }
@@ -657,12 +745,14 @@ class WHLocationCompanion extends UpdateCompanion<WHLocationTable> {
     return (StringBuffer('WHLocationCompanion(')
           ..write('updatedDateAndTime: $updatedDateAndTime, ')
           ..write('locationId: $locationId, ')
+          ..write('serverLocationId: $serverLocationId, ')
           ..write('locationName: $locationName, ')
           ..write('palletNumber: $palletNumber, ')
           ..write('description: $description, ')
           ..write('auditDetailId: $auditDetailId, ')
           ..write('apiStatus: $apiStatus, ')
           ..write('isActive: $isActive, ')
+          ..write('isLocationUpdated: $isLocationUpdated, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -757,6 +847,15 @@ class $WHInOutWardsTable extends WHInOutWards
   late final GeneratedColumn<String> apiStatus = GeneratedColumn<String>(
       'api_status', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _isLocationUpdatedMeta =
+      const VerificationMeta('isLocationUpdated');
+  @override
+  late final GeneratedColumn<bool> isLocationUpdated = GeneratedColumn<bool>(
+      'is_location_updated', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: true,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'CHECK ("is_location_updated" IN (0, 1))'));
   @override
   List<GeneratedColumn> get $columns => [
         updatedDateAndTime,
@@ -772,7 +871,8 @@ class $WHInOutWardsTable extends WHInOutWards
         productId,
         productName,
         auditDetailId,
-        apiStatus
+        apiStatus,
+        isLocationUpdated
       ];
   @override
   String get aliasedName => _alias ?? 'w_h_in_out_wards';
@@ -881,6 +981,14 @@ class $WHInOutWardsTable extends WHInOutWards
     } else if (isInserting) {
       context.missing(_apiStatusMeta);
     }
+    if (data.containsKey('is_location_updated')) {
+      context.handle(
+          _isLocationUpdatedMeta,
+          isLocationUpdated.isAcceptableOrUnknown(
+              data['is_location_updated']!, _isLocationUpdatedMeta));
+    } else if (isInserting) {
+      context.missing(_isLocationUpdatedMeta);
+    }
     return context;
   }
 
@@ -919,6 +1027,8 @@ class $WHInOutWardsTable extends WHInOutWards
           DriftSqlType.string, data['${effectivePrefix}audit_detail_id'])!,
       apiStatus: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}api_status'])!,
+      isLocationUpdated: attachedDatabase.typeMapping.read(
+          DriftSqlType.bool, data['${effectivePrefix}is_location_updated'])!,
     );
   }
 
@@ -944,6 +1054,7 @@ class WHInOutWardsTable extends DataClass
   final String productName;
   final String auditDetailId;
   final String apiStatus;
+  final bool isLocationUpdated;
   const WHInOutWardsTable(
       {required this.updatedDateAndTime,
       required this.inOutWardId,
@@ -958,7 +1069,8 @@ class WHInOutWardsTable extends DataClass
       required this.productId,
       required this.productName,
       required this.auditDetailId,
-      required this.apiStatus});
+      required this.apiStatus,
+      required this.isLocationUpdated});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -976,6 +1088,7 @@ class WHInOutWardsTable extends DataClass
     map['product_name'] = Variable<String>(productName);
     map['audit_detail_id'] = Variable<String>(auditDetailId);
     map['api_status'] = Variable<String>(apiStatus);
+    map['is_location_updated'] = Variable<bool>(isLocationUpdated);
     return map;
   }
 
@@ -995,6 +1108,7 @@ class WHInOutWardsTable extends DataClass
       productName: Value(productName),
       auditDetailId: Value(auditDetailId),
       apiStatus: Value(apiStatus),
+      isLocationUpdated: Value(isLocationUpdated),
     );
   }
 
@@ -1017,6 +1131,7 @@ class WHInOutWardsTable extends DataClass
       productName: serializer.fromJson<String>(json['productName']),
       auditDetailId: serializer.fromJson<String>(json['auditDetailId']),
       apiStatus: serializer.fromJson<String>(json['apiStatus']),
+      isLocationUpdated: serializer.fromJson<bool>(json['isLocationUpdated']),
     );
   }
   @override
@@ -1037,6 +1152,7 @@ class WHInOutWardsTable extends DataClass
       'productName': serializer.toJson<String>(productName),
       'auditDetailId': serializer.toJson<String>(auditDetailId),
       'apiStatus': serializer.toJson<String>(apiStatus),
+      'isLocationUpdated': serializer.toJson<bool>(isLocationUpdated),
     };
   }
 
@@ -1054,7 +1170,8 @@ class WHInOutWardsTable extends DataClass
           String? productId,
           String? productName,
           String? auditDetailId,
-          String? apiStatus}) =>
+          String? apiStatus,
+          bool? isLocationUpdated}) =>
       WHInOutWardsTable(
         updatedDateAndTime: updatedDateAndTime ?? this.updatedDateAndTime,
         inOutWardId: inOutWardId ?? this.inOutWardId,
@@ -1070,6 +1187,7 @@ class WHInOutWardsTable extends DataClass
         productName: productName ?? this.productName,
         auditDetailId: auditDetailId ?? this.auditDetailId,
         apiStatus: apiStatus ?? this.apiStatus,
+        isLocationUpdated: isLocationUpdated ?? this.isLocationUpdated,
       );
   @override
   String toString() {
@@ -1087,7 +1205,8 @@ class WHInOutWardsTable extends DataClass
           ..write('productId: $productId, ')
           ..write('productName: $productName, ')
           ..write('auditDetailId: $auditDetailId, ')
-          ..write('apiStatus: $apiStatus')
+          ..write('apiStatus: $apiStatus, ')
+          ..write('isLocationUpdated: $isLocationUpdated')
           ..write(')'))
         .toString();
   }
@@ -1107,7 +1226,8 @@ class WHInOutWardsTable extends DataClass
       productId,
       productName,
       auditDetailId,
-      apiStatus);
+      apiStatus,
+      isLocationUpdated);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -1125,7 +1245,8 @@ class WHInOutWardsTable extends DataClass
           other.productId == this.productId &&
           other.productName == this.productName &&
           other.auditDetailId == this.auditDetailId &&
-          other.apiStatus == this.apiStatus);
+          other.apiStatus == this.apiStatus &&
+          other.isLocationUpdated == this.isLocationUpdated);
 }
 
 class WHInOutWardsCompanion extends UpdateCompanion<WHInOutWardsTable> {
@@ -1143,6 +1264,7 @@ class WHInOutWardsCompanion extends UpdateCompanion<WHInOutWardsTable> {
   final Value<String> productName;
   final Value<String> auditDetailId;
   final Value<String> apiStatus;
+  final Value<bool> isLocationUpdated;
   final Value<int> rowid;
   const WHInOutWardsCompanion({
     this.updatedDateAndTime = const Value.absent(),
@@ -1159,6 +1281,7 @@ class WHInOutWardsCompanion extends UpdateCompanion<WHInOutWardsTable> {
     this.productName = const Value.absent(),
     this.auditDetailId = const Value.absent(),
     this.apiStatus = const Value.absent(),
+    this.isLocationUpdated = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   WHInOutWardsCompanion.insert({
@@ -1176,6 +1299,7 @@ class WHInOutWardsCompanion extends UpdateCompanion<WHInOutWardsTable> {
     required String productName,
     required String auditDetailId,
     required String apiStatus,
+    required bool isLocationUpdated,
     this.rowid = const Value.absent(),
   })  : updatedDateAndTime = Value(updatedDateAndTime),
         inOutWardId = Value(inOutWardId),
@@ -1190,7 +1314,8 @@ class WHInOutWardsCompanion extends UpdateCompanion<WHInOutWardsTable> {
         productId = Value(productId),
         productName = Value(productName),
         auditDetailId = Value(auditDetailId),
-        apiStatus = Value(apiStatus);
+        apiStatus = Value(apiStatus),
+        isLocationUpdated = Value(isLocationUpdated);
   static Insertable<WHInOutWardsTable> custom({
     Expression<DateTime>? updatedDateAndTime,
     Expression<String>? inOutWardId,
@@ -1206,6 +1331,7 @@ class WHInOutWardsCompanion extends UpdateCompanion<WHInOutWardsTable> {
     Expression<String>? productName,
     Expression<String>? auditDetailId,
     Expression<String>? apiStatus,
+    Expression<bool>? isLocationUpdated,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
@@ -1224,6 +1350,7 @@ class WHInOutWardsCompanion extends UpdateCompanion<WHInOutWardsTable> {
       if (productName != null) 'product_name': productName,
       if (auditDetailId != null) 'audit_detail_id': auditDetailId,
       if (apiStatus != null) 'api_status': apiStatus,
+      if (isLocationUpdated != null) 'is_location_updated': isLocationUpdated,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -1243,6 +1370,7 @@ class WHInOutWardsCompanion extends UpdateCompanion<WHInOutWardsTable> {
       Value<String>? productName,
       Value<String>? auditDetailId,
       Value<String>? apiStatus,
+      Value<bool>? isLocationUpdated,
       Value<int>? rowid}) {
     return WHInOutWardsCompanion(
       updatedDateAndTime: updatedDateAndTime ?? this.updatedDateAndTime,
@@ -1259,6 +1387,7 @@ class WHInOutWardsCompanion extends UpdateCompanion<WHInOutWardsTable> {
       productName: productName ?? this.productName,
       auditDetailId: auditDetailId ?? this.auditDetailId,
       apiStatus: apiStatus ?? this.apiStatus,
+      isLocationUpdated: isLocationUpdated ?? this.isLocationUpdated,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -1309,6 +1438,9 @@ class WHInOutWardsCompanion extends UpdateCompanion<WHInOutWardsTable> {
     if (apiStatus.present) {
       map['api_status'] = Variable<String>(apiStatus.value);
     }
+    if (isLocationUpdated.present) {
+      map['is_location_updated'] = Variable<bool>(isLocationUpdated.value);
+    }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
     }
@@ -1332,6 +1464,7 @@ class WHInOutWardsCompanion extends UpdateCompanion<WHInOutWardsTable> {
           ..write('productName: $productName, ')
           ..write('auditDetailId: $auditDetailId, ')
           ..write('apiStatus: $apiStatus, ')
+          ..write('isLocationUpdated: $isLocationUpdated, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -1425,6 +1558,15 @@ class $WHAuditingTable extends WHAuditing
   late final GeneratedColumn<String> apiStatus = GeneratedColumn<String>(
       'api_status', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _isLocationUpdatedMeta =
+      const VerificationMeta('isLocationUpdated');
+  @override
+  late final GeneratedColumn<bool> isLocationUpdated = GeneratedColumn<bool>(
+      'is_location_updated', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: true,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'CHECK ("is_location_updated" IN (0, 1))'));
   @override
   List<GeneratedColumn> get $columns => [
         updatedDateAndTime,
@@ -1440,7 +1582,8 @@ class $WHAuditingTable extends WHAuditing
         description,
         mfDate,
         file,
-        apiStatus
+        apiStatus,
+        isLocationUpdated
       ];
   @override
   String get aliasedName => _alias ?? 'w_h_auditing';
@@ -1551,6 +1694,14 @@ class $WHAuditingTable extends WHAuditing
     } else if (isInserting) {
       context.missing(_apiStatusMeta);
     }
+    if (data.containsKey('is_location_updated')) {
+      context.handle(
+          _isLocationUpdatedMeta,
+          isLocationUpdated.isAcceptableOrUnknown(
+              data['is_location_updated']!, _isLocationUpdatedMeta));
+    } else if (isInserting) {
+      context.missing(_isLocationUpdatedMeta);
+    }
     return context;
   }
 
@@ -1589,6 +1740,8 @@ class $WHAuditingTable extends WHAuditing
           .read(DriftSqlType.string, data['${effectivePrefix}file'])!,
       apiStatus: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}api_status'])!,
+      isLocationUpdated: attachedDatabase.typeMapping.read(
+          DriftSqlType.bool, data['${effectivePrefix}is_location_updated'])!,
     );
   }
 
@@ -1613,6 +1766,7 @@ class WHAuditingTable extends DataClass implements Insertable<WHAuditingTable> {
   final String mfDate;
   final String file;
   final String apiStatus;
+  final bool isLocationUpdated;
   const WHAuditingTable(
       {required this.updatedDateAndTime,
       required this.auditingId,
@@ -1627,7 +1781,8 @@ class WHAuditingTable extends DataClass implements Insertable<WHAuditingTable> {
       required this.description,
       required this.mfDate,
       required this.file,
-      required this.apiStatus});
+      required this.apiStatus,
+      required this.isLocationUpdated});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -1645,6 +1800,7 @@ class WHAuditingTable extends DataClass implements Insertable<WHAuditingTable> {
     map['mf_date'] = Variable<String>(mfDate);
     map['file'] = Variable<String>(file);
     map['api_status'] = Variable<String>(apiStatus);
+    map['is_location_updated'] = Variable<bool>(isLocationUpdated);
     return map;
   }
 
@@ -1664,6 +1820,7 @@ class WHAuditingTable extends DataClass implements Insertable<WHAuditingTable> {
       mfDate: Value(mfDate),
       file: Value(file),
       apiStatus: Value(apiStatus),
+      isLocationUpdated: Value(isLocationUpdated),
     );
   }
 
@@ -1686,6 +1843,7 @@ class WHAuditingTable extends DataClass implements Insertable<WHAuditingTable> {
       mfDate: serializer.fromJson<String>(json['mfDate']),
       file: serializer.fromJson<String>(json['file']),
       apiStatus: serializer.fromJson<String>(json['apiStatus']),
+      isLocationUpdated: serializer.fromJson<bool>(json['isLocationUpdated']),
     );
   }
   @override
@@ -1706,6 +1864,7 @@ class WHAuditingTable extends DataClass implements Insertable<WHAuditingTable> {
       'mfDate': serializer.toJson<String>(mfDate),
       'file': serializer.toJson<String>(file),
       'apiStatus': serializer.toJson<String>(apiStatus),
+      'isLocationUpdated': serializer.toJson<bool>(isLocationUpdated),
     };
   }
 
@@ -1723,7 +1882,8 @@ class WHAuditingTable extends DataClass implements Insertable<WHAuditingTable> {
           String? description,
           String? mfDate,
           String? file,
-          String? apiStatus}) =>
+          String? apiStatus,
+          bool? isLocationUpdated}) =>
       WHAuditingTable(
         updatedDateAndTime: updatedDateAndTime ?? this.updatedDateAndTime,
         auditingId: auditingId ?? this.auditingId,
@@ -1739,6 +1899,7 @@ class WHAuditingTable extends DataClass implements Insertable<WHAuditingTable> {
         mfDate: mfDate ?? this.mfDate,
         file: file ?? this.file,
         apiStatus: apiStatus ?? this.apiStatus,
+        isLocationUpdated: isLocationUpdated ?? this.isLocationUpdated,
       );
   @override
   String toString() {
@@ -1756,7 +1917,8 @@ class WHAuditingTable extends DataClass implements Insertable<WHAuditingTable> {
           ..write('description: $description, ')
           ..write('mfDate: $mfDate, ')
           ..write('file: $file, ')
-          ..write('apiStatus: $apiStatus')
+          ..write('apiStatus: $apiStatus, ')
+          ..write('isLocationUpdated: $isLocationUpdated')
           ..write(')'))
         .toString();
   }
@@ -1776,7 +1938,8 @@ class WHAuditingTable extends DataClass implements Insertable<WHAuditingTable> {
       description,
       mfDate,
       file,
-      apiStatus);
+      apiStatus,
+      isLocationUpdated);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -1794,7 +1957,8 @@ class WHAuditingTable extends DataClass implements Insertable<WHAuditingTable> {
           other.description == this.description &&
           other.mfDate == this.mfDate &&
           other.file == this.file &&
-          other.apiStatus == this.apiStatus);
+          other.apiStatus == this.apiStatus &&
+          other.isLocationUpdated == this.isLocationUpdated);
 }
 
 class WHAuditingCompanion extends UpdateCompanion<WHAuditingTable> {
@@ -1812,6 +1976,7 @@ class WHAuditingCompanion extends UpdateCompanion<WHAuditingTable> {
   final Value<String> mfDate;
   final Value<String> file;
   final Value<String> apiStatus;
+  final Value<bool> isLocationUpdated;
   final Value<int> rowid;
   const WHAuditingCompanion({
     this.updatedDateAndTime = const Value.absent(),
@@ -1828,6 +1993,7 @@ class WHAuditingCompanion extends UpdateCompanion<WHAuditingTable> {
     this.mfDate = const Value.absent(),
     this.file = const Value.absent(),
     this.apiStatus = const Value.absent(),
+    this.isLocationUpdated = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   WHAuditingCompanion.insert({
@@ -1845,6 +2011,7 @@ class WHAuditingCompanion extends UpdateCompanion<WHAuditingTable> {
     required String mfDate,
     required String file,
     required String apiStatus,
+    required bool isLocationUpdated,
     this.rowid = const Value.absent(),
   })  : updatedDateAndTime = Value(updatedDateAndTime),
         auditingId = Value(auditingId),
@@ -1859,7 +2026,8 @@ class WHAuditingCompanion extends UpdateCompanion<WHAuditingTable> {
         description = Value(description),
         mfDate = Value(mfDate),
         file = Value(file),
-        apiStatus = Value(apiStatus);
+        apiStatus = Value(apiStatus),
+        isLocationUpdated = Value(isLocationUpdated);
   static Insertable<WHAuditingTable> custom({
     Expression<DateTime>? updatedDateAndTime,
     Expression<String>? auditingId,
@@ -1875,6 +2043,7 @@ class WHAuditingCompanion extends UpdateCompanion<WHAuditingTable> {
     Expression<String>? mfDate,
     Expression<String>? file,
     Expression<String>? apiStatus,
+    Expression<bool>? isLocationUpdated,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
@@ -1893,6 +2062,7 @@ class WHAuditingCompanion extends UpdateCompanion<WHAuditingTable> {
       if (mfDate != null) 'mf_date': mfDate,
       if (file != null) 'file': file,
       if (apiStatus != null) 'api_status': apiStatus,
+      if (isLocationUpdated != null) 'is_location_updated': isLocationUpdated,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -1912,6 +2082,7 @@ class WHAuditingCompanion extends UpdateCompanion<WHAuditingTable> {
       Value<String>? mfDate,
       Value<String>? file,
       Value<String>? apiStatus,
+      Value<bool>? isLocationUpdated,
       Value<int>? rowid}) {
     return WHAuditingCompanion(
       updatedDateAndTime: updatedDateAndTime ?? this.updatedDateAndTime,
@@ -1928,6 +2099,7 @@ class WHAuditingCompanion extends UpdateCompanion<WHAuditingTable> {
       mfDate: mfDate ?? this.mfDate,
       file: file ?? this.file,
       apiStatus: apiStatus ?? this.apiStatus,
+      isLocationUpdated: isLocationUpdated ?? this.isLocationUpdated,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -1978,6 +2150,9 @@ class WHAuditingCompanion extends UpdateCompanion<WHAuditingTable> {
     if (apiStatus.present) {
       map['api_status'] = Variable<String>(apiStatus.value);
     }
+    if (isLocationUpdated.present) {
+      map['is_location_updated'] = Variable<bool>(isLocationUpdated.value);
+    }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
     }
@@ -2001,6 +2176,7 @@ class WHAuditingCompanion extends UpdateCompanion<WHAuditingTable> {
           ..write('mfDate: $mfDate, ')
           ..write('file: $file, ')
           ..write('apiStatus: $apiStatus, ')
+          ..write('isLocationUpdated: $isLocationUpdated, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();

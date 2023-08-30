@@ -78,8 +78,8 @@ class _UpdateListScreenState extends State<UpdateListScreen> {
                         ),
                         (item.isLoading)
                             ? const Padding(
-                              padding: EdgeInsets.only(right: 20),
-                              child: SizedBox(
+                                padding: EdgeInsets.only(right: 20),
+                                child: SizedBox(
                                   width: 24,
                                   height: 24,
                                   child: CircularProgressIndicator(
@@ -87,9 +87,9 @@ class _UpdateListScreenState extends State<UpdateListScreen> {
                                     strokeWidth: 3,
                                   ),
                                 ),
-                            )
+                              )
                             : GestureDetector(
-                                onTap: () {
+                                onTap: () async{
                                   updateApi(item);
                                 },
                                 child: Container(

@@ -69,6 +69,7 @@ class DatabaseHelper {
       required String description,
       required bool isActive,
       required String auditDetailId}) async {
+    String locationId = Utils.getNewGuId();
     final query = _database.into(_database.wHLocation).insert(WHLocationTable(
         updatedDateAndTime: DateTime.now(),
         locationName: locationName,
@@ -77,7 +78,9 @@ class DatabaseHelper {
         auditDetailId: auditDetailId,
         isActive: isActive,
         apiStatus: DB_API_STATUS.TODO.name,
-        locationId: Utils.getNewGuId()));
+        locationId: locationId,
+        serverLocationId: locationId,
+        isLocationUpdated: false));
     return await query;
   }
 
@@ -100,6 +103,27 @@ class DatabaseHelper {
       ..where((tbl) => tbl.locationId.equals(locationId))
       ..write(entity);
     await query;
+    return 1;
+  }
+
+  /*
+  * This method is used to update the local guid with api guid and also update location id in whAuditingTable and whInOutWardsTable*/
+  Future<int> updateWHLocationId({
+    required String oldLocationId,
+    required String newLocationId,
+  }) async {
+    WHLocationCompanion entity = WHLocationCompanion(
+        serverLocationId: Value(newLocationId),
+        isLocationUpdated: const Value(true),
+        apiStatus: Value(DB_API_STATUS.COMPLETED.name));
+    final query = _database.update(_database.wHLocation)
+      ..where((tbl) => tbl.locationId.equals(oldLocationId))
+      ..write(entity);
+    await query;
+    await updateWHInOutWardLocationId(
+        whNewLocationId: newLocationId, whOldLocationId: oldLocationId);
+    await updateWHAuditingLocationId(
+        whNewLocationId: newLocationId, whOldLocationId: oldLocationId);
     return 1;
   }
 
@@ -146,16 +170,15 @@ class DatabaseHelper {
     return query;
   }
 
-
   Future<List<WHAuditingTable>> getAllWHAuditing() async {
     List<WHAuditingTable> query =
-    await _database.select(_database.wHAuditing).get();
+        await _database.select(_database.wHAuditing).get();
     return query;
   }
 
   Future<List<WHInOutWardsTable>> getAllInOutWards() async {
     List<WHInOutWardsTable> query =
-    await _database.select(_database.wHInOutWards).get();
+        await _database.select(_database.wHInOutWards).get();
     return query;
   }
 
@@ -212,7 +235,8 @@ class DatabaseHelper {
             productId: productId,
             productName: productName,
             apiStatus: DB_API_STATUS.TODO.name,
-            auditDetailId: auditDetailId));
+            auditDetailId: auditDetailId,
+            isLocationUpdated: false));
     return await query;
   }
 
@@ -247,6 +271,58 @@ class DatabaseHelper {
     return 1;
   }
 
+  Future<int> updateWHInOutWardLocationId({
+    required String whOldLocationId,
+    required String whNewLocationId,
+  }) async {
+    WHInOutWardsCompanion entity = WHInOutWardsCompanion(
+        whLocationId: Value(whNewLocationId),
+        isLocationUpdated: const Value(true));
+    final query = _database.update(_database.wHInOutWards)
+      ..where((tbl) => tbl.whLocationId.equals(whOldLocationId))
+      ..write(entity);
+    await query;
+    return 1;
+  }
+
+  Future<int> updateWHInOutWardApiStatus({
+    required String inOutWardId,
+    String? newInOutWardId,
+    required DB_API_STATUS status,
+  }) async {
+    WHInOutWardsCompanion entity = ((newInOutWardId?.length??0)>0)
+        ? WHInOutWardsCompanion(
+            apiStatus: Value(status.name),
+            inOutWardId: Value(newInOutWardId ?? ""))
+        : WHInOutWardsCompanion(
+            apiStatus: Value(status.name),
+          );
+    final query = _database.update(_database.wHInOutWards)
+      ..where((tbl) => tbl.inOutWardId.equals(inOutWardId))
+      ..write(entity);
+    await query;
+    return 1;
+  }
+
+  Future<int> updateWHAuditingApiStatus({
+    required String auditingId,
+    String? newAuditId,
+    required DB_API_STATUS status,
+  }) async {
+    WHAuditingCompanion entity =((newAuditId?.length??0)>0)
+        ? WHAuditingCompanion(
+        apiStatus: Value(status.name),
+        auditingId: Value(newAuditId ?? ""))
+        : WHAuditingCompanion(
+      apiStatus: Value(status.name),
+    );
+    final query = _database.update(_database.wHAuditing)
+      ..where((tbl) => tbl.auditingId.equals(auditingId))
+      ..write(entity);
+    await query;
+    return 1;
+  }
+
   /*
   * This method is used to insert the data in ApiDataTable by tag*/
   Future<int> insertWHAuditing(
@@ -275,8 +351,23 @@ class DatabaseHelper {
         mfDate: mfDate,
         productName: productName,
         apiStatus: DB_API_STATUS.TODO.name,
-        file: file));
+        file: file,
+        isLocationUpdated: false));
     return await query;
+  }
+
+  Future<int> updateWHAuditingLocationId({
+    required String whOldLocationId,
+    required String whNewLocationId,
+  }) async {
+    WHAuditingCompanion entity = WHAuditingCompanion(
+        whLocationId: Value(whNewLocationId),
+        isLocationUpdated: const Value(true));
+    final query = _database.update(_database.wHAuditing)
+      ..where((tbl) => tbl.whLocationId.equals(whOldLocationId))
+      ..write(entity);
+    await query;
+    return 1;
   }
 
   /*

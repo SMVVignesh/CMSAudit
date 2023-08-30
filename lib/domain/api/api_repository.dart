@@ -1,5 +1,6 @@
-import 'dart:convert';
+import 'package:intl/intl.dart';
 
+import 'package:cms_audit/domain/local_data_base/database.dart';
 import 'package:cms_audit/presentation/pages/dashboard/page/audit_details/model/audit_response.dart';
 import 'package:tool_kit/tool_kit.dart';
 
@@ -8,6 +9,8 @@ import '../../core/constants/api_end_points.dart';
 import '../../data/login/new_login_response.dart';
 import '../../presentation/pages/dashboard/page/products/model/product_response.dart';
 import '../../presentation/pages/dashboard/page/upload_data/page/model/create_location_model.dart';
+import '../../presentation/pages/dashboard/page/upload_data/page/model/wh_auditing_response.dart';
+import '../../presentation/pages/dashboard/page/upload_data/page/model/wh_in_out_wards_response.dart';
 import '../../presentation/pages/login/model/login_response.dart';
 import '../share_preference/shared_preference_repository.dart';
 
@@ -79,22 +82,78 @@ class ApiRepository {
 
   /*This method is used to call the generate New token end point*/
   Future<CreateLocationModel> createWHLocation(
-      {required String locationName,
-      required String palletNumber,
-      required String description,
-      required bool isActive,
-      required String auditDetailId}) async {
+      {required WHLocationTable whLocationTable}) async {
     Map<String, dynamic> body = {
-      "locationName": locationName,
-      "palletNumber": palletNumber,
-      "description": description,
-      "isActive": isActive,
-      "auditDetailId": auditDetailId
+      "locationName": whLocationTable.locationName,
+      "palletNumber": whLocationTable.palletNumber,
+      "description": whLocationTable.description,
+      "isActive": whLocationTable.isActive,
+      "auditDetailId": whLocationTable.auditDetailId
     };
     late CreateLocationModel tokenGenerationResponseModel;
     final response = await otherInApis.post(
         ApiEndPoints.WH_LOCATIONS, body, await getHeaderWithAuth());
     tokenGenerationResponseModel = CreateLocationModel.fromJson(response);
+    return tokenGenerationResponseModel;
+  }
+
+  /*This method is used to upload whInOutWars to server*/
+  Future<WHInOutWardsResponse> createInOutWards(
+      {required WHInOutWardsTable whInOutWardsTable}) async {
+    // 2023-08-30T16:19:49.995Z
+    final formatter = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+    String logEntryDateTime = "";
+    try {
+      logEntryDateTime = formatter.format(whInOutWardsTable.updatedDateAndTime);
+    } catch (e) {
+      print("Exception Time Stamp: ${e.toString()}");
+    }
+
+    Map<String, dynamic> body = {
+      "qty": whInOutWardsTable.qty,
+      "stockType": whInOutWardsTable.stockType,
+      "description": whInOutWardsTable.description,
+      "invoNo": whInOutWardsTable.invoNo,
+      "invoType": whInOutWardsTable.invoType,
+      "invoDate": whInOutWardsTable.invoDate,
+      "logEntryDateTime": logEntryDateTime,
+      "customerName": whInOutWardsTable.customerName,
+      "whLocationId": whInOutWardsTable.whLocationId,
+      "productId": whInOutWardsTable.productId
+    };
+    late WHInOutWardsResponse tokenGenerationResponseModel;
+    final response = await otherInApis.post(
+        ApiEndPoints.WH_IN_OUT_WARDS, body, await getHeaderWithAuth());
+    tokenGenerationResponseModel = WHInOutWardsResponse.fromJson(response);
+    return tokenGenerationResponseModel;
+  }
+
+  /*This method is used to upload whAuditing to server*/
+  Future<WHAuditingResponse> createWhAuditing(
+      {required WHAuditingTable wHAuditingTable}) async {
+    // 2023-08-30T16:19:49.995Z
+    final formatter = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+    String logEntryDateTime = "";
+    try {
+      logEntryDateTime = formatter.format(wHAuditingTable.updatedDateAndTime);
+    } catch (e) {
+      print("Exception Time Stamp: ${e.toString()}");
+    }
+
+    Map<String, dynamic> body = {
+      "qty": wHAuditingTable.qty,
+      "stockType": wHAuditingTable.stockType,
+      "description": wHAuditingTable.description,
+      "mfDate": wHAuditingTable.mfDate,
+      "productQuality": wHAuditingTable.productQuality,
+      "productId": wHAuditingTable.productId,
+      "logEntryDateTime": logEntryDateTime,
+      "whLocationId": wHAuditingTable.whLocationId,
+    };
+    late WHAuditingResponse tokenGenerationResponseModel;
+    final response = await otherInApis.post(
+        ApiEndPoints.WH_AUDITING, body, await getHeaderWithAuth());
+    tokenGenerationResponseModel = WHAuditingResponse.fromJson(response);
     return tokenGenerationResponseModel;
   }
 }
