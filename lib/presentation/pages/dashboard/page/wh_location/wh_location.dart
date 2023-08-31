@@ -19,6 +19,9 @@ class WHLocations extends StatefulWidget {
 
 class _WHLocationsState extends CustomState<WHLocations> {
   List<WHLocationTable> list = [];
+  List<WHLocationTable> filteredList = [];
+  final TextEditingController _searchController = TextEditingController();
+
 
   @override
   void initState() {
@@ -114,143 +117,200 @@ class _WHLocationsState extends CustomState<WHLocations> {
                                 color: CustomColor.black, fontSize: 14),
                           ),
                         )
-                      : ListView.builder(
-                          itemCount: list.length,
-                          itemBuilder: (context, index) {
-                            WHLocationTable location = list[index];
-                            return Padding(
-                              padding: const EdgeInsets.only(top: 10),
-                              child: GestureDetector(
-                                onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            WHLocationsDetails(
-                                              auditDetails: widget.auditDetails,
-                                              location: location,
-                                            )),
-                                  );
+                      : Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(top: 15.0, left: 8, right: 8),
+                            child: TextField(
+                                controller: _searchController,
+                                onChanged: (value) {
+                                  setState(() {
+                                    filterMainList();
+                                  });
                                 },
-                                child: Container(
-                                  width: double.infinity,
-                                  decoration: BoxDecoration(
-                                    border: Border.all(
-                                      color: Colors.grey,
-                                      width: 1,
-                                    ),
-                                    borderRadius: BorderRadius.circular(10),
-                                    color: Colors.transparent,
+                                style: TextStyle(color: Colors.black),
+                                cursorColor: Colors.grey,
+                                decoration: InputDecoration(
+                                  hintText: "Search",
+                                  hintStyle:
+                                  TextStyle(color: CustomColor.grey, fontSize: 16),
+                                  prefixIcon: IconButton(
+                                      icon: ImageIcon(
+                                        AssetImage("assets/image/searchlight.png"),
+                                        color: CustomColor.lightgrey,
+                                        size: 16,
+                                      ),
+                                      onPressed: () {}),
+                                  filled: true,
+                                  fillColor: Color(0xffdadde0),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(35),
+                                    borderSide: BorderSide.none,
                                   ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(10),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        Row(
-                                          children: [
-                                            Expanded(
-                                              child: Text(
-                                                "Location:   ${location.locationName}",
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(35),
+                                    borderSide: BorderSide.none,
+                                  ),
+                                )),
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          (filteredList.length == 0)
+                              ? const Padding(
+                            padding: EdgeInsets.all(20),
+                            child: Text(
+                              "No Audits available",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  color: CustomColor.black, fontSize: 14),
+                            ),
+                          )
+                              : SizedBox(),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Expanded(
+                            child: ListView.builder(
+                                itemCount: filteredList.length,
+                                itemBuilder: (context, index) {
+                                  WHLocationTable location = filteredList[index];
+                                  return Padding(
+                                    padding: const EdgeInsets.only(top: 10),
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  WHLocationsDetails(
+                                                    auditDetails: widget.auditDetails,
+                                                    location: location,
+                                                  )),
+                                        );
+                                      },
+                                      child: Container(
+                                        width: double.infinity,
+                                        decoration: BoxDecoration(
+                                          border: Border.all(
+                                            color: Colors.grey,
+                                            width: 1,
+                                          ),
+                                          borderRadius: BorderRadius.circular(10),
+                                          color: Colors.transparent,
+                                        ),
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(10),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            children: [
+                                              Row(
+                                                children: [
+                                                  Expanded(
+                                                    child: Text(
+                                                      "Location:   ${location.locationName}",
+                                                      style: const TextStyle(
+                                                          color: CustomColor.black,
+                                                          fontSize: 14,
+                                                          fontWeight:
+                                                              FontWeight.normal),
+                                                    ),
+                                                  ),
+                                                  const SizedBox(
+                                                    width: 10,
+                                                  ),
+                                                  GestureDetector(
+                                                      onTap: () async {
+                                                        await showDialog(
+                                                            context: context,
+                                                            barrierColor:
+                                                                Colors.transparent,
+                                                            builder: (context) {
+                                                              return CreateWHLocationScreen(
+                                                                  location:
+                                                                      location,
+                                                                  auditDetails: widget
+                                                                      .auditDetails);
+                                                            });
+                                                        updateWHLocations();
+                                                      },
+                                                      child: Container(
+                                                        color: Colors.transparent,
+                                                        child: Padding(
+                                                          padding:
+                                                              const EdgeInsets.all(5),
+                                                          child: Icon(
+                                                            Icons.edit,
+                                                            color: Colors.blue,
+                                                            size: 20,
+                                                          ),
+                                                        ),
+                                                      )),
+                                                  const SizedBox(
+                                                    width: 10,
+                                                  ),
+                                                  GestureDetector(
+                                                      onTap: () {
+                                                        showDeleteConfirmationPopUp(
+                                                            location);
+                                                      },
+                                                      child: Container(
+                                                        color: Colors.transparent,
+                                                        child: Padding(
+                                                          padding:
+                                                              const EdgeInsets.all(5),
+                                                          child: Icon(
+                                                            Icons.delete,
+                                                            color: Colors.redAccent,
+                                                            size: 20,
+                                                          ),
+                                                        ),
+                                                      ))
+                                                ],
+                                              ),
+                                              const SizedBox(
+                                                height: 10,
+                                              ),
+                                              Text(
+                                                "Pallet Number:    ${location.palletNumber}",
                                                 style: const TextStyle(
                                                     color: CustomColor.black,
                                                     fontSize: 14,
-                                                    fontWeight:
-                                                        FontWeight.normal),
+                                                    fontWeight: FontWeight.normal),
                                               ),
-                                            ),
-                                            const SizedBox(
-                                              width: 10,
-                                            ),
-                                            GestureDetector(
-                                                onTap: () async {
-                                                  await showDialog(
-                                                      context: context,
-                                                      barrierColor:
-                                                          Colors.transparent,
-                                                      builder: (context) {
-                                                        return CreateWHLocationScreen(
-                                                            location:
-                                                                location,
-                                                            auditDetails: widget
-                                                                .auditDetails);
-                                                      });
-                                                  updateWHLocations();
-                                                },
-                                                child: Container(
-                                                  color: Colors.transparent,
-                                                  child: Padding(
-                                                    padding:
-                                                        const EdgeInsets.all(5),
-                                                    child: Icon(
-                                                      Icons.edit,
-                                                      color: Colors.blue,
-                                                      size: 20,
-                                                    ),
-                                                  ),
-                                                )),
-                                            const SizedBox(
-                                              width: 10,
-                                            ),
-                                            GestureDetector(
-                                                onTap: () {
-                                                  showDeleteConfirmationPopUp(
-                                                      location);
-                                                },
-                                                child: Container(
-                                                  color: Colors.transparent,
-                                                  child: Padding(
-                                                    padding:
-                                                        const EdgeInsets.all(5),
-                                                    child: Icon(
-                                                      Icons.delete,
-                                                      color: Colors.redAccent,
-                                                      size: 20,
-                                                    ),
-                                                  ),
-                                                ))
-                                          ],
+                                              const SizedBox(
+                                                height: 10,
+                                              ),
+                                              Text(
+                                                "Description:   ${location.description}",
+                                                style: const TextStyle(
+                                                    color: CustomColor.black,
+                                                    fontSize: 14,
+                                                    fontWeight: FontWeight.normal),
+                                              ),
+                                              const SizedBox(
+                                                height: 10,
+                                              ),
+                                              Text(
+                                                "Is Active:   ${location.isActive}",
+                                                style: const TextStyle(
+                                                    color: CustomColor.black,
+                                                    fontSize: 14,
+                                                    fontWeight: FontWeight.normal),
+                                              ),
+                                            ],
+                                          ),
                                         ),
-                                        const SizedBox(
-                                          height: 10,
-                                        ),
-                                        Text(
-                                          "Pallet Number:    ${location.palletNumber}",
-                                          style: const TextStyle(
-                                              color: CustomColor.black,
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.normal),
-                                        ),
-                                        const SizedBox(
-                                          height: 10,
-                                        ),
-                                        Text(
-                                          "Description:   ${location.description}",
-                                          style: const TextStyle(
-                                              color: CustomColor.black,
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.normal),
-                                        ),
-                                        const SizedBox(
-                                          height: 10,
-                                        ),
-                                        Text(
-                                          "Is Active:   ${location.isActive}",
-                                          style: const TextStyle(
-                                              color: CustomColor.black,
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.normal),
-                                        ),
-                                      ],
+                                      ),
                                     ),
-                                  ),
-                                ),
-                              ),
-                            );
-                          }))
+                                  );
+                                }),
+                          ),
+                        ],
+                      ))
             ],
           ),
         ),
@@ -309,6 +369,7 @@ class _WHLocationsState extends CustomState<WHLocations> {
         .then((value) {
       list.clear();
       list.addAll(value);
+      filterMainList();
       setState(() {});
     });
   }
@@ -334,5 +395,19 @@ class _WHLocationsState extends CustomState<WHLocations> {
         guid: location.locationId);
     Navigator.pop(context);
     updateWHLocations();
+  }
+
+  void filterMainList() {
+    String? searchQuery = _searchController.text;
+    filteredList.clear();
+    filteredList.addAll(list.where((e) {
+      if (searchQuery.length > 0) {
+        bool isItemMatched =
+            e.palletNumber.toLowerCase().contains(searchQuery.toLowerCase()) ?? false;
+        return isItemMatched;
+      } else {
+        return true;
+      }
+    }));
   }
 }
