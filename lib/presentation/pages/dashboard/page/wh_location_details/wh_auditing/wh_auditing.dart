@@ -126,7 +126,11 @@ class _WHAuditingScreenState extends CustomState<WHAuditingScreen> {
                                 width: double.infinity,
                                 decoration: BoxDecoration(
                                   border: Border.all(
-                                    color: Colors.grey,
+                                    color: (inOutWard.apiStatus !=
+                                        DB_API_STATUS
+                                            .COMPLETED.name)
+                                        ? Colors.grey
+                                        : Colors.green,
                                     width: 1,
                                   ),
                                   borderRadius: BorderRadius.circular(10),
@@ -324,6 +328,7 @@ class _WHAuditingScreenState extends CustomState<WHAuditingScreen> {
         .then((value) {
       list.clear();
       list.addAll(value);
+      list.sort((a, b) => b.updatedDateAndTime.compareTo(a.updatedDateAndTime));
       filterMainList();
       setState(() {});
     });

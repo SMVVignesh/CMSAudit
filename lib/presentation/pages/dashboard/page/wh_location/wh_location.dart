@@ -199,7 +199,11 @@ class _WHLocationsState extends CustomState<WHLocations> {
                                           width: double.infinity,
                                           decoration: BoxDecoration(
                                             border: Border.all(
-                                              color: Colors.grey,
+                                              color: (location.apiStatus !=
+                                                      DB_API_STATUS
+                                                          .COMPLETED.name)
+                                                  ? Colors.grey
+                                                  : Colors.green,
                                               width: 1,
                                             ),
                                             borderRadius:
@@ -232,7 +236,8 @@ class _WHLocationsState extends CustomState<WHLocations> {
                                                       width: 10,
                                                     ),
                                                     if (location.apiStatus !=
-                                                        DB_API_STATUS.COMPLETED.name)
+                                                        DB_API_STATUS
+                                                            .COMPLETED.name)
                                                       Row(
                                                         children: [
                                                           GestureDetector(
@@ -397,6 +402,7 @@ class _WHLocationsState extends CustomState<WHLocations> {
         .then((value) {
       list.clear();
       list.addAll(value);
+      list.sort((a, b) => b.updatedDateAndTime.compareTo(a.updatedDateAndTime));
       filterMainList();
       setState(() {});
     });
