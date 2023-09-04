@@ -6,6 +6,7 @@ import 'package:cms_audit/presentation/pages/dashboard/page/wh_location_details/
 import 'package:flutter/material.dart';
 import 'package:tool_kit/tool_kit.dart';
 
+import '../../../../../../core/utils/db_api_status.dart';
 import '../../../../../../domain/local_data_base/data_base_repository.dart';
 
 class WHInOutWardsScreen extends StatefulWidget {
@@ -20,7 +21,11 @@ class WHInOutWardsScreen extends StatefulWidget {
 }
 
 class _WHInOutWardsScreenState extends CustomState<WHInOutWardsScreen> {
+  final TextEditingController _searchController = TextEditingController();
+
   List<WHInOutWardsTable> list = [];
+  List<WHInOutWardsTable> filteredList = [];
+
 
   @override
   void initState() {
@@ -65,8 +70,46 @@ class _WHInOutWardsScreenState extends CustomState<WHInOutWardsScreen> {
           padding: const EdgeInsets.all(8.0),
           child: Column(
             children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 15.0, left: 8, right: 8),
+                child: TextField(
+                    controller: _searchController,
+                    onChanged: (value) {
+                      setState(() {
+                        filterMainList();
+                      });
+                    },
+                    style: TextStyle(color: Colors.black),
+                    cursorColor: Colors.grey,
+                    decoration: InputDecoration(
+                      hintText: "Search",
+                      contentPadding: const EdgeInsets.all(0),
+                      hintStyle:
+                      TextStyle(color: CustomColor.grey, fontSize: 16),
+                      prefixIcon: IconButton(
+                          icon: ImageIcon(
+                            AssetImage("assets/image/searchlight.png"),
+                            color: CustomColor.lightgrey,
+                            size: 16,
+                          ),
+                          onPressed: () {}),
+                      filled: true,
+                      fillColor: Color(0xffdadde0),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(35),
+                        borderSide: BorderSide.none,
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(35),
+                        borderSide: BorderSide.none,
+                      ),
+                    )),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
               Expanded(
-                  child: (list.length == 0)
+                  child: (filteredList.length == 0)
                       ? const Center(
                           child: Text(
                             "No In Out ward available",
@@ -75,9 +118,9 @@ class _WHInOutWardsScreenState extends CustomState<WHInOutWardsScreen> {
                           ),
                         )
                       : ListView.builder(
-                          itemCount: list.length,
+                          itemCount: filteredList.length,
                           itemBuilder: (context, index) {
-                            WHInOutWardsTable inOutWard = list[index];
+                            WHInOutWardsTable inOutWard = filteredList[index];
                             return Padding(
                               padding: const EdgeInsets.only(top: 10),
                               child: Container(
@@ -112,55 +155,57 @@ class _WHInOutWardsScreenState extends CustomState<WHInOutWardsScreen> {
                                           const SizedBox(
                                             width: 10,
                                           ),
-                                          GestureDetector(
-                                              onTap: () async {
-                                                await showDialog(
-                                                    context: context,
-                                                    barrierColor:
-                                                        Colors.transparent,
-                                                    builder: (context) {
-                                                      return CreateWHInOutWardsScreen(
-                                                        location:
-                                                            widget.location,
-                                                        auditDetails:
-                                                            widget.auditDetails,
-                                                        inOutWard: inOutWard,
-                                                      );
-                                                    });
-                                                updateWHInOutWardsScreen();
-                                              },
-                                              child: Container(
-                                                color: Colors.transparent,
-                                                child: Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(5),
-                                                  child: Icon(
-                                                    Icons.edit,
-                                                    color: Colors.blue,
-                                                    size: 20,
-                                                  ),
-                                                ),
-                                              )),
-                                          const SizedBox(
-                                            width: 10,
-                                          ),
-                                          GestureDetector(
-                                              onTap: () {
-                                                showDeleteConfirmationPopUp(
-                                                    inOutWard);
-                                              },
-                                              child: Container(
-                                                color: Colors.transparent,
-                                                child: Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(5),
-                                                  child: Icon(
-                                                    Icons.delete,
-                                                    color: Colors.redAccent,
-                                                    size: 20,
-                                                  ),
-                                                ),
-                                              ))
+                                          if (inOutWard.apiStatus !=
+                                              DB_API_STATUS.COMPLETED.name)
+                                         Row(children: [ GestureDetector(
+                                             onTap: () async {
+                                               await showDialog(
+                                                   context: context,
+                                                   barrierColor:
+                                                   Colors.transparent,
+                                                   builder: (context) {
+                                                     return CreateWHInOutWardsScreen(
+                                                       location:
+                                                       widget.location,
+                                                       auditDetails:
+                                                       widget.auditDetails,
+                                                       inOutWard: inOutWard,
+                                                     );
+                                                   });
+                                               updateWHInOutWardsScreen();
+                                             },
+                                             child: Container(
+                                               color: Colors.transparent,
+                                               child: Padding(
+                                                 padding:
+                                                 const EdgeInsets.all(5),
+                                                 child: Icon(
+                                                   Icons.edit,
+                                                   color: Colors.blue,
+                                                   size: 20,
+                                                 ),
+                                               ),
+                                             )),
+                                           const SizedBox(
+                                             width: 10,
+                                           ),
+                                           GestureDetector(
+                                               onTap: () {
+                                                 showDeleteConfirmationPopUp(
+                                                     inOutWard);
+                                               },
+                                               child: Container(
+                                                 color: Colors.transparent,
+                                                 child: Padding(
+                                                   padding:
+                                                   const EdgeInsets.all(5),
+                                                   child: Icon(
+                                                     Icons.delete,
+                                                     color: Colors.redAccent,
+                                                     size: 20,
+                                                   ),
+                                                 ),
+                                               ))],)
                                         ],
                                       ),
                                       const SizedBox(
@@ -268,8 +313,22 @@ class _WHInOutWardsScreenState extends CustomState<WHInOutWardsScreen> {
         .then((value) {
       list.clear();
       list.addAll(value);
+      filterMainList();
       setState(() {});
     });
+  }
+  void filterMainList() {
+    String? searchQuery = _searchController.text;
+    filteredList.clear();
+    filteredList.addAll(list.where((e) {
+      if (searchQuery.length > 0) {
+        bool isItemMatched =
+            e.productName.toLowerCase().contains(searchQuery.toLowerCase()) ?? false;
+        return isItemMatched;
+      } else {
+        return true;
+      }
+    }));
   }
 
   void showDeleteConfirmationPopUp(WHInOutWardsTable inOutWardsTable) {

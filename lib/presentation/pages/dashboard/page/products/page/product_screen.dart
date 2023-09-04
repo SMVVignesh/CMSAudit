@@ -51,6 +51,7 @@ class _ProductScreenState extends State<ProductScreen> {
                     cursorColor: Colors.grey,
                     decoration: InputDecoration(
                       hintText: "Search",
+                      contentPadding: const EdgeInsets.all(0),
                       hintStyle:
                           TextStyle(color: CustomColor.grey, fontSize: 16),
                       prefixIcon: IconButton(

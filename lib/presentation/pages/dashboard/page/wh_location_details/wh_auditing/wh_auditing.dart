@@ -6,20 +6,25 @@ import 'package:cms_audit/presentation/pages/dashboard/page/wh_location_details/
 import 'package:flutter/material.dart';
 import 'package:tool_kit/tool_kit.dart';
 
+import '../../../../../../core/utils/db_api_status.dart';
 import '../../../../../../domain/local_data_base/data_base_repository.dart';
 
 class WHAuditingScreen extends StatefulWidget {
   Data auditDetails;
   WHLocationTable location;
 
-  WHAuditingScreen({super.key, required this.auditDetails, required this.location});
+  WHAuditingScreen(
+      {super.key, required this.auditDetails, required this.location});
 
   @override
   State<WHAuditingScreen> createState() => _WHAuditingScreenState();
 }
 
 class _WHAuditingScreenState extends CustomState<WHAuditingScreen> {
+  final TextEditingController _searchController = TextEditingController();
+
   List<WHAuditingTable> list = [];
+  List<WHAuditingTable> filteredList = [];
 
   @override
   void initState() {
@@ -33,50 +38,88 @@ class _WHAuditingScreenState extends CustomState<WHAuditingScreen> {
       color: CustomColor.toolbarBg,
       child: SafeArea(
           child: Scaffold(
-            backgroundColor: CustomColor.appBG,
-            floatingActionButton: GestureDetector(
-              onTap: () async {
-                await showDialog(
-                    context: context,
-                    barrierColor: Colors.transparent,
-                    builder: (context) {
-                      return CreateWHAuditingScreen(
-                          location: widget.location,
-                          auditDetails: widget.auditDetails);
-                    });
-                updateWHInOutWardsScreen();
-              },
-              child: Container(
-                decoration: const BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: CustomColor.toolbarBg,
-                ),
-                child: const Padding(
-                  padding: EdgeInsets.all(15),
-                  child: Icon(
-                    Icons.add,
-                    color: CustomColor.white,
-                  ),
-                ),
+        backgroundColor: CustomColor.appBG,
+        floatingActionButton: GestureDetector(
+          onTap: () async {
+            await showDialog(
+                context: context,
+                barrierColor: Colors.transparent,
+                builder: (context) {
+                  return CreateWHAuditingScreen(
+                      location: widget.location,
+                      auditDetails: widget.auditDetails);
+                });
+            updateWHInOutWardsScreen();
+          },
+          child: Container(
+            decoration: const BoxDecoration(
+              shape: BoxShape.circle,
+              color: CustomColor.toolbarBg,
+            ),
+            child: const Padding(
+              padding: EdgeInsets.all(15),
+              child: Icon(
+                Icons.add,
+                color: CustomColor.white,
               ),
             ),
-            body: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                children: [
-                  Expanded(
-                      child: (list.length == 0)
-                          ? const Center(
-                        child: Text(
-                          "No Audit available",
-                          style: TextStyle(
-                              color: CustomColor.black, fontSize: 14),
-                        ),
-                      )
-                          : ListView.builder(
-                          itemCount: list.length,
+          ),
+        ),
+        body: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 15.0, left: 8, right: 8),
+                child: TextField(
+                    controller: _searchController,
+                    onChanged: (value) {
+                      setState(() {
+                        filterMainList();
+                      });
+                    },
+                    style: TextStyle(color: Colors.black),
+                    cursorColor: Colors.grey,
+                    decoration: InputDecoration(
+                      hintText: "Search",
+                      contentPadding: const EdgeInsets.all(0),
+                      hintStyle:
+                      TextStyle(color: CustomColor.grey, fontSize: 16),
+                      prefixIcon: IconButton(
+                          icon: ImageIcon(
+                            AssetImage("assets/image/searchlight.png"),
+                            color: CustomColor.lightgrey,
+                            size: 16,
+                          ),
+                          onPressed: () {}),
+                      filled: true,
+                      fillColor: Color(0xffdadde0),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(35),
+                        borderSide: BorderSide.none,
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(35),
+                        borderSide: BorderSide.none,
+                      ),
+                    )),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Expanded(
+                  child: (filteredList.length == 0)
+                      ? const Center(
+                          child: Text(
+                            "No Audit available",
+                            style: TextStyle(
+                                color: CustomColor.black, fontSize: 14),
+                          ),
+                        )
+                      : ListView.builder(
+                          itemCount: filteredList.length,
                           itemBuilder: (context, index) {
-                            WHAuditingTable inOutWard = list[index];
+                            WHAuditingTable inOutWard = filteredList[index];
                             return Padding(
                               padding: const EdgeInsets.only(top: 10),
                               child: Container(
@@ -93,12 +136,14 @@ class _WHAuditingScreenState extends CustomState<WHAuditingScreen> {
                                   padding: const EdgeInsets.all(10),
                                   child: Column(
                                     crossAxisAlignment:
-                                    CrossAxisAlignment.start,
+                                        CrossAxisAlignment.start,
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
                                       Row(
-                                        crossAxisAlignment:CrossAxisAlignment.start,
-                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
                                         children: [
                                           Expanded(
                                             child: Text(
@@ -107,61 +152,71 @@ class _WHAuditingScreenState extends CustomState<WHAuditingScreen> {
                                                   color: CustomColor.black,
                                                   fontSize: 14,
                                                   fontWeight:
-                                                  FontWeight.normal),
+                                                      FontWeight.normal),
                                             ),
                                           ),
                                           const SizedBox(
                                             width: 10,
                                           ),
-                                          GestureDetector(
-                                              onTap: () async {
-                                                await showDialog(
-                                                    context: context,
-                                                    barrierColor:
-                                                    Colors.transparent,
-                                                    builder: (context) {
-                                                      return CreateWHAuditingScreen(
-                                                        location:
-                                                        widget.location,
-                                                        auditDetails:
-                                                        widget.auditDetails,
-                                                        auditingTable: inOutWard,
-                                                      );
-                                                    });
-                                                updateWHInOutWardsScreen();
-                                              },
-                                              child: Container(
-                                                color: Colors.transparent,
-                                                child: Padding(
-                                                  padding:
-                                                  const EdgeInsets.all(5),
-                                                  child: Icon(
-                                                    Icons.edit,
-                                                    color: Colors.blue,
-                                                    size: 20,
-                                                  ),
+                                          if (inOutWard.apiStatus !=
+                                              DB_API_STATUS.COMPLETED.name)
+                                            Row(
+                                              children: [
+                                                GestureDetector(
+                                                    onTap: () async {
+                                                      await showDialog(
+                                                          context: context,
+                                                          barrierColor: Colors
+                                                              .transparent,
+                                                          builder: (context) {
+                                                            return CreateWHAuditingScreen(
+                                                              location: widget
+                                                                  .location,
+                                                              auditDetails: widget
+                                                                  .auditDetails,
+                                                              auditingTable:
+                                                                  inOutWard,
+                                                            );
+                                                          });
+                                                      updateWHInOutWardsScreen();
+                                                    },
+                                                    child: Container(
+                                                      color: Colors.transparent,
+                                                      child: Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(5),
+                                                        child: Icon(
+                                                          Icons.edit,
+                                                          color: Colors.blue,
+                                                          size: 20,
+                                                        ),
+                                                      ),
+                                                    )),
+                                                const SizedBox(
+                                                  width: 10,
                                                 ),
-                                              )),
-                                          const SizedBox(
-                                            width: 10,
-                                          ),
-                                          GestureDetector(
-                                              onTap: () {
-                                                showDeleteConfirmationPopUp(
-                                                    inOutWard);
-                                              },
-                                              child: Container(
-                                                color: Colors.transparent,
-                                                child: Padding(
-                                                  padding:
-                                                  const EdgeInsets.all(5),
-                                                  child: Icon(
-                                                    Icons.delete,
-                                                    color: Colors.redAccent,
-                                                    size: 20,
-                                                  ),
-                                                ),
-                                              ))
+                                                GestureDetector(
+                                                    onTap: () {
+                                                      showDeleteConfirmationPopUp(
+                                                          inOutWard);
+                                                    },
+                                                    child: Container(
+                                                      color: Colors.transparent,
+                                                      child: Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(5),
+                                                        child: Icon(
+                                                          Icons.delete,
+                                                          color:
+                                                              Colors.redAccent,
+                                                          size: 20,
+                                                        ),
+                                                      ),
+                                                    ))
+                                              ],
+                                            )
                                         ],
                                       ),
                                       const SizedBox(
@@ -210,10 +265,10 @@ class _WHAuditingScreenState extends CustomState<WHAuditingScreen> {
                               ),
                             );
                           }))
-                ],
-              ),
-            ),
-          )),
+            ],
+          ),
+        ),
+      )),
     );
   }
 
@@ -265,12 +320,27 @@ class _WHAuditingScreenState extends CustomState<WHAuditingScreen> {
   void updateWHInOutWardsScreen() async {
     DatabaseRepository()
         .getWHAuditingByAuditId(
-        widget.auditDetails.id ?? "", widget.location.locationId)
+            widget.auditDetails.id ?? "", widget.location.locationId)
         .then((value) {
       list.clear();
       list.addAll(value);
+      filterMainList();
       setState(() {});
     });
+  }
+
+  void filterMainList() {
+    String? searchQuery = _searchController.text;
+    filteredList.clear();
+    filteredList.addAll(list.where((e) {
+      if (searchQuery.length > 0) {
+        bool isItemMatched =
+            e.productName.toLowerCase().contains(searchQuery.toLowerCase()) ?? false;
+        return isItemMatched;
+      } else {
+        return true;
+      }
+    }));
   }
 
   void showDeleteConfirmationPopUp(WHAuditingTable auditingTable) {
@@ -278,7 +348,8 @@ class _WHAuditingScreenState extends CustomState<WHAuditingScreen> {
         context: context,
         themeColor: CustomColor.splashScreenTop,
         heading: "",
-        desc: "Are you sure you want to Delete Id: ${auditingTable.auditingId}?",
+        desc:
+            "Are you sure you want to Delete Id: ${auditingTable.auditingId}?",
         positiveBtn: "Delete",
         positiveClick: () {
           deleteLocation(auditingTable);

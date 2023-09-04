@@ -49,14 +49,15 @@ class _AuditDetailsScreenState extends State<AuditDetailsScreen> {
                       filterMainList();
                     });
                   },
-                  style: TextStyle(color: Colors.black),
+                  style: const TextStyle(color: Colors.black),
                   cursorColor: Colors.grey,
                   decoration: InputDecoration(
                     hintText: "Search",
+                    contentPadding: const EdgeInsets.all(0),
                     hintStyle:
-                    TextStyle(color: CustomColor.grey, fontSize: 16),
+                    const TextStyle(color: CustomColor.grey, fontSize: 16),
                     prefixIcon: IconButton(
-                        icon: ImageIcon(
+                        icon: const ImageIcon(
                           AssetImage("assets/image/searchlight.png"),
                           color: CustomColor.lightgrey,
                           size: 16,
