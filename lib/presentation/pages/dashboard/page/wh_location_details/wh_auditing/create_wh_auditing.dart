@@ -2,6 +2,7 @@ import 'dart:ffi';
 
 import 'package:cms_audit/core/utils/custom_color.dart';
 import 'package:cms_audit/domain/local_data_base/data_base_repository.dart';
+import 'package:cms_audit/domain/share_preference/shared_preference_repository.dart';
 import 'package:cms_audit/presentation/pages/dashboard/page/audit_details/model/audit_response.dart';
 import 'package:flutter/material.dart';
 import 'package:tool_kit/tool_kit.dart';
@@ -58,6 +59,20 @@ class _CreateWHAuditingScreenState extends State<CreateWHAuditingScreen> {
           .where((element) =>
               element.key == (widget.auditingTable?.productQuality ?? ""))
           .first;
+    } else {
+      updateLastStockTypeValue();
+    }
+  }
+
+  void updateLastStockTypeValue() async {
+    String? lastSelectedStockType =
+        await SharedPreferenceRepository().getLastSelectedStockType();
+    if (lastSelectedStockType != null) {
+      setState(() {
+        selectedStockType = Utils.stockType
+            .where((element) => element.key == lastSelectedStockType)
+            .first;
+      });
     }
   }
 
@@ -248,9 +263,10 @@ class _CreateWHAuditingScreenState extends State<CreateWHAuditingScreen> {
       SnackBarUtils.showError(context, "Enter Best Before");
     } else {
       try {
-        bool isLocationUpdated = widget.location?.isLocationUpdated??false;
+        bool isLocationUpdated = widget.location?.isLocationUpdated ?? false;
         print("isLocationUpdated :$isLocationUpdated");
-
+        SharedPreferenceRepository()
+            .setLastSelectedStockType(selectedStockType?.key ?? "");
         if (widget.auditingTable != null) {
           await DatabaseRepository().updateWHAuditing(
               qty: convertToInt(qty),
@@ -259,7 +275,7 @@ class _CreateWHAuditingScreenState extends State<CreateWHAuditingScreen> {
               productQuality: selectedProductType?.key ?? "",
               productId: selectedProducts?.key ?? "",
               productName: selectedProducts?.value ?? "",
-              whLocationId:widget.location?.locationId ?? "",
+              whLocationId: widget.location?.locationId ?? "",
               auditDetailId: widget.auditDetails.id ?? "",
               description: description,
               mfDate: mfDate,

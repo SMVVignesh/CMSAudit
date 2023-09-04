@@ -32,6 +32,7 @@ class SharedPreferenceRepository {
         .getString(SharedPreferenceConstant.ACCESS_KEY);
   }
 
+
   /*
   * This method is used to save access token*/
   Future<bool> setEmail(String? value) async {
@@ -42,8 +43,20 @@ class SharedPreferenceRepository {
   /*
   * This method is used to get the saved access token*/
   Future<String?> getEmail() async {
-    await SharedPreferenceUtils().getString(SharedPreferenceConstant.EMAIL) ??
-        "";
+    return await SharedPreferenceUtils().getString(SharedPreferenceConstant.EMAIL) ?? "";
+  }
+
+  /*
+  * This method is used to save Last selected stock Type*/
+  Future<bool> setLastSelectedStockType(String? value) async {
+    return await SharedPreferenceUtils()
+        .setString(SharedPreferenceConstant.LAST_STOCK_TYPE, value ?? "");
+  }
+
+  /*
+  * This method is used to get the saved Last selected stock Type*/
+  Future<String?> getLastSelectedStockType() async {
+    return await SharedPreferenceUtils().getString(SharedPreferenceConstant.LAST_STOCK_TYPE) ?? "";
   }
 
 
