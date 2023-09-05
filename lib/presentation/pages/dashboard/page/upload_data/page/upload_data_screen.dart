@@ -77,7 +77,7 @@ class _UploadDataScreenState extends State<UploadDataScreen> {
                                 height: 10,
                               ),
                               Text(
-                                "Progress :   ${item.completedCount ?? ""} /${item.totalCount ?? ""}",
+                                "Completed :   ${item.completedCount ?? ""} /${item.totalCount ?? ""}",
                                 style: const TextStyle(
                                     color: CustomColor.black,
                                     fontSize: 14,

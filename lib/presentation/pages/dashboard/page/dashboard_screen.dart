@@ -58,7 +58,9 @@ class _DashboardScreenState extends CustomState<DashboardScreen> {
                         height: 60,
                         width: 60,
                       ),
-                      const SizedBox(height: 10,),
+                      const SizedBox(
+                        height: 10,
+                      ),
                       const Text(
                         "CMS Audit",
                         style: TextStyle(
@@ -92,13 +94,20 @@ class _DashboardScreenState extends CustomState<DashboardScreen> {
                                 padding: const EdgeInsets.only(left: 10),
                                 child: Row(
                                   children: [
-                                    Icon(item.iconData,size: 20,color: CustomColor.toolbarBg,),
-                                    const SizedBox(width: 10,),
+                                    Icon(
+                                      item.iconData,
+                                      size: 20,
+                                      color: CustomColor.toolbarBg,
+                                    ),
+                                    const SizedBox(
+                                      width: 10,
+                                    ),
                                     Expanded(
                                       child: Text(
                                         item.name,
                                         style: const TextStyle(
-                                            color: CustomColor.black, fontSize: 16),
+                                            color: CustomColor.black,
+                                            fontSize: 16),
                                       ),
                                     ),
                                   ],
@@ -132,19 +141,34 @@ class _DashboardScreenState extends CustomState<DashboardScreen> {
     return HOME_SCREEN;
   }
 
+  /// This will create the list of Menus for Navigation Drawer
   updateDrawerMenus() {
     menus.clear();
     menus.add(DashboardMenuModel(
-        id: 1, name: "Products",iconData:Icons.production_quantity_limits, screen: const ProductScreen()));
+        id: 1,
+        name: "Products",
+        iconData: Icons.production_quantity_limits,
+        screen: const ProductScreen()));
     menus.add(DashboardMenuModel(
-        id: 2, name: "Audits",iconData:Icons.account_balance, screen: const AuditDetailsScreen()));
+        id: 2,
+        name: "Audits",
+        iconData: Icons.account_balance,
+        screen: const AuditDetailsScreen()));
     menus.add(DashboardMenuModel(
-        id: 3, name: "Get Products & Audits",iconData:Icons.cloud_download_outlined, screen: const UpdateListScreen()));
+        id: 3,
+        name: "Update Products & Audits",
+        iconData: Icons.cloud_download_outlined,
+        screen: const UpdateListScreen()));
     menus.add(DashboardMenuModel(
-        id: 5, name: "Offline data",iconData:Icons.upload_file, screen: const UploadDataScreen()));
-    menus.add(DashboardMenuModel(id: 4,iconData:Icons.logout, name: "Logout"));
+        id: 5,
+        name: "Offline Data",
+        iconData: Icons.upload_file,
+        screen: const UploadDataScreen()));
+    menus
+        .add(DashboardMenuModel(id: 4, iconData: Icons.logout, name: "Logout"));
   }
 
+//This will handle menu click navigation
   void navigateTo(DashboardMenuModel item) {
     if (_scaffoldKey.currentState?.isDrawerOpen == true) {
       _scaffoldKey.currentState?.openEndDrawer();
@@ -158,6 +182,7 @@ class _DashboardScreenState extends CustomState<DashboardScreen> {
     }
   }
 
+  /// This is a confirmation popup for logout
   void showConfirmationPopUp() {
     DialogUtils.showCustomDialog(
         context: context,
