@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:cms_audit/core/utils/db_api_status.dart';
+import 'package:cms_audit/core/utils/widgets/custom_date_picker.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_guid/flutter_guid.dart';
@@ -307,16 +308,26 @@ class Utils {
   static _selectDate(BuildContext context,
       TextEditingController? textEditingController) async {
     final DateFormat outputFormatter = DateFormat("yyyy-MM-dd");
-    DateTime? newSelectedDate = await showDatePicker(
-      initialEntryMode:DatePickerEntryMode.input,
-      context: context,
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2040),
-      initialDate: DateTime.now(),
-    );
-    if (newSelectedDate != null) {
-      textEditingController?.text = outputFormatter.format(newSelectedDate);
-    }
+    // DateTime? newSelectedDate = await showDatePicker(
+    //   initialEntryMode:DatePickerEntryMode.input,
+    //   context: context,
+    //   firstDate: DateTime(2000),
+    //   lastDate: DateTime(2040),
+    //   initialDate: DateTime.now(),
+    // );
+
+    showDialog(
+        context: context,
+        builder: (context) {
+          return CustomDatePicker(onDateChange: (value){
+            if (value != null) {
+              textEditingController?.text = outputFormatter.format(value);
+            }
+          });
+        });
+
+
+
   }
 
   static Future<List<DropdownDataModel>> getFilterData(

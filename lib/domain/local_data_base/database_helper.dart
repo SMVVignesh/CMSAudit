@@ -1,6 +1,7 @@
 import 'dart:ffi';
 
 import 'package:cms_audit/core/utils/db_api_status.dart';
+import 'package:cms_audit/domain/local_data_base/method_status.dart';
 import 'package:drift/drift.dart';
 
 import '../../core/utils/utils.dart';
@@ -80,6 +81,7 @@ class DatabaseHelper {
         apiStatus: DB_API_STATUS.TODO.name,
         locationId: locationId,
         localLocationId: locationId,
+        methodName: METHOD_STATUS.CREATE.name,
         isLocationUpdated: false));
     return await query;
   }
@@ -97,6 +99,7 @@ class DatabaseHelper {
     WHLocationCompanion entity = WHLocationCompanion(
         locationName: Value(locationName),
         palletNumber: Value(palletNumber),
+        apiStatus: Value(DB_API_STATUS.TODO.name),
         description: Value(description),
         isActive: Value(isActive));
     final query = _database.update(_database.wHLocation)
@@ -225,6 +228,7 @@ class DatabaseHelper {
     final query = _database.into(_database.wHInOutWards).insert(
         WHInOutWardsTable(
             inOutWardId: Utils.getNewGuId(),
+            serverInOutWardId: "",
             updatedDateAndTime: DateTime.now(),
             qty: qty,
             stockType: stockType,
@@ -237,6 +241,7 @@ class DatabaseHelper {
             productId: productId,
             productName: productName,
             apiStatus: DB_API_STATUS.TODO.name,
+            methodName: METHOD_STATUS.CREATE.name,
             auditDetailId: auditDetailId,
             isLocationUpdated: isLocationUpdated));
     return await query;
@@ -263,6 +268,7 @@ class DatabaseHelper {
         description: Value(description),
         invoNo: Value(invoNo),
         invoType: Value(invoType),
+        apiStatus: Value(DB_API_STATUS.TODO.name),
         customerName: Value(customerName),
         productName: Value(productName),
         productId: Value(productId));
@@ -294,8 +300,11 @@ class DatabaseHelper {
   }) async {
     WHInOutWardsCompanion entity = ((newInOutWardId?.length ?? 0) > 0)
         ? WHInOutWardsCompanion(
-            apiStatus: Value(status.name),
-            inOutWardId: Value(newInOutWardId ?? ""))
+            apiStatus: ((newInOutWardId?.length ?? 0) > 0)
+                ? Value(DB_API_STATUS.NO_CHANGES.name)
+                : Value(status.name),
+            methodName: Value(METHOD_STATUS.UPDATE.name),
+            serverInOutWardId: Value(newInOutWardId ?? ""))
         : WHInOutWardsCompanion(
             apiStatus: Value(status.name),
           );
@@ -313,7 +322,11 @@ class DatabaseHelper {
   }) async {
     WHAuditingCompanion entity = ((newAuditId?.length ?? 0) > 0)
         ? WHAuditingCompanion(
-            apiStatus: Value(status.name), auditingId: Value(newAuditId ?? ""))
+            apiStatus: ((newAuditId?.length ?? 0) > 0)
+                ? Value(DB_API_STATUS.NO_CHANGES.name)
+                : Value(status.name),
+            methodName: Value(METHOD_STATUS.UPDATE.name),
+            serverAuditingId: Value(newAuditId ?? ""))
         : WHAuditingCompanion(
             apiStatus: Value(status.name),
           );
@@ -342,6 +355,7 @@ class DatabaseHelper {
     final query = _database.into(_database.wHAuditing).insert(WHAuditingTable(
         updatedDateAndTime: DateTime.now(),
         auditingId: Utils.getNewGuId(),
+        serverAuditingId: "",
         qty: qty,
         bestBefore: bestBefore,
         stockType: stockType,
@@ -353,6 +367,7 @@ class DatabaseHelper {
         mfDate: mfDate,
         productName: productName,
         apiStatus: DB_API_STATUS.TODO.name,
+        methodName: METHOD_STATUS.CREATE.name,
         file: file,
         isLocationUpdated: isLocationUpdated));
     return await query;
@@ -395,6 +410,7 @@ class DatabaseHelper {
         description: Value(description),
         productName: Value(productName),
         productId: Value(productId),
+        apiStatus: Value(DB_API_STATUS.TODO.name),
         mfDate: Value(mfDate),
         file: Value(file));
     final query = _database.update(_database.wHAuditing)

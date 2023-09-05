@@ -43,6 +43,8 @@ class WHLocation extends Table {
 
   TextColumn get apiStatus => text()();
 
+  TextColumn get methodName => text()();
+
   BoolColumn get isActive => boolean()();
 
   BoolColumn get isLocationUpdated => boolean()();
@@ -59,6 +61,8 @@ class WHInOutWards extends Table {
   DateTimeColumn get updatedDateAndTime => dateTime()();
 
   TextColumn get inOutWardId => text()();
+
+  TextColumn get serverInOutWardId => text()();
 
   IntColumn get qty => integer()();
 
@@ -84,6 +88,8 @@ class WHInOutWards extends Table {
 
   TextColumn get apiStatus => text()();
 
+  TextColumn get methodName => text()();
+
   BoolColumn get isLocationUpdated => boolean()();
 
 
@@ -98,6 +104,8 @@ class WHAuditing extends Table {
   DateTimeColumn get updatedDateAndTime => dateTime()();
 
   TextColumn get auditingId => text()();
+
+  TextColumn get serverAuditingId => text()();
 
   IntColumn get qty => integer()();
 
@@ -123,6 +131,8 @@ class WHAuditing extends Table {
 
   TextColumn get apiStatus => text()();
 
+  TextColumn get methodName => text()();
+
   BoolColumn get isLocationUpdated => boolean()();
 
   @override
@@ -137,7 +147,7 @@ class Database extends _$Database {
   Database() : super(_openConnection());
 
   @override
-  int get schemaVersion => 13;
+  int get schemaVersion => 14;
 
   @override
   @DriftDatabase(tables: [ApiData, WHLocation, WHInOutWards, WHAuditing])
