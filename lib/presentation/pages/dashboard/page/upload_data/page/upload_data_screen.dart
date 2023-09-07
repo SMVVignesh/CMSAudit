@@ -3,6 +3,7 @@ import 'package:cms_audit/core/utils/utils.dart';
 import 'package:cms_audit/domain/api/api_repository.dart';
 import 'package:cms_audit/domain/local_data_base/data_base_repository.dart';
 import 'package:cms_audit/domain/local_data_base/database.dart';
+import 'package:cms_audit/domain/local_data_base/method_status.dart';
 import 'package:flutter/material.dart';
 import 'package:tool_kit/tool_kit.dart';
 import '../../../../../../core/utils/custom_color.dart';
@@ -373,6 +374,10 @@ class _UploadDataScreenState extends State<UploadDataScreen> {
                 inOutWardId: whInOutItem.inOutWardId,
                 newInOutWardId: response.inOutWardsId,
                 status: DB_API_STATUS.COMPLETED);
+            if (whInOutItem.methodName == METHOD_STATUS.DELETE.name) {
+              await DatabaseRepository()
+                  .deleteWHInOutWard(wHInOutWardsTable: whInOutItem);
+            }
             setState(() {
               isLoading = false;
             });
@@ -409,6 +414,10 @@ class _UploadDataScreenState extends State<UploadDataScreen> {
                 auditingId: whAuditingItem.auditingId,
                 newAuditId: response.inOutWardsId,
                 status: DB_API_STATUS.COMPLETED);
+            if (whAuditingItem.methodName == METHOD_STATUS.DELETE.name) {
+              await DatabaseRepository()
+                  .deleteWHAuditing(auditingTable: whAuditingItem);
+            }
             setState(() {
               isLoading = false;
             });

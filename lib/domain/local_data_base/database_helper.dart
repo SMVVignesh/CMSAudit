@@ -221,7 +221,7 @@ class DatabaseHelper {
     List<WHInOutWardsTable> query =
         await _database.select(_database.wHInOutWards).get();
     List<WHInOutWardsTable> whLocations = query.where((tbl) {
-      return (tbl.auditDetailId == auditId) && (tbl.whLocationId == locationId);
+      return (tbl.auditDetailId == auditId) && (tbl.whLocationId == locationId)&&(tbl.methodName != METHOD_STATUS.DELETE.name);
     }).toList();
     return whLocations;
   }
@@ -233,7 +233,7 @@ class DatabaseHelper {
     List<WHAuditingTable> query =
         await _database.select(_database.wHAuditing).get();
     List<WHAuditingTable> whLocations = query.where((tbl) {
-      return (tbl.auditDetailId == auditId) && (tbl.whLocationId == locationId);
+      return (tbl.auditDetailId == auditId) && (tbl.whLocationId == locationId) &&(tbl.methodName != METHOD_STATUS.DELETE.name);
     }).toList();
     return whLocations;
   }
