@@ -358,6 +358,22 @@ class DatabaseRepository {
     return encryptedData;
   }
 
+
+  Future<List<WHInOutWardsTable>> getWHInOutWardByLocationId(String locationId) async {
+    final encryptedData =
+    await databaseHelper.getWHInOutWardByLocationId(locationId);
+    return encryptedData;
+  }
+
+  /*
+  * This method will return only one record by tag in ApiDataTable*/
+  Future<List<WHAuditingTable>> getWHAuditingByLocationId(String locationId) async {
+    final encryptedData =
+    await databaseHelper.getWHAuditingByLocationId(locationId);
+    return encryptedData;
+  }
+
+
   Future<List<WHLocationTable>> getAllWHLocation() async {
     final encryptedData = await databaseHelper.getAllWHLocation();
     return encryptedData;

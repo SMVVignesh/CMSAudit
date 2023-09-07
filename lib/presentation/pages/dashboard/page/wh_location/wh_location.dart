@@ -425,9 +425,18 @@ class _WHLocationsState extends CustomState<WHLocations> {
   }
 
   void deleteLocation(WHLocationTable location) async {
-    await DatabaseRepository().deleteWHLocation(guid: location.locationId);
+    List<WHInOutWardsTable> whInOutList = await DatabaseRepository()
+        .getWHInOutWardByLocationId(location.locationId);
+    List<WHAuditingTable> whAuditingList = await DatabaseRepository()
+        .getWHAuditingByLocationId(location.locationId);
+    if (whInOutList.length > 0 || whAuditingList.length > 0) {
+      SnackBarUtils.showError(context,
+          "Sorry we can't delete this location, Because some auditings or In Out wards are under this location");
+    } else {
+      await DatabaseRepository().deleteWHLocation(guid: location.locationId);
+      updateWHLocations();
+    }
     Navigator.pop(context);
-    updateWHLocations();
   }
 
   void filterMainList() {

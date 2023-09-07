@@ -238,6 +238,30 @@ class DatabaseHelper {
     return whLocations;
   }
 
+
+
+  /*
+  * This method will return only one record by tag in ApiDataTable*/
+  Future<List<WHInOutWardsTable>> getWHInOutWardByLocationId(String locationId) async {
+    List<WHInOutWardsTable> query =
+    await _database.select(_database.wHInOutWards).get();
+    List<WHInOutWardsTable> whLocations = query.where((tbl) {
+      return (tbl.whLocationId == locationId);
+    }).toList();
+    return whLocations;
+  }
+
+  /*
+  * This method will return only one record by tag in ApiDataTable*/
+  Future<List<WHAuditingTable>> getWHAuditingByLocationId(String locationId) async {
+    List<WHAuditingTable> query =
+    await _database.select(_database.wHAuditing).get();
+    List<WHAuditingTable> whLocations = query.where((tbl) {
+      return (tbl.whLocationId == locationId);
+    }).toList();
+    return whLocations;
+  }
+
   /*
   * This method is used to insert the data in ApiDataTable by tag*/
   Future<int> insertWHInOutWard(

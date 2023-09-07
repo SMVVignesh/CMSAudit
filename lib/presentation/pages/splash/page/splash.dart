@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:tool_kit/tool_kit.dart';
-
+import 'package:intl/intl.dart';
 import '../../../../core/constants/constants.dart';
 
 class Splash extends StatefulWidget {
@@ -57,7 +57,8 @@ class _SplashState extends CustomState<Splash> {
                 Expanded(child: Container()),
                 Text(
                   version,
-                  style: const TextStyle(color: CustomColor.lightBlue, fontSize: 12),
+                  style: const TextStyle(
+                      color: CustomColor.lightBlue, fontSize: 12),
                 ),
                 const SizedBox(
                   height: 30,
@@ -71,9 +72,15 @@ class _SplashState extends CustomState<Splash> {
   }
 
   void moveToNextScreen() async {
+    final DateFormat inputFormatter = DateFormat("yyyy-MM-dd");
+    DateTime expiryDate = inputFormatter.parse("2023-09-20");
+    int difference = expiryDate.difference(DateTime.now()).inDays;
+    print("difference $difference");
+    if(difference<=0){
+      return;
+    }
     String? token = await SharedPreferenceRepository().getAccessToken();
     print("Token $token");
-
     Future.delayed(Duration(milliseconds: 1500), () async {
       if ((token?.length ?? 0) == 0) {
         if (context.mounted) {
@@ -97,6 +104,4 @@ class _SplashState extends CustomState<Splash> {
       });
     }
   }
-
-
 }
