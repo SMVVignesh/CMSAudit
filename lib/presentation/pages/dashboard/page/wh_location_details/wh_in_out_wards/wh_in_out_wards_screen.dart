@@ -126,8 +126,10 @@ class _WHInOutWardsScreenState extends CustomState<WHInOutWardsScreen> {
                                 width: double.infinity,
                                 decoration: BoxDecoration(
                                   border: Border.all(
-                                    color: (inOutWard.apiStatus !=
-                                            DB_API_STATUS.COMPLETED.name)
+                                    color: ((inOutWard.apiStatus !=
+                                        DB_API_STATUS.COMPLETED.name) &&
+                                        (inOutWard.apiStatus !=
+                                            DB_API_STATUS.NO_CHANGES.name))
                                         ? Colors.grey
                                         : Colors.green,
                                     width: 1,
@@ -353,7 +355,7 @@ class _WHInOutWardsScreenState extends CustomState<WHInOutWardsScreen> {
             "Are you sure you want to Delete Id: ${inOutWardsTable.productId}?",
         positiveBtn: "Delete",
         positiveClick: () {
-          deleteLocation(inOutWardsTable);
+          deleteInOutWards(inOutWardsTable);
         },
         negativeBtn: "Cancel",
         negativeClick: () {
@@ -361,8 +363,8 @@ class _WHInOutWardsScreenState extends CustomState<WHInOutWardsScreen> {
         });
   }
 
-  void deleteLocation(WHInOutWardsTable location) async {
-    await DatabaseRepository().deleteWHInOutWard(guid: location.inOutWardId);
+  void deleteInOutWards(WHInOutWardsTable wHInOutWardsTable) async {
+    await DatabaseRepository().deleteWHInOutWard(wHInOutWardsTable: wHInOutWardsTable);
     Navigator.pop(context);
     updateWHInOutWardsScreen();
   }

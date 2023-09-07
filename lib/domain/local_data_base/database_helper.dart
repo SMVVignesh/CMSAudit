@@ -156,6 +156,34 @@ class DatabaseHelper {
   }
 
   /*
+  * This method is used to update delete WHLocations*/
+  Future<int> updateDeleteWHAuditing({required String guid}) async {
+    WHAuditingCompanion entity = WHAuditingCompanion(
+        methodName: Value(METHOD_STATUS.DELETE.name),
+        apiStatus: Value(DB_API_STATUS.TODO.name));
+
+    final query = _database.update(_database.wHAuditing)
+      ..where((tbl) => tbl.auditingId.equals(guid))
+      ..write(entity);
+    await query;
+
+    return 1;
+  }
+
+  /*
+  * This method is used to update delete WHInOurWards*/
+  Future<int> updateDeleteWHInOutWards({required String guid}) async {
+    WHInOutWardsCompanion entity = WHInOutWardsCompanion(
+        methodName: Value(METHOD_STATUS.DELETE.name),
+        apiStatus: Value(DB_API_STATUS.TODO.name));
+    final query = _database.update(_database.wHInOutWards)
+      ..where((tbl) => tbl.inOutWardId.equals(guid))
+      ..write(entity);
+    await query;
+    return 1;
+  }
+
+  /*
   * This method will return only one record by tag in ApiDataTable*/
   Future<List<WHLocationTable>> getWHLocationByAuditId(String auditId) async {
     List<WHLocationTable> query =

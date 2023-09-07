@@ -288,9 +288,9 @@ class _UploadDataScreenState extends State<UploadDataScreen> {
   void updateWHLocations() async {
     DatabaseRepository().getAllWHLocation().then((value) {
       whLocationTotalCount = value.length;
-      whLocationCompletedCount = (value.where(
-              (element) => element.apiStatus == DB_API_STATUS.COMPLETED.name))
-          .length;
+      whLocationCompletedCount = (value.where((element) =>
+          (element.apiStatus == DB_API_STATUS.COMPLETED.name) ||
+          (element.apiStatus == DB_API_STATUS.NO_CHANGES.name))).length;
       whLocationErrorCount = (value.where(
           (element) => element.apiStatus == DB_API_STATUS.ERROR.name)).length;
       if (context.mounted) {
@@ -302,9 +302,9 @@ class _UploadDataScreenState extends State<UploadDataScreen> {
   void updateWHAuditing() async {
     DatabaseRepository().getAllWHAuditing().then((value) {
       whAuditingTotalCount = value.length;
-      whAuditingCompletedCount = (value.where(
-              (element) => element.apiStatus == DB_API_STATUS.COMPLETED.name))
-          .length;
+      whAuditingCompletedCount = (value.where((element) =>
+          (element.apiStatus == DB_API_STATUS.COMPLETED.name) ||
+          (element.apiStatus == DB_API_STATUS.NO_CHANGES.name))).length;
       whAuditingErrorCount = (value.where(
           (element) => element.apiStatus == DB_API_STATUS.ERROR.name)).length;
       if (context.mounted) {
@@ -316,9 +316,9 @@ class _UploadDataScreenState extends State<UploadDataScreen> {
   void updateWhInOutWards() async {
     DatabaseRepository().getAllInOutWards().then((value) {
       whInOutWardTotalCount = value.length;
-      whInOutWardCompletedCount = (value.where(
-              (element) => element.apiStatus == DB_API_STATUS.COMPLETED.name))
-          .length;
+      whInOutWardCompletedCount = (value.where((element) =>
+          (element.apiStatus == DB_API_STATUS.COMPLETED.name) ||
+          (element.apiStatus == DB_API_STATUS.NO_CHANGES.name))).length;
       whInOutWardErrorCount = (value.where(
           (element) => element.apiStatus == DB_API_STATUS.ERROR.name)).length;
       if (context.mounted) {
@@ -361,7 +361,8 @@ class _UploadDataScreenState extends State<UploadDataScreen> {
     DatabaseRepository().getAllInOutWards().then((value) async {
       for (WHInOutWardsTable whInOutItem in value) {
         if (whInOutItem.isLocationUpdated &&
-            whInOutItem.apiStatus != DB_API_STATUS.COMPLETED.name) {
+            (whInOutItem.apiStatus != DB_API_STATUS.COMPLETED.name) &&
+            (whInOutItem.apiStatus != DB_API_STATUS.NO_CHANGES.name)) {
           setState(() {
             isLoading = true;
           });
@@ -393,15 +394,17 @@ class _UploadDataScreenState extends State<UploadDataScreen> {
   void uploadWhAuditingData() async {
     DatabaseRepository().getAllWHAuditing().then((value) async {
       for (WHAuditingTable whAuditingItem in value) {
-        print("whAuditingItem.isLocationUpdated ${whAuditingItem.isLocationUpdated} whAuditingItem.apiStatus: ${whAuditingItem.apiStatus}");
+        print(
+            "whAuditingItem.isLocationUpdated ${whAuditingItem.isLocationUpdated} whAuditingItem.apiStatus: ${whAuditingItem.apiStatus}");
         if (whAuditingItem.isLocationUpdated &&
-            whAuditingItem.apiStatus != DB_API_STATUS.COMPLETED.name) {
+            (whAuditingItem.apiStatus != DB_API_STATUS.COMPLETED.name) &&
+            (whAuditingItem.apiStatus != DB_API_STATUS.NO_CHANGES.name)) {
           setState(() {
             isLoading = true;
           });
           try {
             final response = await ApiRepository()
-                .createWhAuditing(wHAuditingTable: whAuditingItem);
+                .createOrUpdateWhAuditing(wHAuditingTable: whAuditingItem);
             await DatabaseRepository().updateWHAuditingApiStatus(
                 auditingId: whAuditingItem.auditingId,
                 newAuditId: response.inOutWardsId,

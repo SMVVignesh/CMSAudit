@@ -84,7 +84,7 @@ class _WHAuditingScreenState extends CustomState<WHAuditingScreen> {
                       hintText: "Search",
                       contentPadding: const EdgeInsets.all(0),
                       hintStyle:
-                      TextStyle(color: CustomColor.grey, fontSize: 16),
+                          TextStyle(color: CustomColor.grey, fontSize: 16),
                       prefixIcon: IconButton(
                           icon: ImageIcon(
                             AssetImage("assets/image/searchlight.png"),
@@ -126,9 +126,10 @@ class _WHAuditingScreenState extends CustomState<WHAuditingScreen> {
                                 width: double.infinity,
                                 decoration: BoxDecoration(
                                   border: Border.all(
-                                    color: (inOutWard.apiStatus !=
-                                        DB_API_STATUS
-                                            .COMPLETED.name)
+                                    color: ((inOutWard.apiStatus !=
+                                                DB_API_STATUS.COMPLETED.name) &&
+                                            (inOutWard.apiStatus !=
+                                                DB_API_STATUS.NO_CHANGES.name))
                                         ? Colors.grey
                                         : Colors.green,
                                     width: 1,
@@ -340,7 +341,8 @@ class _WHAuditingScreenState extends CustomState<WHAuditingScreen> {
     filteredList.addAll(list.where((e) {
       if (searchQuery.length > 0) {
         bool isItemMatched =
-            e.productName.toLowerCase().contains(searchQuery.toLowerCase()) ?? false;
+            e.productName.toLowerCase().contains(searchQuery.toLowerCase()) ??
+                false;
         return isItemMatched;
       } else {
         return true;
@@ -366,7 +368,7 @@ class _WHAuditingScreenState extends CustomState<WHAuditingScreen> {
   }
 
   void deleteLocation(WHAuditingTable auditingTable) async {
-    await DatabaseRepository().deleteWHAuditing(guid: auditingTable.auditingId);
+    await DatabaseRepository().deleteWHAuditing(auditingTable: auditingTable);
     Navigator.pop(context);
     updateWHInOutWardsScreen();
   }

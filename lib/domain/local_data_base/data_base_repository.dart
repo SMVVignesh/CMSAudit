@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:cms_audit/core/utils/db_api_status.dart';
 import 'package:cms_audit/domain/local_data_base/database.dart';
+import 'package:cms_audit/domain/local_data_base/method_status.dart';
 import 'package:cms_audit/presentation/pages/dashboard/page/audit_details/model/audit_response.dart';
 import 'package:cms_audit/presentation/pages/dashboard/page/products/model/product_response.dart';
 
@@ -112,14 +113,30 @@ class DatabaseRepository {
     return encryptedData;
   }
 
-  Future<int> deleteWHInOutWard({required String guid}) async {
-    final encryptedData = await databaseHelper.deleteWHInOutWard(guid: guid);
+  Future<int> deleteWHInOutWard(
+      {required WHInOutWardsTable wHInOutWardsTable}) async {
+
+    int? encryptedData;
+    if (wHInOutWardsTable.methodName == METHOD_STATUS.UPDATE.name) {
+      encryptedData =
+      await databaseHelper.updateDeleteWHInOutWards(guid: wHInOutWardsTable.inOutWardId);
+    } else {
+      encryptedData =
+      await databaseHelper.deleteWHInOutWard(guid: wHInOutWardsTable.inOutWardId);
+    }
     return encryptedData;
   }
 
-  Future<int> deleteWHAuditing({required String guid}) async {
-    final encryptedData = await databaseHelper.deleteWHAuditing(guid: guid);
-    return encryptedData;
+  Future<int> deleteWHAuditing({required WHAuditingTable auditingTable}) async {
+    int? encryptedData;
+    if (auditingTable.methodName == METHOD_STATUS.UPDATE.name) {
+      encryptedData =
+      await databaseHelper.updateDeleteWHAuditing(guid: auditingTable.auditingId);
+    } else {
+       encryptedData =
+          await databaseHelper.deleteWHAuditing(guid: auditingTable.auditingId);
+    }
+    return encryptedData??0;
   }
 
   Future<List<WHLocationTable>> getWHLocationByAuditId(String auditId) async {
@@ -224,7 +241,7 @@ class DatabaseRepository {
   //   required String whNewLocationId,
   // }) async {
   //   final encryptedData = await databaseHelper.updateWHInOutWardLocationId(
-  //       whOldLocationId: whOldLocationId, whNewLocationId: whNewLocationId)
+  //       whOldLocationId: whOldLocationId, whNewLocationId: whNewLocationId);
   //   return encryptedData;
   // }
   //
@@ -234,7 +251,7 @@ class DatabaseRepository {
   //   required String whNewLocationId,
   // }) async {
   //   final encryptedData = await databaseHelper.updateWHAuditingLocationId(
-  //       whOldLocationId: whOldLocationId, whNewLocationId: whNewLocationId)
+  //       whOldLocationId: whOldLocationId, whNewLocationId: whNewLocationId);
   //   return encryptedData;
   // }
 

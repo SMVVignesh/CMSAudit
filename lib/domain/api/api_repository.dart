@@ -6,12 +6,12 @@ import 'package:tool_kit/tool_kit.dart';
 
 import '../../config/Environment.dart';
 import '../../core/constants/api_end_points.dart';
-import '../../data/login/new_login_response.dart';
 import '../../presentation/pages/dashboard/page/products/model/product_response.dart';
 import '../../presentation/pages/dashboard/page/upload_data/page/model/create_location_model.dart';
 import '../../presentation/pages/dashboard/page/upload_data/page/model/wh_auditing_response.dart';
 import '../../presentation/pages/dashboard/page/upload_data/page/model/wh_in_out_wards_response.dart';
 import '../../presentation/pages/login/model/login_response.dart';
+import '../local_data_base/method_status.dart';
 import '../share_preference/shared_preference_repository.dart';
 
 class ApiRepository {
@@ -122,14 +122,26 @@ class ApiRepository {
       "productId": whInOutWardsTable.productId
     };
     late WHInOutWardsResponse tokenGenerationResponseModel;
-    final response = await otherInApis.post(
-        ApiEndPoints.WH_IN_OUT_WARDS, body, await getHeaderWithAuth());
+    dynamic response;
+    if (whInOutWardsTable.methodName == METHOD_STATUS.UPDATE.name) {
+      body["id"] = whInOutWardsTable.serverInOutWardId;
+      response = await otherInApis.put(
+          "${ApiEndPoints.WH_IN_OUT_WARDS}/${whInOutWardsTable.serverInOutWardId}", body, await getHeaderWithAuth());
+    } else if (whInOutWardsTable.methodName == METHOD_STATUS.DELETE.name) {
+      body.clear();
+      body["id"] = whInOutWardsTable.serverInOutWardId;
+      response = await otherInApis.delete(
+          "${ApiEndPoints.WH_IN_OUT_WARDS}/${whInOutWardsTable.serverInOutWardId}", body, await getHeaderWithAuth());
+    } else {
+      response = await otherInApis.post(
+          ApiEndPoints.WH_IN_OUT_WARDS, body, await getHeaderWithAuth());
+    }
     tokenGenerationResponseModel = WHInOutWardsResponse.fromJson(response);
     return tokenGenerationResponseModel;
   }
 
   /*This method is used to upload whAuditing to server*/
-  Future<WHAuditingResponse> createWhAuditing(
+  Future<WHAuditingResponse> createOrUpdateWhAuditing(
       {required WHAuditingTable wHAuditingTable}) async {
     // 2023-08-30T16:19:49.995Z
     final formatter = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
@@ -150,9 +162,22 @@ class ApiRepository {
       "logEntryDateTime": logEntryDateTime,
       "whLocationId": wHAuditingTable.whLocationId,
     };
+
     late WHAuditingResponse tokenGenerationResponseModel;
-    final response = await otherInApis.post(
-        ApiEndPoints.WH_AUDITING, body, await getHeaderWithAuth());
+    dynamic response;
+    if (wHAuditingTable.methodName == METHOD_STATUS.UPDATE.name) {
+      body["id"] = wHAuditingTable.serverAuditingId;
+      response = await otherInApis.put(
+          "${ApiEndPoints.WH_AUDITING}/${wHAuditingTable.serverAuditingId}", body, await getHeaderWithAuth());
+    } else if (wHAuditingTable.methodName == METHOD_STATUS.DELETE.name) {
+      body.clear();
+      body["id"] = wHAuditingTable.serverAuditingId;
+      response = await otherInApis.delete(
+          "${ApiEndPoints.WH_AUDITING}/${wHAuditingTable.serverAuditingId}", body, await getHeaderWithAuth());
+    } else {
+      response = await otherInApis.post(
+          ApiEndPoints.WH_AUDITING, body, await getHeaderWithAuth());
+    }
     tokenGenerationResponseModel = WHAuditingResponse.fromJson(response);
     return tokenGenerationResponseModel;
   }
