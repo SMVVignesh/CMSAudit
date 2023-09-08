@@ -115,14 +115,13 @@ class DatabaseRepository {
 
   Future<int> deleteWHInOutWard(
       {required WHInOutWardsTable wHInOutWardsTable}) async {
-
     int? encryptedData;
     if (wHInOutWardsTable.methodName == METHOD_STATUS.UPDATE.name) {
-      encryptedData =
-      await databaseHelper.updateDeleteWHInOutWards(guid: wHInOutWardsTable.inOutWardId);
+      encryptedData = await databaseHelper.updateDeleteWHInOutWards(
+          guid: wHInOutWardsTable.inOutWardId);
     } else {
-      encryptedData =
-      await databaseHelper.deleteWHInOutWard(guid: wHInOutWardsTable.inOutWardId);
+      encryptedData = await databaseHelper.deleteWHInOutWard(
+          guid: wHInOutWardsTable.inOutWardId);
     }
     return encryptedData;
   }
@@ -130,13 +129,13 @@ class DatabaseRepository {
   Future<int> deleteWHAuditing({required WHAuditingTable auditingTable}) async {
     int? encryptedData;
     if (auditingTable.methodName == METHOD_STATUS.UPDATE.name) {
-      encryptedData =
-      await databaseHelper.updateDeleteWHAuditing(guid: auditingTable.auditingId);
+      encryptedData = await databaseHelper.updateDeleteWHAuditing(
+          guid: auditingTable.auditingId);
     } else {
-       encryptedData =
+      encryptedData =
           await databaseHelper.deleteWHAuditing(guid: auditingTable.auditingId);
     }
-    return encryptedData??0;
+    return encryptedData ?? 0;
   }
 
   Future<List<WHLocationTable>> getWHLocationByAuditId(String auditId) async {
@@ -188,7 +187,9 @@ class DatabaseRepository {
       required String auditDetailId,
       required String productName,
       required bool isLocationUpdated,
-      required String productId}) async {
+      required String productId,
+      String? productImage,
+      bool? isProductImageUpdated}) async {
     final encryptedData = await databaseHelper.insertWHInOutWard(
         qty: qty,
         stockType: stockType,
@@ -201,7 +202,9 @@ class DatabaseRepository {
         productId: productId,
         productName: productName,
         isLocationUpdated: isLocationUpdated,
-        auditDetailId: auditDetailId);
+        auditDetailId: auditDetailId,
+        productImage: productImage,
+        isProductImageUpdated: isProductImageUpdated);
     return encryptedData;
   }
 
@@ -269,7 +272,9 @@ class DatabaseRepository {
       required String auditDetailId,
       required String productName,
       required String productId,
-      required String inOutWardId}) async {
+      required String inOutWardId,
+      String? productImage,
+      bool? isProductImageUpdated}) async {
     final encryptedData = await databaseHelper.updateWHInOutWard(
         qty: qty,
         stockType: stockType,
@@ -358,21 +363,21 @@ class DatabaseRepository {
     return encryptedData;
   }
 
-
-  Future<List<WHInOutWardsTable>> getWHInOutWardByLocationId(String locationId) async {
+  Future<List<WHInOutWardsTable>> getWHInOutWardByLocationId(
+      String locationId) async {
     final encryptedData =
-    await databaseHelper.getWHInOutWardByLocationId(locationId);
+        await databaseHelper.getWHInOutWardByLocationId(locationId);
     return encryptedData;
   }
 
   /*
   * This method will return only one record by tag in ApiDataTable*/
-  Future<List<WHAuditingTable>> getWHAuditingByLocationId(String locationId) async {
+  Future<List<WHAuditingTable>> getWHAuditingByLocationId(
+      String locationId) async {
     final encryptedData =
-    await databaseHelper.getWHAuditingByLocationId(locationId);
+        await databaseHelper.getWHAuditingByLocationId(locationId);
     return encryptedData;
   }
-
 
   Future<List<WHLocationTable>> getAllWHLocation() async {
     final encryptedData = await databaseHelper.getAllWHLocation();

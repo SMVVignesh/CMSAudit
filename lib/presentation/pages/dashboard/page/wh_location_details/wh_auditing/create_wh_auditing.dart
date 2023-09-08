@@ -184,6 +184,32 @@ class _CreateWHAuditingScreenState extends State<CreateWHAuditingScreen> {
                     ),
                     Row(
                       children: [
+                        GestureDetector(
+                          onTap: () {
+
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                                color: CustomColor.uploadButtonB ,
+                                borderRadius: BorderRadius.circular(5)),
+                            child: const Padding(
+                              padding: EdgeInsets.only(left: 20,right: 20,top: 10,bottom: 10),
+                              child: Text(
+                                textAlign: TextAlign.center,
+                                "Upload",
+                                style: TextStyle(
+                                    fontSize: 14, color: CustomColor.white),
+                              ),
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    Row(
+                      children: [
                         if (widget.auditingTable == null)
                           Expanded(
                               child: GestureDetector(

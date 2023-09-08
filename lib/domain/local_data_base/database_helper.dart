@@ -221,7 +221,9 @@ class DatabaseHelper {
     List<WHInOutWardsTable> query =
         await _database.select(_database.wHInOutWards).get();
     List<WHInOutWardsTable> whLocations = query.where((tbl) {
-      return (tbl.auditDetailId == auditId) && (tbl.whLocationId == locationId)&&(tbl.methodName != METHOD_STATUS.DELETE.name);
+      return (tbl.auditDetailId == auditId) &&
+          (tbl.whLocationId == locationId) &&
+          (tbl.methodName != METHOD_STATUS.DELETE.name);
     }).toList();
     return whLocations;
   }
@@ -233,18 +235,19 @@ class DatabaseHelper {
     List<WHAuditingTable> query =
         await _database.select(_database.wHAuditing).get();
     List<WHAuditingTable> whLocations = query.where((tbl) {
-      return (tbl.auditDetailId == auditId) && (tbl.whLocationId == locationId) &&(tbl.methodName != METHOD_STATUS.DELETE.name);
+      return (tbl.auditDetailId == auditId) &&
+          (tbl.whLocationId == locationId) &&
+          (tbl.methodName != METHOD_STATUS.DELETE.name);
     }).toList();
     return whLocations;
   }
 
-
-
   /*
   * This method will return only one record by tag in ApiDataTable*/
-  Future<List<WHInOutWardsTable>> getWHInOutWardByLocationId(String locationId) async {
+  Future<List<WHInOutWardsTable>> getWHInOutWardByLocationId(
+      String locationId) async {
     List<WHInOutWardsTable> query =
-    await _database.select(_database.wHInOutWards).get();
+        await _database.select(_database.wHInOutWards).get();
     List<WHInOutWardsTable> whLocations = query.where((tbl) {
       return (tbl.whLocationId == locationId);
     }).toList();
@@ -253,9 +256,10 @@ class DatabaseHelper {
 
   /*
   * This method will return only one record by tag in ApiDataTable*/
-  Future<List<WHAuditingTable>> getWHAuditingByLocationId(String locationId) async {
+  Future<List<WHAuditingTable>> getWHAuditingByLocationId(
+      String locationId) async {
     List<WHAuditingTable> query =
-    await _database.select(_database.wHAuditing).get();
+        await _database.select(_database.wHAuditing).get();
     List<WHAuditingTable> whLocations = query.where((tbl) {
       return (tbl.whLocationId == locationId);
     }).toList();
@@ -276,7 +280,9 @@ class DatabaseHelper {
       required String auditDetailId,
       required String productName,
       required bool isLocationUpdated,
-      required String productId}) async {
+      required String productId,
+      String? productImage,
+      bool? isProductImageUpdated}) async {
     final query = _database.into(_database.wHInOutWards).insert(
         WHInOutWardsTable(
             inOutWardId: Utils.getNewGuId(),
@@ -295,7 +301,9 @@ class DatabaseHelper {
             apiStatus: DB_API_STATUS.TODO.name,
             methodName: METHOD_STATUS.CREATE.name,
             auditDetailId: auditDetailId,
-            isLocationUpdated: isLocationUpdated));
+            isLocationUpdated: isLocationUpdated,
+            productImage: productImage ?? "",
+            isProductImageUpdated: isProductImageUpdated ?? false));
     return await query;
   }
 
@@ -313,17 +321,37 @@ class DatabaseHelper {
       required String auditDetailId,
       required String productName,
       required String productId,
-      required String inOutWardId}) async {
-    WHInOutWardsCompanion entity = WHInOutWardsCompanion(
-        qty: Value(qty),
-        stockType: Value(stockType),
-        description: Value(description),
-        invoNo: Value(invoNo),
-        invoType: Value(invoType),
-        apiStatus: Value(DB_API_STATUS.TODO.name),
-        customerName: Value(customerName),
-        productName: Value(productName),
-        productId: Value(productId));
+      required String inOutWardId,
+      String? productImage,
+      bool? isProductImageUpdated}) async {
+    late WHInOutWardsCompanion entity;
+    if (isProductImageUpdated == true) {
+      entity = WHInOutWardsCompanion(
+          qty: Value(qty),
+          stockType: Value(stockType),
+          description: Value(description),
+          invoNo: Value(invoNo),
+          invoType: Value(invoType),
+          apiStatus: Value(DB_API_STATUS.TODO.name),
+          customerName: Value(customerName),
+          productName: Value(productName),
+          productId: Value(productId),
+          productImage: Value(productImage),
+          isProductImageUpdated: Value(isProductImageUpdated ?? false));
+    } else {
+      entity = WHInOutWardsCompanion(
+          qty: Value(qty),
+          stockType: Value(stockType),
+          description: Value(description),
+          invoNo: Value(invoNo),
+          invoType: Value(invoType),
+          apiStatus: Value(DB_API_STATUS.TODO.name),
+          customerName: Value(customerName),
+          productName: Value(productName),
+          productId: Value(productId),
+          isProductImageUpdated: Value(isProductImageUpdated ?? false));
+    }
+
     final query = _database.update(_database.wHInOutWards)
       ..where((tbl) => tbl.inOutWardId.equals(inOutWardId))
       ..write(entity);

@@ -32,8 +32,6 @@ class CustomColor {
   static const Color divider = Color(0xFF2A3B6D);
   static const Color lightgrey = Color(0xFF8B95AE);
   static const Color actualGraphColor = Color(0xFF80CBC3);
-  static const Color budgetGraphColor = Color(0xFFFCBB86);
-  static const Color forecastGraphColor = Color(0xFFBB86FC);
   static const Color search = Color(0xff2A3B6D);
 
   static const Color green = Color(0xFF5EFF5A);
@@ -43,20 +41,12 @@ class CustomColor {
   static const Color black = Color(0xFF000000);
   static const Color positiveGreen = Color(0xFF10B981);
   static const Color negativeRed = Color(0xFFEF4444);
-  static const Color mediaTrendsBrandBg = Color(0xFFF1F5F9);
-  static const Color mediaTrendsItemBg = Color(0xFFF8FAFC);
   static const Color bottomSheetTopView = Color(0xFFCBD5E1);
-  static const Color lastYearYOYCurve = Color(0xffE4ADF6);
-  static const Color thisYearYOYCurve = Color(0xff7B248A);
-  static const Color talentHeadCountProgress = Color(0xff163679);
 
   static const Color statusGreenTop = Color(0xff069F9B);
   static const Color statusGreenBottom = Color(0xff3BD233);
 
   static const Color statusRedTop = Color(0xffFE3368);
   static const Color statusRedBottom = Color(0xffFE3368);
-  static const Color statusMyPriorityItemBg = Color(0xff1F306B);
-  static const Color plannedBg = Color(0xff68AD4C);
-  static const Color mineTextBg = Color(0xff0F172A);
-  static const Color aiTextBg = Color(0xff1E3A8A);
+  static const Color uploadButtonB = Color(0xff68AD4C);
 }

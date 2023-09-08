@@ -908,6 +908,21 @@ class $WHInOutWardsTable extends WHInOutWards
       requiredDuringInsert: true,
       defaultConstraints: GeneratedColumn.constraintIsAlways(
           'CHECK ("is_location_updated" IN (0, 1))'));
+  static const VerificationMeta _productImageMeta =
+      const VerificationMeta('productImage');
+  @override
+  late final GeneratedColumn<String> productImage = GeneratedColumn<String>(
+      'product_image', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _isProductImageUpdatedMeta =
+      const VerificationMeta('isProductImageUpdated');
+  @override
+  late final GeneratedColumn<bool> isProductImageUpdated =
+      GeneratedColumn<bool>('is_product_image_updated', aliasedName, false,
+          type: DriftSqlType.bool,
+          requiredDuringInsert: true,
+          defaultConstraints: GeneratedColumn.constraintIsAlways(
+              'CHECK ("is_product_image_updated" IN (0, 1))'));
   @override
   List<GeneratedColumn> get $columns => [
         updatedDateAndTime,
@@ -926,7 +941,9 @@ class $WHInOutWardsTable extends WHInOutWards
         auditDetailId,
         apiStatus,
         methodName,
-        isLocationUpdated
+        isLocationUpdated,
+        productImage,
+        isProductImageUpdated
       ];
   @override
   String get aliasedName => _alias ?? 'w_h_in_out_wards';
@@ -1059,6 +1076,20 @@ class $WHInOutWardsTable extends WHInOutWards
     } else if (isInserting) {
       context.missing(_isLocationUpdatedMeta);
     }
+    if (data.containsKey('product_image')) {
+      context.handle(
+          _productImageMeta,
+          productImage.isAcceptableOrUnknown(
+              data['product_image']!, _productImageMeta));
+    }
+    if (data.containsKey('is_product_image_updated')) {
+      context.handle(
+          _isProductImageUpdatedMeta,
+          isProductImageUpdated.isAcceptableOrUnknown(
+              data['is_product_image_updated']!, _isProductImageUpdatedMeta));
+    } else if (isInserting) {
+      context.missing(_isProductImageUpdatedMeta);
+    }
     return context;
   }
 
@@ -1103,6 +1134,11 @@ class $WHInOutWardsTable extends WHInOutWards
           .read(DriftSqlType.string, data['${effectivePrefix}method_name'])!,
       isLocationUpdated: attachedDatabase.typeMapping.read(
           DriftSqlType.bool, data['${effectivePrefix}is_location_updated'])!,
+      productImage: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}product_image']),
+      isProductImageUpdated: attachedDatabase.typeMapping.read(
+          DriftSqlType.bool,
+          data['${effectivePrefix}is_product_image_updated'])!,
     );
   }
 
@@ -1131,6 +1167,8 @@ class WHInOutWardsTable extends DataClass
   final String apiStatus;
   final String methodName;
   final bool isLocationUpdated;
+  final String? productImage;
+  final bool isProductImageUpdated;
   const WHInOutWardsTable(
       {required this.updatedDateAndTime,
       required this.inOutWardId,
@@ -1148,7 +1186,9 @@ class WHInOutWardsTable extends DataClass
       required this.auditDetailId,
       required this.apiStatus,
       required this.methodName,
-      required this.isLocationUpdated});
+      required this.isLocationUpdated,
+      this.productImage,
+      required this.isProductImageUpdated});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -1169,6 +1209,10 @@ class WHInOutWardsTable extends DataClass
     map['api_status'] = Variable<String>(apiStatus);
     map['method_name'] = Variable<String>(methodName);
     map['is_location_updated'] = Variable<bool>(isLocationUpdated);
+    if (!nullToAbsent || productImage != null) {
+      map['product_image'] = Variable<String>(productImage);
+    }
+    map['is_product_image_updated'] = Variable<bool>(isProductImageUpdated);
     return map;
   }
 
@@ -1191,6 +1235,10 @@ class WHInOutWardsTable extends DataClass
       apiStatus: Value(apiStatus),
       methodName: Value(methodName),
       isLocationUpdated: Value(isLocationUpdated),
+      productImage: productImage == null && nullToAbsent
+          ? const Value.absent()
+          : Value(productImage),
+      isProductImageUpdated: Value(isProductImageUpdated),
     );
   }
 
@@ -1216,6 +1264,9 @@ class WHInOutWardsTable extends DataClass
       apiStatus: serializer.fromJson<String>(json['apiStatus']),
       methodName: serializer.fromJson<String>(json['methodName']),
       isLocationUpdated: serializer.fromJson<bool>(json['isLocationUpdated']),
+      productImage: serializer.fromJson<String?>(json['productImage']),
+      isProductImageUpdated:
+          serializer.fromJson<bool>(json['isProductImageUpdated']),
     );
   }
   @override
@@ -1239,6 +1290,8 @@ class WHInOutWardsTable extends DataClass
       'apiStatus': serializer.toJson<String>(apiStatus),
       'methodName': serializer.toJson<String>(methodName),
       'isLocationUpdated': serializer.toJson<bool>(isLocationUpdated),
+      'productImage': serializer.toJson<String?>(productImage),
+      'isProductImageUpdated': serializer.toJson<bool>(isProductImageUpdated),
     };
   }
 
@@ -1259,7 +1312,9 @@ class WHInOutWardsTable extends DataClass
           String? auditDetailId,
           String? apiStatus,
           String? methodName,
-          bool? isLocationUpdated}) =>
+          bool? isLocationUpdated,
+          Value<String?> productImage = const Value.absent(),
+          bool? isProductImageUpdated}) =>
       WHInOutWardsTable(
         updatedDateAndTime: updatedDateAndTime ?? this.updatedDateAndTime,
         inOutWardId: inOutWardId ?? this.inOutWardId,
@@ -1278,6 +1333,10 @@ class WHInOutWardsTable extends DataClass
         apiStatus: apiStatus ?? this.apiStatus,
         methodName: methodName ?? this.methodName,
         isLocationUpdated: isLocationUpdated ?? this.isLocationUpdated,
+        productImage:
+            productImage.present ? productImage.value : this.productImage,
+        isProductImageUpdated:
+            isProductImageUpdated ?? this.isProductImageUpdated,
       );
   @override
   String toString() {
@@ -1298,7 +1357,9 @@ class WHInOutWardsTable extends DataClass
           ..write('auditDetailId: $auditDetailId, ')
           ..write('apiStatus: $apiStatus, ')
           ..write('methodName: $methodName, ')
-          ..write('isLocationUpdated: $isLocationUpdated')
+          ..write('isLocationUpdated: $isLocationUpdated, ')
+          ..write('productImage: $productImage, ')
+          ..write('isProductImageUpdated: $isProductImageUpdated')
           ..write(')'))
         .toString();
   }
@@ -1321,7 +1382,9 @@ class WHInOutWardsTable extends DataClass
       auditDetailId,
       apiStatus,
       methodName,
-      isLocationUpdated);
+      isLocationUpdated,
+      productImage,
+      isProductImageUpdated);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -1342,7 +1405,9 @@ class WHInOutWardsTable extends DataClass
           other.auditDetailId == this.auditDetailId &&
           other.apiStatus == this.apiStatus &&
           other.methodName == this.methodName &&
-          other.isLocationUpdated == this.isLocationUpdated);
+          other.isLocationUpdated == this.isLocationUpdated &&
+          other.productImage == this.productImage &&
+          other.isProductImageUpdated == this.isProductImageUpdated);
 }
 
 class WHInOutWardsCompanion extends UpdateCompanion<WHInOutWardsTable> {
@@ -1363,6 +1428,8 @@ class WHInOutWardsCompanion extends UpdateCompanion<WHInOutWardsTable> {
   final Value<String> apiStatus;
   final Value<String> methodName;
   final Value<bool> isLocationUpdated;
+  final Value<String?> productImage;
+  final Value<bool> isProductImageUpdated;
   final Value<int> rowid;
   const WHInOutWardsCompanion({
     this.updatedDateAndTime = const Value.absent(),
@@ -1382,6 +1449,8 @@ class WHInOutWardsCompanion extends UpdateCompanion<WHInOutWardsTable> {
     this.apiStatus = const Value.absent(),
     this.methodName = const Value.absent(),
     this.isLocationUpdated = const Value.absent(),
+    this.productImage = const Value.absent(),
+    this.isProductImageUpdated = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   WHInOutWardsCompanion.insert({
@@ -1402,6 +1471,8 @@ class WHInOutWardsCompanion extends UpdateCompanion<WHInOutWardsTable> {
     required String apiStatus,
     required String methodName,
     required bool isLocationUpdated,
+    this.productImage = const Value.absent(),
+    required bool isProductImageUpdated,
     this.rowid = const Value.absent(),
   })  : updatedDateAndTime = Value(updatedDateAndTime),
         inOutWardId = Value(inOutWardId),
@@ -1419,7 +1490,8 @@ class WHInOutWardsCompanion extends UpdateCompanion<WHInOutWardsTable> {
         auditDetailId = Value(auditDetailId),
         apiStatus = Value(apiStatus),
         methodName = Value(methodName),
-        isLocationUpdated = Value(isLocationUpdated);
+        isLocationUpdated = Value(isLocationUpdated),
+        isProductImageUpdated = Value(isProductImageUpdated);
   static Insertable<WHInOutWardsTable> custom({
     Expression<DateTime>? updatedDateAndTime,
     Expression<String>? inOutWardId,
@@ -1438,6 +1510,8 @@ class WHInOutWardsCompanion extends UpdateCompanion<WHInOutWardsTable> {
     Expression<String>? apiStatus,
     Expression<String>? methodName,
     Expression<bool>? isLocationUpdated,
+    Expression<String>? productImage,
+    Expression<bool>? isProductImageUpdated,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
@@ -1459,6 +1533,9 @@ class WHInOutWardsCompanion extends UpdateCompanion<WHInOutWardsTable> {
       if (apiStatus != null) 'api_status': apiStatus,
       if (methodName != null) 'method_name': methodName,
       if (isLocationUpdated != null) 'is_location_updated': isLocationUpdated,
+      if (productImage != null) 'product_image': productImage,
+      if (isProductImageUpdated != null)
+        'is_product_image_updated': isProductImageUpdated,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -1481,6 +1558,8 @@ class WHInOutWardsCompanion extends UpdateCompanion<WHInOutWardsTable> {
       Value<String>? apiStatus,
       Value<String>? methodName,
       Value<bool>? isLocationUpdated,
+      Value<String?>? productImage,
+      Value<bool>? isProductImageUpdated,
       Value<int>? rowid}) {
     return WHInOutWardsCompanion(
       updatedDateAndTime: updatedDateAndTime ?? this.updatedDateAndTime,
@@ -1500,6 +1579,9 @@ class WHInOutWardsCompanion extends UpdateCompanion<WHInOutWardsTable> {
       apiStatus: apiStatus ?? this.apiStatus,
       methodName: methodName ?? this.methodName,
       isLocationUpdated: isLocationUpdated ?? this.isLocationUpdated,
+      productImage: productImage ?? this.productImage,
+      isProductImageUpdated:
+          isProductImageUpdated ?? this.isProductImageUpdated,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -1559,6 +1641,13 @@ class WHInOutWardsCompanion extends UpdateCompanion<WHInOutWardsTable> {
     if (isLocationUpdated.present) {
       map['is_location_updated'] = Variable<bool>(isLocationUpdated.value);
     }
+    if (productImage.present) {
+      map['product_image'] = Variable<String>(productImage.value);
+    }
+    if (isProductImageUpdated.present) {
+      map['is_product_image_updated'] =
+          Variable<bool>(isProductImageUpdated.value);
+    }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
     }
@@ -1585,6 +1674,8 @@ class WHInOutWardsCompanion extends UpdateCompanion<WHInOutWardsTable> {
           ..write('apiStatus: $apiStatus, ')
           ..write('methodName: $methodName, ')
           ..write('isLocationUpdated: $isLocationUpdated, ')
+          ..write('productImage: $productImage, ')
+          ..write('isProductImageUpdated: $isProductImageUpdated, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();

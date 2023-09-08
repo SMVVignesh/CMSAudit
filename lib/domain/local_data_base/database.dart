@@ -92,6 +92,10 @@ class WHInOutWards extends Table {
 
   BoolColumn get isLocationUpdated => boolean()();
 
+  TextColumn? get productImage => text().nullable()();
+
+  BoolColumn get isProductImageUpdated => boolean()();
+
 
   @override
   Set<Column> get primaryKey => {invoNo, inOutWardId, auditDetailId};
@@ -147,7 +151,7 @@ class Database extends _$Database {
   Database() : super(_openConnection());
 
   @override
-  int get schemaVersion => 14;
+  int get schemaVersion => 15;
 
   @override
   @DriftDatabase(tables: [ApiData, WHLocation, WHInOutWards, WHAuditing])
