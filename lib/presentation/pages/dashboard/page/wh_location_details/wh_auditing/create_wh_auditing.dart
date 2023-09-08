@@ -1,10 +1,11 @@
-import 'dart:ffi';
+import 'dart:io';
 
 import 'package:cms_audit/core/utils/custom_color.dart';
 import 'package:cms_audit/domain/local_data_base/data_base_repository.dart';
 import 'package:cms_audit/domain/share_preference/shared_preference_repository.dart';
 import 'package:cms_audit/presentation/pages/dashboard/page/audit_details/model/audit_response.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:tool_kit/tool_kit.dart';
 
 import '../../../../../../core/utils/utils.dart';
@@ -27,6 +28,7 @@ class CreateWHAuditingScreen extends StatefulWidget {
 }
 
 class _CreateWHAuditingScreenState extends State<CreateWHAuditingScreen> {
+  Dialog? imagePickerDialog;
   TextEditingController bestBeforeTextEditingController =
       TextEditingController();
   TextEditingController descriptionTextEditingController =
@@ -36,6 +38,8 @@ class _CreateWHAuditingScreenState extends State<CreateWHAuditingScreen> {
   DropdownDataModel? selectedStockType;
   DropdownDataModel? selectedProductType;
   DropdownDataModel? selectedProducts;
+  String? productImageUrl;
+  bool isProductImageUrlUpdated = false;
 
   List<DropdownDataModel> products = [];
 
@@ -182,29 +186,76 @@ class _CreateWHAuditingScreenState extends State<CreateWHAuditingScreen> {
                     SizedBox(
                       height: 10,
                     ),
-                    Row(
-                      children: [
-                        GestureDetector(
-                          onTap: () {
-
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                                color: CustomColor.uploadButtonB ,
-                                borderRadius: BorderRadius.circular(5)),
-                            child: const Padding(
-                              padding: EdgeInsets.only(left: 20,right: 20,top: 10,bottom: 10),
-                              child: Text(
-                                textAlign: TextAlign.center,
-                                "Upload",
-                                style: TextStyle(
-                                    fontSize: 14, color: CustomColor.white),
+                    isProductImageUrlUpdated
+                        ? Row(
+                            children: [
+                              SizedBox(
+                                width: 100,
+                                height: 100,
+                                child: Stack(
+                                  children: [
+                                    Positioned(
+                                        left: 0,
+                                        right: 5,
+                                        bottom: 0,
+                                        top: 5,
+                                        child: Image.file(
+                                          File(productImageUrl ?? ""),
+                                          width: 90,
+                                          height: 90,
+                                          fit: BoxFit.fill,
+                                        )),
+                                    Positioned(
+                                        right: 0,
+                                        top: 0,
+                                        child: GestureDetector(
+                                          onTap: (){
+                                            setState(() {
+                                              isProductImageUrlUpdated = false;
+                                              productImageUrl = null;
+                                            });
+                                          },
+                                          child: Container(
+                                              color: CustomColor.black,
+                                              child: const Icon(
+                                                Icons.close,
+                                                size: 15,
+                                                color: CustomColor.white,
+                                              )),
+                                        )),
+                                  ],
+                                ),
                               ),
-                            ),
+                            ],
+                          )
+                        : Row(
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  showImagePicker();
+                                },
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      color: CustomColor.uploadButtonB,
+                                      borderRadius: BorderRadius.circular(5)),
+                                  child: const Padding(
+                                    padding: EdgeInsets.only(
+                                        left: 20,
+                                        right: 20,
+                                        top: 10,
+                                        bottom: 10),
+                                    child: Text(
+                                      textAlign: TextAlign.center,
+                                      "Upload",
+                                      style: TextStyle(
+                                          fontSize: 14,
+                                          color: CustomColor.white),
+                                    ),
+                                  ),
+                                ),
+                              )
+                            ],
                           ),
-                        )
-                      ],
-                    ),
                     SizedBox(
                       height: 15,
                     ),
@@ -360,5 +411,90 @@ class _CreateWHAuditingScreenState extends State<CreateWHAuditingScreen> {
     } catch (e) {
       return 0;
     }
+  }
+
+  /// Get from gallery
+  getFromGallery(bool isCamera) async {
+    XFile? pickedFile = await ImagePicker().pickImage(
+      source: isCamera ? ImageSource.camera : ImageSource.gallery,
+      maxWidth: 1800,
+      maxHeight: 1800,
+    );
+    if (pickedFile != null) {
+      productImageUrl = pickedFile.path;
+      isProductImageUrlUpdated = true;
+      setState(() {});
+      Navigator.pop(context);
+    }
+  }
+
+  void showImagePicker() {
+    imagePickerDialog = Dialog(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
+      //this right here
+      child: Container(
+        color: Colors.transparent,
+        child: Padding(
+          padding:
+              const EdgeInsets.only(top: 15, bottom: 25, right: 10, left: 10),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const Expanded(
+                    child: Text(
+                      "Select",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(color: CustomColor.black, fontSize: 16),
+                    ),
+                  ),
+                  GestureDetector(
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                      child: const Icon(
+                        Icons.close,
+                        size: 20,
+                      ))
+                ],
+              ),
+              const SizedBox(
+                height: 15,
+              ),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  GestureDetector(
+                      onTap: () {
+                        getFromGallery(true);
+                      },
+                      child: const Icon(
+                        Icons.camera_alt,
+                        size: 30,
+                      )),
+                  const SizedBox(
+                    width: 15,
+                  ),
+                  GestureDetector(
+                      onTap: () {
+                        getFromGallery(false);
+                      },
+                      child: const Icon(
+                        Icons.filter,
+                        size: 30,
+                      )),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+    showDialog(
+        context: context,
+        builder: (BuildContext context) => imagePickerDialog!);
   }
 }
