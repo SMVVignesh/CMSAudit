@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:cms_audit/core/utils/db_api_status.dart';
 import 'package:cms_audit/core/utils/widgets/custom_date_picker.dart';
@@ -319,15 +320,12 @@ class Utils {
     showDialog(
         context: context,
         builder: (context) {
-          return CustomDatePicker(onDateChange: (value){
+          return CustomDatePicker(onDateChange: (value) {
             if (value != null) {
               textEditingController?.text = outputFormatter.format(value);
             }
           });
         });
-
-
-
   }
 
   static Future<List<DropdownDataModel>> getFilterData(
@@ -356,6 +354,20 @@ class Utils {
     DropdownDataModel(key: "Damage", value: "Damage"),
     DropdownDataModel(key: "Expired", value: "Expired"),
   ];
+
+  static Map<String, String> getProductImageJson(String productImageUri) {
+    Map<String, String> productJson = Map();
+    try {
+      File file = File(productImageUri);
+      productJson["name"] = file.path.split(Platform.pathSeparator).last;
+      productJson["extension"] =
+          file.path.split(Platform.pathSeparator).last.split(".").last;
+      productJson["data"] = base64Encode(file.readAsBytesSync());
+    } catch (e) {
+      print("Exception getProductImageJson:${e.toString()}");
+    }
+    return productJson;
+  }
 }
 
 class AlwaysDisabledFocusNode extends FocusNode {

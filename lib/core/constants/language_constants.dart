@@ -8,6 +8,7 @@ const SIGN_IN = 'sign_in';
 const FORGOT_PASSWORD = 'forgot_password';
 const FORGOT_PASSWORD_HEADING = 'forgot_password_heading';
 const PLEASE_ENTER_EMAIL = 'please_enter_email';
+const PLEASE_ENTER_BASE_URL = 'please_enter_base_url';
 const PLEASE_ENTER_PASSWORD = 'please_enter_password';
 const PLEASE_ENTER_TENANT = 'please_enter_tenant';
 const PLEASE_ENTER_VALID_EMAIL = 'please_enter_valid_email';

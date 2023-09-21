@@ -1,3 +1,4 @@
+import 'package:cms_audit/core/utils/utils.dart';
 import 'package:intl/intl.dart';
 
 import 'package:cms_audit/domain/local_data_base/database.dart';
@@ -126,12 +127,16 @@ class ApiRepository {
     if (whInOutWardsTable.methodName == METHOD_STATUS.UPDATE.name) {
       body["id"] = whInOutWardsTable.serverInOutWardId;
       response = await otherInApis.put(
-          "${ApiEndPoints.WH_IN_OUT_WARDS}/${whInOutWardsTable.serverInOutWardId}", body, await getHeaderWithAuth());
+          "${ApiEndPoints.WH_IN_OUT_WARDS}/${whInOutWardsTable.serverInOutWardId}",
+          body,
+          await getHeaderWithAuth());
     } else if (whInOutWardsTable.methodName == METHOD_STATUS.DELETE.name) {
       body.clear();
       body["id"] = whInOutWardsTable.serverInOutWardId;
       response = await otherInApis.delete(
-          "${ApiEndPoints.WH_IN_OUT_WARDS}/${whInOutWardsTable.serverInOutWardId}", body, await getHeaderWithAuth());
+          "${ApiEndPoints.WH_IN_OUT_WARDS}/${whInOutWardsTable.serverInOutWardId}",
+          body,
+          await getHeaderWithAuth());
     } else {
       response = await otherInApis.post(
           ApiEndPoints.WH_IN_OUT_WARDS, body, await getHeaderWithAuth());
@@ -163,17 +168,29 @@ class ApiRepository {
       "whLocationId": wHAuditingTable.whLocationId,
     };
 
+    if (wHAuditingTable.isProductImageUriUpdated) {
+      if (wHAuditingTable.productImageUri.length == 0) {
+        body["aProductImage"] = null;
+      } else {
+        body["aProductImage"] = Utils.getProductImageJson(wHAuditingTable.productImageUri);
+      }
+    }
+
     late WHAuditingResponse tokenGenerationResponseModel;
     dynamic response;
     if (wHAuditingTable.methodName == METHOD_STATUS.UPDATE.name) {
       body["id"] = wHAuditingTable.serverAuditingId;
       response = await otherInApis.put(
-          "${ApiEndPoints.WH_AUDITING}/${wHAuditingTable.serverAuditingId}", body, await getHeaderWithAuth());
+          "${ApiEndPoints.WH_AUDITING}/${wHAuditingTable.serverAuditingId}",
+          body,
+          await getHeaderWithAuth());
     } else if (wHAuditingTable.methodName == METHOD_STATUS.DELETE.name) {
       body.clear();
       body["id"] = wHAuditingTable.serverAuditingId;
       response = await otherInApis.delete(
-          "${ApiEndPoints.WH_AUDITING}/${wHAuditingTable.serverAuditingId}", body, await getHeaderWithAuth());
+          "${ApiEndPoints.WH_AUDITING}/${wHAuditingTable.serverAuditingId}",
+          body,
+          await getHeaderWithAuth());
     } else {
       response = await otherInApis.post(
           ApiEndPoints.WH_AUDITING, body, await getHeaderWithAuth());

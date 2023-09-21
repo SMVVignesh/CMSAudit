@@ -22,6 +22,7 @@ import '../model/login_response.dart';
 * */
 class LoginPage extends StatefulWidget {
   bool isLoading = false;
+  TextEditingController? baseUrlController = TextEditingController();
   TextEditingController? emailController = TextEditingController();
   TextEditingController? tenantController = TextEditingController();
   TextEditingController? passwordController = TextEditingController();
@@ -42,6 +43,7 @@ class _LoginPageState extends CustomState<LoginPage> {
   @override
   void initState() {
     super.initState();
+    updateBaseUrl();
   }
 
   @override
@@ -83,6 +85,10 @@ class _LoginPageState extends CustomState<LoginPage> {
                       fontWeight: FontWeight.normal),
                 ),
                 const SizedBox(height: 15),
+                getLoginComponent(
+                    "Base Url",
+                    "Enter Base Url",
+                    widget.baseUrlController),
                 getLoginComponent(
                     AppLocalizations.of(context)!.trans(EMAIL),
                     AppLocalizations.of(context)!.trans(EMAIL_HINT),
@@ -216,10 +222,14 @@ This method is used to validate the email, password and tenant
 if all fields are validated this is going to call  Login api
  */
   void validateFields(BuildContext context) async {
+    String? baseurl = widget.baseUrlController?.text.trim();
     String? email = widget.emailController?.text.trim();
     String? password = widget.passwordController?.text.trim();
     String? tenant = widget.tenantController?.text.trim();
-    if (email?.isEmpty ?? true) {
+    if (baseurl?.isEmpty ?? true) {
+      SnackBarUtils.showError(
+          context, AppLocalizations.of(context)?.trans(PLEASE_ENTER_BASE_URL));
+    }else if (email?.isEmpty ?? true) {
       SnackBarUtils.showError(
           context, AppLocalizations.of(context)?.trans(PLEASE_ENTER_EMAIL));
     } else if (password?.isEmpty ?? true) {
@@ -238,6 +248,7 @@ if all fields are validated this is going to call  Login api
           widget.isLoading = true;
         });
         try  {
+          await SharedPreferenceRepository().setBaseUrl(baseurl);
           LoginResponse newLoginResponse =
               await ApiRepository().loginApi(email ?? "", password ?? "",tenant??"");
 
@@ -266,5 +277,10 @@ if all fields are validated this is going to call  Login api
         }
       }
     }
+  }
+
+  void updateBaseUrl() async {
+   String baseUrl =  await SharedPreferenceRepository().getBaseUrl()??"";
+   widget.baseUrlController?.text = baseUrl;
   }
 }

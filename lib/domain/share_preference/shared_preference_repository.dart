@@ -32,6 +32,20 @@ class SharedPreferenceRepository {
         .getString(SharedPreferenceConstant.ACCESS_KEY);
   }
 
+  /*
+  * This method is used to save base url*/
+  Future<bool> setBaseUrl(String? value) async {
+    return await SharedPreferenceUtils()
+        .setString(SharedPreferenceConstant.BASE_URL, value ?? "");
+  }
+
+  /*
+  * This method is used to get the saved base url*/
+  Future<String?> getBaseUrl() async {
+    return await SharedPreferenceUtils()
+        .getString(SharedPreferenceConstant.BASE_URL);
+  }
+
 
   /*
   * This method is used to save access token*/

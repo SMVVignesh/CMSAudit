@@ -10,6 +10,7 @@
   "forgot_password_heading": "Forgot Password",
   "please_enter_email": "Please enter Email",
   "please_enter_password": "Please enter Password",
+  "please_enter_base_url": "Please enter Base Url",
   "please_enter_tenant": "Please enter Tenant",
   "please_enter_valid_email": "Please enter valid Email",
   "logged_in_successfully": "Logged In successfully",
