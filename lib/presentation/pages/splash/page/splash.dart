@@ -73,7 +73,7 @@ class _SplashState extends CustomState<Splash> {
 
   void moveToNextScreen() async {
     final DateFormat inputFormatter = DateFormat("yyyy-MM-dd");
-    DateTime expiryDate = inputFormatter.parse("2023-09-20");
+    DateTime expiryDate = inputFormatter.parse("2023-09-26");
     int difference = expiryDate.difference(DateTime.now()).inDays;
     print("difference $difference");
     if(difference<=0){

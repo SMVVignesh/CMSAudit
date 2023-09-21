@@ -64,17 +64,17 @@ class _CreateWHAuditingScreenState extends State<CreateWHAuditingScreen> {
               element.key == (widget.auditingTable?.productQuality ?? ""))
           .first;
     } else {
-      updateLastStockTypeValue();
+      updateLastProductTypeValue();
     }
   }
 
-  void updateLastStockTypeValue() async {
-    String? lastSelectedStockType =
-        await SharedPreferenceRepository().getLastSelectedStockType();
-    if (lastSelectedStockType != null) {
+  void updateLastProductTypeValue() async {
+    String? lastSelectedProductType =
+        await SharedPreferenceRepository().getLastSelectedProductType();
+    if (lastSelectedProductType != null) {
       setState(() {
-        selectedStockType = Utils.stockType
-            .where((element) => element.key == lastSelectedStockType)
+        selectedProductType = Utils.stockType
+            .where((element) => element.key == lastSelectedProductType)
             .first;
       });
     }
@@ -343,7 +343,7 @@ class _CreateWHAuditingScreenState extends State<CreateWHAuditingScreen> {
         bool isLocationUpdated = widget.location?.isLocationUpdated ?? false;
         print("isLocationUpdated :$isLocationUpdated");
         SharedPreferenceRepository()
-            .setLastSelectedStockType(selectedStockType?.key ?? "");
+            .setLastSelectedProductType(selectedStockType?.key ?? "");
         if (widget.auditingTable != null) {
           await DatabaseRepository().updateWHAuditing(
               qty: convertToInt(qty),

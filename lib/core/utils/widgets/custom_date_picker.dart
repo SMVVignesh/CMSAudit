@@ -39,6 +39,7 @@ class _CustomDatePickerState extends State<CustomDatePicker> {
                 height: 180,
                 child: CupertinoDatePicker(
                   mode: CupertinoDatePickerMode.date,
+                  dateOrder: DatePickerDateOrder.dmy,
                   onDateTimeChanged: (DateTime value) {
                     selectedValue = value;
                   },

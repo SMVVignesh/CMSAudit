@@ -48,15 +48,15 @@ class SharedPreferenceRepository {
 
   /*
   * This method is used to save Last selected stock Type*/
-  Future<bool> setLastSelectedStockType(String? value) async {
+  Future<bool> setLastSelectedProductType(String? value) async {
     return await SharedPreferenceUtils()
-        .setString(SharedPreferenceConstant.LAST_STOCK_TYPE, value ?? "");
+        .setString(SharedPreferenceConstant.LAST_PRODUCT_TYPE, value ?? "");
   }
 
   /*
   * This method is used to get the saved Last selected stock Type*/
-  Future<String?> getLastSelectedStockType() async {
-    return await SharedPreferenceUtils().getString(SharedPreferenceConstant.LAST_STOCK_TYPE) ?? "";
+  Future<String?> getLastSelectedProductType() async {
+    return await SharedPreferenceUtils().getString(SharedPreferenceConstant.LAST_PRODUCT_TYPE) ?? "";
   }
 
 
