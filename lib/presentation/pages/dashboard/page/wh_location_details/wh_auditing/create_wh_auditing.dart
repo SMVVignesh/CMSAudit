@@ -63,6 +63,9 @@ class _CreateWHAuditingScreenState extends State<CreateWHAuditingScreen> {
           .where((element) =>
               element.key == (widget.auditingTable?.productQuality ?? ""))
           .first;
+      productImageUrl = widget.auditingTable?.productImageUri ?? "";
+      isProductImageUrlUpdated = widget.auditingTable?.isProductImageUriUpdated??false;
+
     } else {
       updateLastProductTypeValue();
     }
@@ -73,7 +76,7 @@ class _CreateWHAuditingScreenState extends State<CreateWHAuditingScreen> {
         await SharedPreferenceRepository().getLastSelectedProductType();
     if (lastSelectedProductType != null) {
       setState(() {
-        selectedProductType = Utils.stockType
+        selectedProductType = Utils.productType
             .where((element) => element.key == lastSelectedProductType)
             .first;
       });
@@ -186,7 +189,7 @@ class _CreateWHAuditingScreenState extends State<CreateWHAuditingScreen> {
                     SizedBox(
                       height: 10,
                     ),
-                    isProductImageUrlUpdated
+                    ((productImageUrl?.length ?? 0) > 0)
                         ? Row(
                             children: [
                               SizedBox(
@@ -209,9 +212,9 @@ class _CreateWHAuditingScreenState extends State<CreateWHAuditingScreen> {
                                         right: 0,
                                         top: 0,
                                         child: GestureDetector(
-                                          onTap: (){
+                                          onTap: () {
                                             setState(() {
-                                              isProductImageUrlUpdated = false;
+                                              isProductImageUrlUpdated = true;
                                               productImageUrl = null;
                                             });
                                           },
@@ -356,7 +359,8 @@ class _CreateWHAuditingScreenState extends State<CreateWHAuditingScreen> {
               auditDetailId: widget.auditDetails.id ?? "",
               description: description,
               mfDate: mfDate,
-              file: "",
+              isProductImageUriUpdated: isProductImageUrlUpdated,
+              productImageUri: productImageUrl ?? "",
               auditingId: widget.auditingTable?.auditingId ?? "");
         } else {
           await DatabaseRepository().insertWHAuditing(
@@ -371,7 +375,8 @@ class _CreateWHAuditingScreenState extends State<CreateWHAuditingScreen> {
               description: description,
               mfDate: mfDate,
               isLocationUpdated: isLocationUpdated,
-              file: "");
+              isProductImageUriUpdated: isProductImageUrlUpdated,
+              productImageUri: productImageUrl ?? "");
         }
         if (createAnother) {
           setState(() {

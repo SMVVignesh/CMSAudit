@@ -1764,11 +1764,22 @@ class $WHAuditingTable extends WHAuditing
   late final GeneratedColumn<String> mfDate = GeneratedColumn<String>(
       'mf_date', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _fileMeta = const VerificationMeta('file');
+  static const VerificationMeta _productImageUriMeta =
+      const VerificationMeta('productImageUri');
   @override
-  late final GeneratedColumn<String> file = GeneratedColumn<String>(
-      'file', aliasedName, false,
+  late final GeneratedColumn<String> productImageUri = GeneratedColumn<String>(
+      'product_image_uri', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _isProductImageUriUpdatedMeta =
+      const VerificationMeta('isProductImageUriUpdated');
+  @override
+  late final GeneratedColumn<bool> isProductImageUriUpdated =
+      GeneratedColumn<bool>(
+          'is_product_image_uri_updated', aliasedName, false,
+          type: DriftSqlType.bool,
+          requiredDuringInsert: true,
+          defaultConstraints: GeneratedColumn.constraintIsAlways(
+              'CHECK ("is_product_image_uri_updated" IN (0, 1))'));
   static const VerificationMeta _apiStatusMeta =
       const VerificationMeta('apiStatus');
   @override
@@ -1805,7 +1816,8 @@ class $WHAuditingTable extends WHAuditing
         auditDetailId,
         description,
         mfDate,
-        file,
+        productImageUri,
+        isProductImageUriUpdated,
         apiStatus,
         methodName,
         isLocationUpdated
@@ -1915,11 +1927,22 @@ class $WHAuditingTable extends WHAuditing
     } else if (isInserting) {
       context.missing(_mfDateMeta);
     }
-    if (data.containsKey('file')) {
+    if (data.containsKey('product_image_uri')) {
       context.handle(
-          _fileMeta, file.isAcceptableOrUnknown(data['file']!, _fileMeta));
+          _productImageUriMeta,
+          productImageUri.isAcceptableOrUnknown(
+              data['product_image_uri']!, _productImageUriMeta));
     } else if (isInserting) {
-      context.missing(_fileMeta);
+      context.missing(_productImageUriMeta);
+    }
+    if (data.containsKey('is_product_image_uri_updated')) {
+      context.handle(
+          _isProductImageUriUpdatedMeta,
+          isProductImageUriUpdated.isAcceptableOrUnknown(
+              data['is_product_image_uri_updated']!,
+              _isProductImageUriUpdatedMeta));
+    } else if (isInserting) {
+      context.missing(_isProductImageUriUpdatedMeta);
     }
     if (data.containsKey('api_status')) {
       context.handle(_apiStatusMeta,
@@ -1979,8 +2002,11 @@ class $WHAuditingTable extends WHAuditing
           .read(DriftSqlType.string, data['${effectivePrefix}description'])!,
       mfDate: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}mf_date'])!,
-      file: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}file'])!,
+      productImageUri: attachedDatabase.typeMapping.read(
+          DriftSqlType.string, data['${effectivePrefix}product_image_uri'])!,
+      isProductImageUriUpdated: attachedDatabase.typeMapping.read(
+          DriftSqlType.bool,
+          data['${effectivePrefix}is_product_image_uri_updated'])!,
       apiStatus: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}api_status'])!,
       methodName: attachedDatabase.typeMapping
@@ -2010,7 +2036,8 @@ class WHAuditingTable extends DataClass implements Insertable<WHAuditingTable> {
   final String auditDetailId;
   final String description;
   final String mfDate;
-  final String file;
+  final String productImageUri;
+  final bool isProductImageUriUpdated;
   final String apiStatus;
   final String methodName;
   final bool isLocationUpdated;
@@ -2028,7 +2055,8 @@ class WHAuditingTable extends DataClass implements Insertable<WHAuditingTable> {
       required this.auditDetailId,
       required this.description,
       required this.mfDate,
-      required this.file,
+      required this.productImageUri,
+      required this.isProductImageUriUpdated,
       required this.apiStatus,
       required this.methodName,
       required this.isLocationUpdated});
@@ -2048,7 +2076,9 @@ class WHAuditingTable extends DataClass implements Insertable<WHAuditingTable> {
     map['audit_detail_id'] = Variable<String>(auditDetailId);
     map['description'] = Variable<String>(description);
     map['mf_date'] = Variable<String>(mfDate);
-    map['file'] = Variable<String>(file);
+    map['product_image_uri'] = Variable<String>(productImageUri);
+    map['is_product_image_uri_updated'] =
+        Variable<bool>(isProductImageUriUpdated);
     map['api_status'] = Variable<String>(apiStatus);
     map['method_name'] = Variable<String>(methodName);
     map['is_location_updated'] = Variable<bool>(isLocationUpdated);
@@ -2070,7 +2100,8 @@ class WHAuditingTable extends DataClass implements Insertable<WHAuditingTable> {
       auditDetailId: Value(auditDetailId),
       description: Value(description),
       mfDate: Value(mfDate),
-      file: Value(file),
+      productImageUri: Value(productImageUri),
+      isProductImageUriUpdated: Value(isProductImageUriUpdated),
       apiStatus: Value(apiStatus),
       methodName: Value(methodName),
       isLocationUpdated: Value(isLocationUpdated),
@@ -2095,7 +2126,9 @@ class WHAuditingTable extends DataClass implements Insertable<WHAuditingTable> {
       auditDetailId: serializer.fromJson<String>(json['auditDetailId']),
       description: serializer.fromJson<String>(json['description']),
       mfDate: serializer.fromJson<String>(json['mfDate']),
-      file: serializer.fromJson<String>(json['file']),
+      productImageUri: serializer.fromJson<String>(json['productImageUri']),
+      isProductImageUriUpdated:
+          serializer.fromJson<bool>(json['isProductImageUriUpdated']),
       apiStatus: serializer.fromJson<String>(json['apiStatus']),
       methodName: serializer.fromJson<String>(json['methodName']),
       isLocationUpdated: serializer.fromJson<bool>(json['isLocationUpdated']),
@@ -2118,7 +2151,9 @@ class WHAuditingTable extends DataClass implements Insertable<WHAuditingTable> {
       'auditDetailId': serializer.toJson<String>(auditDetailId),
       'description': serializer.toJson<String>(description),
       'mfDate': serializer.toJson<String>(mfDate),
-      'file': serializer.toJson<String>(file),
+      'productImageUri': serializer.toJson<String>(productImageUri),
+      'isProductImageUriUpdated':
+          serializer.toJson<bool>(isProductImageUriUpdated),
       'apiStatus': serializer.toJson<String>(apiStatus),
       'methodName': serializer.toJson<String>(methodName),
       'isLocationUpdated': serializer.toJson<bool>(isLocationUpdated),
@@ -2139,7 +2174,8 @@ class WHAuditingTable extends DataClass implements Insertable<WHAuditingTable> {
           String? auditDetailId,
           String? description,
           String? mfDate,
-          String? file,
+          String? productImageUri,
+          bool? isProductImageUriUpdated,
           String? apiStatus,
           String? methodName,
           bool? isLocationUpdated}) =>
@@ -2157,7 +2193,9 @@ class WHAuditingTable extends DataClass implements Insertable<WHAuditingTable> {
         auditDetailId: auditDetailId ?? this.auditDetailId,
         description: description ?? this.description,
         mfDate: mfDate ?? this.mfDate,
-        file: file ?? this.file,
+        productImageUri: productImageUri ?? this.productImageUri,
+        isProductImageUriUpdated:
+            isProductImageUriUpdated ?? this.isProductImageUriUpdated,
         apiStatus: apiStatus ?? this.apiStatus,
         methodName: methodName ?? this.methodName,
         isLocationUpdated: isLocationUpdated ?? this.isLocationUpdated,
@@ -2178,7 +2216,8 @@ class WHAuditingTable extends DataClass implements Insertable<WHAuditingTable> {
           ..write('auditDetailId: $auditDetailId, ')
           ..write('description: $description, ')
           ..write('mfDate: $mfDate, ')
-          ..write('file: $file, ')
+          ..write('productImageUri: $productImageUri, ')
+          ..write('isProductImageUriUpdated: $isProductImageUriUpdated, ')
           ..write('apiStatus: $apiStatus, ')
           ..write('methodName: $methodName, ')
           ..write('isLocationUpdated: $isLocationUpdated')
@@ -2201,7 +2240,8 @@ class WHAuditingTable extends DataClass implements Insertable<WHAuditingTable> {
       auditDetailId,
       description,
       mfDate,
-      file,
+      productImageUri,
+      isProductImageUriUpdated,
       apiStatus,
       methodName,
       isLocationUpdated);
@@ -2222,7 +2262,8 @@ class WHAuditingTable extends DataClass implements Insertable<WHAuditingTable> {
           other.auditDetailId == this.auditDetailId &&
           other.description == this.description &&
           other.mfDate == this.mfDate &&
-          other.file == this.file &&
+          other.productImageUri == this.productImageUri &&
+          other.isProductImageUriUpdated == this.isProductImageUriUpdated &&
           other.apiStatus == this.apiStatus &&
           other.methodName == this.methodName &&
           other.isLocationUpdated == this.isLocationUpdated);
@@ -2242,7 +2283,8 @@ class WHAuditingCompanion extends UpdateCompanion<WHAuditingTable> {
   final Value<String> auditDetailId;
   final Value<String> description;
   final Value<String> mfDate;
-  final Value<String> file;
+  final Value<String> productImageUri;
+  final Value<bool> isProductImageUriUpdated;
   final Value<String> apiStatus;
   final Value<String> methodName;
   final Value<bool> isLocationUpdated;
@@ -2261,7 +2303,8 @@ class WHAuditingCompanion extends UpdateCompanion<WHAuditingTable> {
     this.auditDetailId = const Value.absent(),
     this.description = const Value.absent(),
     this.mfDate = const Value.absent(),
-    this.file = const Value.absent(),
+    this.productImageUri = const Value.absent(),
+    this.isProductImageUriUpdated = const Value.absent(),
     this.apiStatus = const Value.absent(),
     this.methodName = const Value.absent(),
     this.isLocationUpdated = const Value.absent(),
@@ -2281,7 +2324,8 @@ class WHAuditingCompanion extends UpdateCompanion<WHAuditingTable> {
     required String auditDetailId,
     required String description,
     required String mfDate,
-    required String file,
+    required String productImageUri,
+    required bool isProductImageUriUpdated,
     required String apiStatus,
     required String methodName,
     required bool isLocationUpdated,
@@ -2299,7 +2343,8 @@ class WHAuditingCompanion extends UpdateCompanion<WHAuditingTable> {
         auditDetailId = Value(auditDetailId),
         description = Value(description),
         mfDate = Value(mfDate),
-        file = Value(file),
+        productImageUri = Value(productImageUri),
+        isProductImageUriUpdated = Value(isProductImageUriUpdated),
         apiStatus = Value(apiStatus),
         methodName = Value(methodName),
         isLocationUpdated = Value(isLocationUpdated);
@@ -2317,7 +2362,8 @@ class WHAuditingCompanion extends UpdateCompanion<WHAuditingTable> {
     Expression<String>? auditDetailId,
     Expression<String>? description,
     Expression<String>? mfDate,
-    Expression<String>? file,
+    Expression<String>? productImageUri,
+    Expression<bool>? isProductImageUriUpdated,
     Expression<String>? apiStatus,
     Expression<String>? methodName,
     Expression<bool>? isLocationUpdated,
@@ -2338,7 +2384,9 @@ class WHAuditingCompanion extends UpdateCompanion<WHAuditingTable> {
       if (auditDetailId != null) 'audit_detail_id': auditDetailId,
       if (description != null) 'description': description,
       if (mfDate != null) 'mf_date': mfDate,
-      if (file != null) 'file': file,
+      if (productImageUri != null) 'product_image_uri': productImageUri,
+      if (isProductImageUriUpdated != null)
+        'is_product_image_uri_updated': isProductImageUriUpdated,
       if (apiStatus != null) 'api_status': apiStatus,
       if (methodName != null) 'method_name': methodName,
       if (isLocationUpdated != null) 'is_location_updated': isLocationUpdated,
@@ -2360,7 +2408,8 @@ class WHAuditingCompanion extends UpdateCompanion<WHAuditingTable> {
       Value<String>? auditDetailId,
       Value<String>? description,
       Value<String>? mfDate,
-      Value<String>? file,
+      Value<String>? productImageUri,
+      Value<bool>? isProductImageUriUpdated,
       Value<String>? apiStatus,
       Value<String>? methodName,
       Value<bool>? isLocationUpdated,
@@ -2379,7 +2428,9 @@ class WHAuditingCompanion extends UpdateCompanion<WHAuditingTable> {
       auditDetailId: auditDetailId ?? this.auditDetailId,
       description: description ?? this.description,
       mfDate: mfDate ?? this.mfDate,
-      file: file ?? this.file,
+      productImageUri: productImageUri ?? this.productImageUri,
+      isProductImageUriUpdated:
+          isProductImageUriUpdated ?? this.isProductImageUriUpdated,
       apiStatus: apiStatus ?? this.apiStatus,
       methodName: methodName ?? this.methodName,
       isLocationUpdated: isLocationUpdated ?? this.isLocationUpdated,
@@ -2430,8 +2481,12 @@ class WHAuditingCompanion extends UpdateCompanion<WHAuditingTable> {
     if (mfDate.present) {
       map['mf_date'] = Variable<String>(mfDate.value);
     }
-    if (file.present) {
-      map['file'] = Variable<String>(file.value);
+    if (productImageUri.present) {
+      map['product_image_uri'] = Variable<String>(productImageUri.value);
+    }
+    if (isProductImageUriUpdated.present) {
+      map['is_product_image_uri_updated'] =
+          Variable<bool>(isProductImageUriUpdated.value);
     }
     if (apiStatus.present) {
       map['api_status'] = Variable<String>(apiStatus.value);
@@ -2464,7 +2519,8 @@ class WHAuditingCompanion extends UpdateCompanion<WHAuditingTable> {
           ..write('auditDetailId: $auditDetailId, ')
           ..write('description: $description, ')
           ..write('mfDate: $mfDate, ')
-          ..write('file: $file, ')
+          ..write('productImageUri: $productImageUri, ')
+          ..write('isProductImageUriUpdated: $isProductImageUriUpdated, ')
           ..write('apiStatus: $apiStatus, ')
           ..write('methodName: $methodName, ')
           ..write('isLocationUpdated: $isLocationUpdated, ')

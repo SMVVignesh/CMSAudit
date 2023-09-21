@@ -8,6 +8,7 @@ import 'package:path_provider/path_provider.dart';
 part 'database.g.dart';
 
 // flutter packages pub run build_runner build
+//flutter packages pub run build_runner watch
 
 /*
 * This class represents the data base table for Api cache*/
@@ -48,7 +49,6 @@ class WHLocation extends Table {
   BoolColumn get isActive => boolean()();
 
   BoolColumn get isLocationUpdated => boolean()();
-
 
   @override
   Set<Column> get primaryKey => {locationName, palletNumber, auditDetailId};
@@ -96,7 +96,6 @@ class WHInOutWards extends Table {
 
   BoolColumn get isProductImageUpdated => boolean()();
 
-
   @override
   Set<Column> get primaryKey => {invoNo, inOutWardId, auditDetailId};
 }
@@ -131,7 +130,9 @@ class WHAuditing extends Table {
 
   TextColumn get mfDate => text()();
 
-  TextColumn get file => text()();
+  TextColumn get productImageUri => text()();
+
+  BoolColumn get isProductImageUriUpdated => boolean()();
 
   TextColumn get apiStatus => text()();
 
@@ -151,14 +152,14 @@ class Database extends _$Database {
   Database() : super(_openConnection());
 
   @override
-  int get schemaVersion => 15;
+  int get schemaVersion => 16;
 
   @override
   @DriftDatabase(tables: [ApiData, WHLocation, WHInOutWards, WHAuditing])
   MigrationStrategy get migration {
     return MigrationStrategy(onUpgrade: (_migrator, from, to) async {
       print("MigrationStrategy :: Triggered");
-      for(var item in allTables){
+      for (var item in allTables) {
         _migrator.drop(item);
         _migrator.create(item);
       }

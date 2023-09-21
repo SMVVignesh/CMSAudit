@@ -430,7 +430,8 @@ class DatabaseHelper {
       required String description,
       required String mfDate,
       required String productName,
-      required String file,
+      required String productImageUri,
+      required bool isProductImageUriUpdated,
       required bool isLocationUpdated}) async {
     final query = _database.into(_database.wHAuditing).insert(WHAuditingTable(
         updatedDateAndTime: DateTime.now(),
@@ -448,7 +449,8 @@ class DatabaseHelper {
         productName: productName,
         apiStatus: DB_API_STATUS.TODO.name,
         methodName: METHOD_STATUS.CREATE.name,
-        file: file,
+        productImageUri: productImageUri,
+        isProductImageUriUpdated:isProductImageUriUpdated,
         isLocationUpdated: isLocationUpdated));
     return await query;
   }
@@ -480,7 +482,8 @@ class DatabaseHelper {
       required String description,
       required String mfDate,
       required String productName,
-      required String file,
+      required bool isProductImageUriUpdated,
+      required String productImageUri,
       required String auditingId}) async {
     WHAuditingCompanion entity = WHAuditingCompanion(
         qty: Value(qty),
@@ -492,7 +495,8 @@ class DatabaseHelper {
         productId: Value(productId),
         apiStatus: Value(DB_API_STATUS.TODO.name),
         mfDate: Value(mfDate),
-        file: Value(file));
+        isProductImageUriUpdated: Value(isProductImageUriUpdated),
+        productImageUri: Value(productImageUri));
     final query = _database.update(_database.wHAuditing)
       ..where((tbl) => tbl.auditingId.equals(auditingId))
       ..write(entity);

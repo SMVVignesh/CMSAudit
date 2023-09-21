@@ -302,7 +302,8 @@ class DatabaseRepository {
       required String description,
       required String mfDate,
       required String productName,
-      required String file,
+      required String productImageUri,
+      required bool isProductImageUriUpdated,
       required bool isLocationUpdated}) async {
     final encryptedData = await databaseHelper.insertWHAuditing(
         qty: qty,
@@ -315,7 +316,8 @@ class DatabaseRepository {
         description: description,
         mfDate: mfDate,
         productName: productName,
-        file: file,
+        isProductImageUriUpdated: isProductImageUriUpdated,
+        productImageUri: productImageUri,
         isLocationUpdated: isLocationUpdated);
     return encryptedData;
   }
@@ -331,7 +333,8 @@ class DatabaseRepository {
       required String description,
       required String mfDate,
       required String productName,
-      required String file,
+      required String productImageUri,
+      required bool isProductImageUriUpdated,
       required String auditingId}) async {
     final encryptedData = await databaseHelper.updateWHAuditing(
         qty: qty,
@@ -344,7 +347,8 @@ class DatabaseRepository {
         description: description,
         mfDate: mfDate,
         productName: productName,
-        file: file,
+        isProductImageUriUpdated: isProductImageUriUpdated,
+        productImageUri: productImageUri,
         auditingId: auditingId);
     return encryptedData;
   }
