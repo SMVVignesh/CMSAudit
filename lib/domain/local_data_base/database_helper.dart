@@ -405,6 +405,7 @@ class DatabaseHelper {
             apiStatus: ((newAuditId?.length ?? 0) > 0)
                 ? Value(DB_API_STATUS.NO_CHANGES.name)
                 : Value(status.name),
+            isProductImageUriUpdated: const Value(false),
             methodName: Value(METHOD_STATUS.UPDATE.name),
             serverAuditingId: Value(newAuditId ?? ""))
         : WHAuditingCompanion(
