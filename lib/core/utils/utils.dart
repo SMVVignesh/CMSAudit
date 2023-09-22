@@ -363,7 +363,7 @@ class Utils {
           file.path.split(Platform.pathSeparator).last;
       productJson["name"] = fileNameWithExtension.split(".").first;
       productJson["extension"] = ".${fileNameWithExtension.split(".").last}";
-      productJson["data"] = base64Encode(file.readAsBytesSync());
+      productJson["data"] = "data:image/jpeg;base64,${base64Encode(file.readAsBytesSync())}";
     } catch (e) {
       print("Exception getProductImageJson:${e.toString()}");
     }
