@@ -359,9 +359,10 @@ class Utils {
     Map<String, String> productJson = Map();
     try {
       File file = File(productImageUri);
-      productJson["name"] = file.path.split(Platform.pathSeparator).last;
-      productJson["extension"] =
-          file.path.split(Platform.pathSeparator).last.split(".").last;
+      String fileNameWithExtension =
+          file.path.split(Platform.pathSeparator).last;
+      productJson["name"] = fileNameWithExtension.split(".").first;
+      productJson["extension"] = ".${fileNameWithExtension.split(".").last}";
       productJson["data"] = base64Encode(file.readAsBytesSync());
     } catch (e) {
       print("Exception getProductImageJson:${e.toString()}");

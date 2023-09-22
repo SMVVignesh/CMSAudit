@@ -32,6 +32,15 @@ class ApiRepository {
   ApiBaseHelper otherInApis =
       ApiBaseHelper(baseUrl: Environment().config?.apiHost ?? "", debug: true);
 
+  Future<bool> updateBaseUrl() async {
+    String baseurl = await SharedPreferenceRepository().getBaseUrl() ?? "";
+    String version = baseurl.split("/").last;
+    String loginBaseUrl = baseurl.replaceAll("/$version", "");
+    loginInApis = ApiBaseHelper(baseUrl: loginBaseUrl, debug: true);
+    otherInApis = ApiBaseHelper(baseUrl: baseurl, debug: true);
+    return true;
+  }
+
   /*
 * This method is used to get the headers with access token */
   Future<Map<String, String>> getHeaderWithAuth() async {
@@ -172,7 +181,8 @@ class ApiRepository {
       if (wHAuditingTable.productImageUri.length == 0) {
         body["aProductImage"] = null;
       } else {
-        body["aProductImage"] = Utils.getProductImageJson(wHAuditingTable.productImageUri);
+        body["aProductImage"] =
+            Utils.getProductImageJson(wHAuditingTable.productImageUri);
       }
     }
 

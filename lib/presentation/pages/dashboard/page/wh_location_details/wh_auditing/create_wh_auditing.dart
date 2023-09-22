@@ -74,6 +74,7 @@ class _CreateWHAuditingScreenState extends State<CreateWHAuditingScreen> {
   void updateLastProductTypeValue() async {
     String? lastSelectedProductType =
         await SharedPreferenceRepository().getLastSelectedProductType();
+    print("lastSelectedProductType :${lastSelectedProductType}");
     if (lastSelectedProductType != null) {
       setState(() {
         selectedProductType = Utils.productType
@@ -346,7 +347,7 @@ class _CreateWHAuditingScreenState extends State<CreateWHAuditingScreen> {
         bool isLocationUpdated = widget.location?.isLocationUpdated ?? false;
         print("isLocationUpdated :$isLocationUpdated");
         SharedPreferenceRepository()
-            .setLastSelectedProductType(selectedStockType?.key ?? "");
+            .setLastSelectedProductType(selectedProductType?.key ?? "");
         if (widget.auditingTable != null) {
           await DatabaseRepository().updateWHAuditing(
               qty: convertToInt(qty),

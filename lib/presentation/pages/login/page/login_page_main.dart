@@ -87,7 +87,7 @@ class _LoginPageState extends CustomState<LoginPage> {
                 const SizedBox(height: 15),
                 getLoginComponent(
                     "Base Url",
-                    "Enter Base Url",
+                    "Example. http://nearchoice.co.in/api/v1",
                     widget.baseUrlController),
                 getLoginComponent(
                     AppLocalizations.of(context)!.trans(EMAIL),
@@ -249,6 +249,7 @@ if all fields are validated this is going to call  Login api
         });
         try  {
           await SharedPreferenceRepository().setBaseUrl(baseurl);
+          await ApiRepository().updateBaseUrl();
           LoginResponse newLoginResponse =
               await ApiRepository().loginApi(email ?? "", password ?? "",tenant??"");
 
